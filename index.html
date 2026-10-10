@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Central de Estrategias - SlenderGun MG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,700&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark: #070709;
+  --bg-panel: #101014;
+  --lux-gold: #ffcc00;
+  --lux-gold-dim: rgba(255, 204, 0, 0.15);
+  --lux-red: #e61919;
+  --text-main: #ffffff;
+  --text-dim: #8b8b99;
+  --border-color: #262633;
+  
+  --font-title: 'Chakra Petch', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-text: 'Inter', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { 
+  background-color: var(--bg-dark);
+  color: var(--text-main); 
+  font-family: var(--font-text); 
+  overflow-x: hidden;
+}
+
+/* ── Barra Superior (Pestañas) ── */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(16, 16, 20, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 50px;
+  z-index: 1000;
+  transition: transform 0.4s ease;
+}
+
+.nav-hidden {
+  transform: translateY(-100%);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 35px;
+  height: 35px;
+  background: var(--lux-gold);
+  clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-title);
+  font-weight: 700;
+  color: #000;
+  font-size: 1rem;
+}
+
+.brand-text {
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-tabs a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  transition: 0.3s;
+  position: relative;
+}
+
+.nav-tabs a:hover { color: var(--lux-gold); }
+.nav-tabs a::after {
+  content: '';
+  position: absolute;
+  bottom: -25px; left: 0; width: 0%; height: 3px;
+  background: var(--lux-gold);
+  transition: 0.3s;
+}
+.nav-tabs a:hover::after { width: 100%; }
+
+/* Botón Menú Hamburguesa (oculto por defecto) */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.menu-toggle span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: var(--lux-gold);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+/* ── Pliegue Inicial (Hero Section) ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 20px 40px 20px;
+  background-image: 
+    linear-gradient(to bottom, rgba(7, 7, 9, 0.3), var(--bg-dark)),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: cover, 40px 40px, 40px 40px;
+}
+
+.hero h1 {
+  font-family: var(--font-title);
+  font-size: 4.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+.hero h1 span { color: var(--lux-gold); }
+
+.hero p {
+  color: var(--text-dim);
+  font-size: 1.2rem;
+  max-width: 700px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+/* ── Redes Sociales ── */
+.social-links {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  padding: 12px 24px;
+  border-radius: 50px;
+  color: var(--text-main);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.social-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  transition: 0.3s ease;
+}
+
+.social-btn:hover {
+  background: var(--bg-panel);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.social-btn.tiktok:hover { border-color: #00f2fe; color: #00f2fe; }
+.social-btn.youtube:hover { border-color: #ff0000; color: #ff0000; }
+.social-btn.instagram:hover { border-color: #e1306c; color: #e1306c; }
+.social-btn.whatsapp:hover { border-color: #25d366; color: #25d366; background: rgba(37, 211, 102, 0.06); }
+
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--lux-gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-15px); }
+  60% { transform: translateY(-7px); }
+}
+
+/* ── Spots de Módulos ── */
+.modules-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 50px 20px 100px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+}
+
+.spot {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.spot.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.spot:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.spot-img {
+  flex: 1;
+  width: 100%;
+  height: 400px;
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spot-img::before {
+  content: 'IMAGEN DEL MÓDULO';
+  font-family: var(--font-title);
+  color: var(--border-color);
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  text-align: center;
+  padding: 0 10px;
+}
+
+/* Ocultar el texto si hay imagen de fondo */
+.spot-img.con-imagen::before {
+  display: none;
+}
+
+.spot-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 40%, rgba(255, 204, 0, 0.05) 50%, transparent 60%);
+}
+
+.spot-info {
+  flex: 1;
+}
+
+.spot-tag {
+  font-family: var(--font-mono);
+  color: var(--lux-gold);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: inline-block;
+  border-bottom: 1px solid var(--lux-gold);
+  padding-bottom: 3px;
+}
+
+.spot-info h2 {
+  font-family: var(--font-title);
+  font-size: 2.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  line-height: 1.1;
+}
+
+.spot-info p {
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 35px;
+}
+
+.btn-entrar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lux-gold);
+  color: #000;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 15px 40px;
+  border-radius: 4px;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  transition: 0.3s;
+}
+
+.btn-entrar:hover {
+  background: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(255, 204, 0, 0.2);
+}
+
+/* Clase para los botones deshabilitados "Próximamente" */
+.btn-entrar.btn-disabled,
+.spot-rojo .btn-entrar.btn-disabled,
+.spot-azul .btn-entrar.btn-disabled {
+  background: var(--border-color);
+  color: var(--text-dim);
+  pointer-events: none;
+  box-shadow: none;
+  transform: none;
+}
+
+.spot-rojo .spot-tag { color: var(--lux-red); border-color: var(--lux-red); }
+.spot-rojo .btn-entrar:not(.btn-disabled) { background: var(--lux-red); color: white; }
+.spot-rojo .btn-entrar:not(.btn-disabled):hover { background: #fff; color: var(--lux-red); box-shadow: 0 10px 20px rgba(230, 25, 25, 0.2); }
+.spot-rojo .spot-img::after { background: linear-gradient(45deg, transparent 40%, rgba(230, 25, 25, 0.05) 50%, transparent 60%); }
+
+.spot-azul .spot-tag { color: #00e5ff; border-color: #00e5ff; }
+.spot-azul .btn-entrar:not(.btn-disabled) { background: #00e5ff; color: #000; }
+.spot-azul .btn-entrar:not(.btn-disabled):hover { background: #fff; box-shadow: 0 10px 20px rgba(0, 229, 255, 0.2); }
+.spot-azul .spot-img::after { background: linear-gradient(45deg, transparent 40%, rgba(0, 229, 255, 0.05) 50%, transparent 60%); }
+
+/* ── Responsividad (Tablets) ── */
+@media (max-width: 900px) {
+  .top-nav { padding: 0 20px; justify-content: space-between; }
+  
+  .menu-toggle { display: flex; }
+  .nav-tabs { 
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: rgba(16, 16, 20, 0.98);
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 0;
+    gap: 25px;
+    border-bottom: 1px solid var(--border-color);
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    transition: clip-path 0.4s ease-in-out;
+  }
+  
+  .nav-tabs.menu-open {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  
+  .nav-tabs a::after { display: none; } 
+
+  .hero h1 { font-size: 3rem; }
+  .spot, .spot:nth-child(even) { flex-direction: column; text-align: center; gap: 40px; }
+  .spot-img { width: 100%; height: 300px; }
+  .spot-tag { margin: 0 auto 10px auto; }
+  .modules-container { gap: 80px; padding: 40px 20px 80px 20px; }
+}
+
+/* ── Responsividad (Móviles - Optimización Profunda) ── */
+@media (max-width: 600px) {
+  .top-nav { padding: 0 15px; }
+  .brand-text { font-size: 1.1rem; }
+  
+  .hero { padding: 90px 15px 40px 15px; }
+  .hero h1 { font-size: 2.2rem; margin-bottom: 15px; line-height: 1.2; }
+  .hero p { font-size: 0.95rem; margin-bottom: 30px; }
+  
+  .social-links { width: 100%; flex-direction: column; gap: 12px; margin-bottom: 40px; }
+  .social-btn { width: 100%; justify-content: center; padding: 16px; font-size: 1rem; }
+  
+  .modules-container { padding: 30px 15px 60px 15px; gap: 40px; }
+  
+  .spot { 
+    gap: 20px; 
+    background: rgba(255, 255, 255, 0.02); 
+    padding: 20px; 
+    border-radius: 16px; 
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .spot-img { height: 180px; border-radius: 10px; }
+  .spot-img::before { font-size: 1.1rem; }
+  
+  .spot-info h2 { font-size: 1.8rem; margin-bottom: 10px; }
+  .spot-info p { font-size: 0.95rem; margin-bottom: 20px; text-align: left; }
+  
+  .spot:nth-child(odd), .spot:nth-child(even) { text-align: left; }
+  .spot-tag { margin: 0 0 10px 0; display: inline-block; }
+  
+  .btn-entrar { width: 100%; padding: 16px; font-size: 1.05rem; }
+}
+</style>
+</head>
+<body>
+
+  <!-- Barra Superior -->
+  <nav class="top-nav" id="navbar">
+    <div class="brand">
+      <div class="brand-logo">SG</div>
+      <div class="brand-text">SLENDERGUN MG</div>
+    </div>
+    
+    <!-- Botón Menú Hamburguesa -->
+    <div class="menu-toggle" id="mobile-menu-btn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="nav-tabs" id="nav-menu">
+      <a href="#inicio" class="nav-link">Inicio</a>
+      <a href="#modulos" class="nav-link">Módulos de Gestión</a>
+    </div>
+  </nav>
+
+  <!-- Pliegue Principal -->
+  <section class="hero" id="inicio">
+    <h1>Central de <span>Estrategias</span></h1>
+    <p>Plataforma táctica oficial de Prof.SlenderGun. Accede a las herramientas de análisis, evalúa el rendimiento del roster y define las rotaciones competitivas para las próximas jornadas.</p>
+    
+    <!-- REDES SOCIALES -->
+    <div class="social-links">
+      <a href="https://www.tiktok.com/@Prof.SlenderGun" target="_blank" class="social-btn tiktok">
+        <svg viewBox="0 0 448 512"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
+        @Prof.SlenderGun
+      </a>
+      <a href="https://www.youtube.com/@The_Slender_Gun" target="_blank" class="social-btn youtube">
+        <svg viewBox="0 0 576 512"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
+        @TheSlenderGun
+      </a>
+      <a href="https://www.instagram.com/TheSlenderGun" target="_blank" class="social-btn instagram">
+        <svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+        @TheSlenderGun
+      </a>
+      <a href="https://chat.whatsapp.com/FkwbtIy6rOtIABwg9kpf04" target="_blank" rel="noopener noreferrer" class="social-btn whatsapp">
+        <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M380.9 97.1C339.4 55.6 284.2 32.7 225.5 32.7c-121.1 0-219.6 98.5-219.6 219.6 0 38.7 10.1 76.5 29.3 109.8L4.5 480l120.8-31.7c31.8 17.4 67.7 26.5 104.1 26.5h.1c121 0 219.6-98.5 219.6-219.6 0-58.7-22.9-113.9-68.2-158.1zM225.5 433.6h-.1c-32.5 0-64.3-8.7-92-25.1l-6.6-3.9-71.7 18.8 19.1-69.9-4.3-7.2c-17.9-28.5-27.3-61.5-27.3-95.9 0-99.5 81-180.5 180.6-180.5 48.2 0 93.5 18.8 127.5 52.8 34 34 52.8 79.3 52.8 127.6-.1 99.4-81 180.4-180.5 180.4z"/></svg>
+        GRUPO DE WHATSAPP
+      </a>
+    </div>
+
+    <div class="scroll-indicator">↓ Desliza para explorar ↓</div>
+  </section>
+
+  <!-- Contenedor de Módulos -->
+  <section class="modules-container" id="modulos">
+
+    <!-- Spot 1: Panel Táctil (Activo y con Imagen Vinculada) -->
+    <div class="spot spot-anim">
+      <div class="spot-img con-imagen" style="background-image: url('img/T.png'); background-size: cover; background-position: center;"></div>
+      <div class="spot-info">
+        <span class="spot-tag">Análisis de Mapas</span>
+        <h2>Panel Táctil</h2>
+        <p>Planea el macrojuego con precisión absoluta. Traza rotaciones, marca zonas de caída, calcula tiempos de desplazamiento y asegura un posicionamiento superior antes de que cierre la zona segura.</p>
+        <a href="Táctil.html" class="btn-entrar">ENTRAR</a>
+      </div>
+    </div>
+
+    <!-- Spot 2: Estadísticas de Jugadores (Activo) -->
+    <div class="spot spot-rojo spot-anim">
+      <div class="spot-img" style="background-image: url(''); background-size: cover; background-position: center;"></div>
+      <div class="spot-info">
+        <span class="spot-tag">Estadísticas de Jugadores</span>
+        <h2>Calculadora Stats</h2>
+        <p>Registra y analiza el rendimiento individual de cada jugador. Captura kills, daño, posición y puntos por partida para generar un resumen estadístico de la competencia.</p>
+        <a href="estadisticas.html" class="btn-entrar">ENTRAR</a>
+      </div>
+    </div>
+
+    <!-- Spot 3: Gestor Roster (Próximamente) -->
+    <div class="spot spot-azul spot-anim">
+      <div class="spot-img" style="background-image: url(''); background-size: cover; background-position: center;"></div>
+      <div class="spot-info">
+        <span class="spot-tag">Administración de Talento</span>
+        <h2>Gestor Roster</h2>
+        <p>Control total sobre tu plantilla. Define los roles específicos (Rusher, IGL, Sniper, Soporte), ajusta las formaciones titulares, gestiona los presupuestos y crea gráficos de presentación del equipo.</p>
+        <a href="#" class="btn-entrar btn-disabled">PRÓXIMAMENTE</a>
+      </div>
+    </div>
+
+    <!-- Spot 4: Sorteo Caídas (Próximamente) -->
+    <div class="spot spot-anim">
+      <div class="spot-img" style="background-image: url(''); background-size: cover; background-position: center;"></div>
+      <div class="spot-info">
+        <span class="spot-tag">Organización de Salas</span>
+        <h2>Sorteo Caídas</h2>
+        <p>Módulo diseñado para organizadores. Genera y asigna de manera rápida, aleatoria y justa las zonas de caída iniciales para todos los equipos en scrims y torneos privados.</p>
+        <a href="#" class="btn-entrar btn-disabled">PRÓXIMAMENTE</a>
+      </div>
+    </div>
+
+    <!-- Spot 5: Tabla de Resultados (Próximamente) -->
+    <div class="spot spot-rojo spot-anim">
+      <div class="spot-img" style="background-image: url(''); background-size: cover; background-position: center;"></div>
+      <div class="spot-info">
+        <span class="spot-tag">Leaderboard Competitivo</span>
+        <h2>Tabla Resultados</h2>
+        <p>Registra las puntuaciones acumuladas partida tras partida. Proyecta la tabla general en vivo, diseñada y optimizada para verse perfecta en transmisiones de OBS.</p>
+        <a href="#" class="btn-entrar btn-disabled">PRÓXIMAMENTE</a>
+      </div>
+    </div>
+
+  </section>
+
+<script>
+  let lastScrollY = window.scrollY;
+  const navbar = document.getElementById('navbar');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > lastScrollY && window.scrollY > 100) {
+      navbar.classList.add('nav-hidden');
+    } else {
+      navbar.classList.remove('nav-hidden');
+    }
+    lastScrollY = window.scrollY;
+  });
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.2
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target); 
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.spot-anim').forEach(spot => {
+    observer.observe(spot);
+  });
+
+  // Lógica del Menú Hamburguesa para Móviles
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const navMenu = document.getElementById('nav-menu');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  // Abrir / Cerrar el menú al tocar la hamburguesa
+  mobileMenuBtn.addEventListener('click', () => {
+    navMenu.classList.toggle('menu-open');
+  });
+
+  // Cerrar el menú automáticamente cuando se hace clic en un enlace
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('menu-open');
+    });
+  });
+</script>
+</body>
+</html>

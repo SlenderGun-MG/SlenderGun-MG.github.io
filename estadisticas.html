@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>TR-eSport · Estadísticas de Jugadores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,700&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{
+  --bg:#060708;--bg2:#0a0d11;--panel:#0d1117;--panel2:#111720;--field:#080c11;
+  --gold:#ffcc00;--gold2:#ffe46b;--red:#e01919;--cyan:#1edcff;--green:#35e993;
+  --txt:#f5f7fa;--dim:#98a3af;--muted:#5e6a77;--line:#1b2530;--line2:#293744;
+  --fh:'Chakra Petch',sans-serif;--fm:'Share Tech Mono',monospace;--fd:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{min-height:100vh;background:
+ radial-gradient(900px 520px at 0 -10%,rgba(255,204,0,.055),transparent 62%),
+ radial-gradient(900px 560px at 100% 100%,rgba(30,220,255,.04),transparent 65%),
+ linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px),var(--bg);
+ background-size:auto,auto,36px 36px,36px 36px,auto;color:var(--txt);font-family:var(--fd);overflow-x:hidden}
+body:after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background:linear-gradient(transparent 50%,rgba(255,255,255,.01) 50%);background-size:100% 4px;opacity:.12}
+button,input,select,textarea{font:inherit}button,a{touch-action:manipulation}
+
+/* NAV */
+.top-nav{position:sticky;top:0;left:0;width:100%;height:68px;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(8,10,14,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,204,0,.22);box-shadow:0 10px 28px rgba(0,0,0,.28)}
+.brand{display:flex;align-items:center;gap:11px}.brand-logo{width:36px;height:36px;background:var(--gold);clip-path:polygon(20% 0,100% 0,80% 100%,0 100%);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:700;color:#000}.brand-text{font-family:var(--fh);font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em}
+.nav-tabs{display:flex;align-items:center;gap:24px}.nav-tabs a{color:#7c8896;text-decoration:none;font-family:var(--fh);font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;position:relative;padding:8px 0}.nav-tabs a:hover,.nav-tabs a.active{color:#fff}.nav-tabs a.active{color:var(--gold)}.nav-tabs a:after{content:'';position:absolute;left:0;right:0;bottom:-17px;height:2px;background:var(--gold);transform:scaleX(0);transition:.2s}.nav-tabs a.active:after,.nav-tabs a:hover:after{transform:scaleX(1)}
+.nav-action{display:inline-flex;align-items:center;justify-content:center;padding:9px 13px;border:1px solid var(--line2);background:#0d1218;color:#dbe2e8;text-decoration:none;font:700 .62rem var(--fh);letter-spacing:.08em;text-transform:uppercase}.nav-action:hover{border-color:var(--gold);color:var(--gold)}
+.menu-toggle{display:none;width:28px;height:20px;flex-direction:column;justify-content:space-between}.menu-toggle span{height:3px;background:var(--gold);border-radius:2px}
+
+/* APP / HEADER */
+.app{max-width:1480px;margin:0 auto;padding:28px 28px 70px;display:block}
+.page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:26px;padding:24px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(13,18,24,.98),rgba(8,12,17,.98));box-shadow:0 12px 34px rgba(0,0,0,.22);position:relative;margin-bottom:24px;min-height:0}
+.page-head:before{content:'';position:absolute;left:0;top:0;width:4px;height:100%;background:linear-gradient(var(--gold),rgba(255,204,0,.05))}.page-head:after{content:'PLAYER ANALYTICS // DATABASE';position:absolute;right:16px;top:10px;font:9px var(--fm);letter-spacing:.15em;color:#3e4a56}
+.page-head>div:first-child{flex:1;min-width:0}.kicker{font:600 .58rem var(--fm);color:var(--cyan);letter-spacing:.2em;text-transform:uppercase;margin-bottom:9px}.page-head h1{font:700 clamp(2rem,4vw,3.6rem)/1 var(--fh);text-transform:uppercase;font-style:italic;letter-spacing:.02em}.page-head p{color:#788594;line-height:1.6;font-size:.84rem;max-width:820px;margin-top:10px}
+.head-meta{display:flex;gap:7px;flex-wrap:wrap}.status-chip{font:9px var(--fm);letter-spacing:.1em;color:#92efb4;border:1px solid rgba(53,233,147,.18);background:rgba(53,233,147,.035);padding:5px 7px}.status-chip i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 7px rgba(53,233,147,.45);margin-right:5px}.status-chip.muted{color:#6d7986;border-color:#24303b;background:transparent}
+.head-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+
+/* BUTTONS */
+.btn{border:1px solid var(--line2);background:linear-gradient(180deg,#121a22,#0a1016);color:#dce4ea;padding:10px 13px;min-height:38px;cursor:pointer;border-radius:2px;font:700 .61rem var(--fh);letter-spacing:.09em;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:.18s}.btn:hover{border-color:#50606f;transform:translateY(-1px)}.btn.gold{background:linear-gradient(180deg,#ffe36b,#f3c400);border-color:#ffe36b;color:#070707;box-shadow:0 7px 20px rgba(255,204,0,.09)}.btn.gold:hover{background:#fff}.btn.red{background:rgba(224,25,25,.08);border-color:rgba(224,25,25,.4);color:#ff9b9b}.btn.cyan{background:rgba(30,220,255,.06);border-color:rgba(30,220,255,.32);color:#8beeff}.btn.small{min-height:32px;padding:7px 10px;font-size:.55rem}.btn.icon{width:34px;padding:0}
+
+/* GENERIC */
+.grid{display:grid;gap:16px}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-main{display:flex!important;flex-direction:column;gap:24px;margin:0!important}.grid-main>div,.grid-main>aside{width:100%;min-width:0}.grid-main>aside{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}.grid-main>aside .card{height:100%}
+.card{background:linear-gradient(180deg,rgba(14,20,27,.98),rgba(9,13,18,.98));border:1px solid var(--line);padding:20px;box-shadow:0 12px 34px rgba(0,0,0,.20);position:relative;overflow:hidden}.card:before{content:'';position:absolute;left:0;top:0;width:26%;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:.9}.card-title{display:flex;align-items:center;gap:9px;color:#eef3f7;font:700 .77rem var(--fh);letter-spacing:.10em;text-transform:uppercase;margin-bottom:14px}.card-title:before{content:'';width:3px;height:17px;background:var(--gold);flex:none}.card-title:after{content:'//';margin-left:auto;color:#3a4651;font:9px var(--fm)}.card-sub{color:#718091;font-size:.68rem;line-height:1.55;margin-top:-6px;margin-bottom:14px}.section-label{font:9px var(--fm);color:#536170;letter-spacing:.18em;text-transform:uppercase;margin:11px 0 7px}
+.field label{display:block;margin-bottom:6px;color:#718091;font:600 .53rem var(--fh);letter-spacing:.11em;text-transform:uppercase}.field input,.field select,.field textarea,input[type=text],input[type=number],select,textarea{width:100%;background:linear-gradient(180deg,#091016,#060b10);border:1px solid #22313e;color:#eef4f8;border-radius:2px;padding:10px 11px;outline:none;font-size:.79rem}.field input:focus,.field select:focus,.field textarea:focus,input:focus,select:focus,textarea:focus{border-color:rgba(255,204,0,.6);box-shadow:0 0 0 2px rgba(255,204,0,.06)}textarea{min-height:76px;resize:vertical}
+
+/* ROSTER */
+.roster{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}.player-field{position:relative;background:#0a0f14;border:1px solid #1c2833;padding:8px}.player-index{position:absolute;right:8px;top:9px;font:8px var(--fm);color:#52606e;pointer-events:none}.player-field input{padding-right:28px}.save-line{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:12px;margin-top:12px;border-top:1px solid rgba(255,255,255,.05)}.save-state{font:9px var(--fm);color:#6dd39a;letter-spacing:.08em}.save-state.warn{color:var(--gold)}
+
+/* PARTIDAS */
+.toolbar{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:15px}.toolbar>div{min-width:0}.match-list{display:flex;flex-direction:column;gap:12px}.match{border:1px solid #1d2934;background:linear-gradient(180deg,#0d141b,#090e13);overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.15)}.match-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 13px;background:linear-gradient(90deg,rgba(255,204,0,.04),transparent 72%);border-bottom:1px solid rgba(255,255,255,.05)}.match-title{display:flex;align-items:center;gap:9px;min-width:0}.match-badge{font:8px var(--fm);color:var(--gold);border:1px solid #465462;padding:4px 7px}.match-name{font:700 .72rem var(--fh);text-transform:uppercase;letter-spacing:.06em}.match-meta{font:8px var(--fm);color:#5d6a77;margin-top:2px}.match-body{padding:13px}.match-grid{display:grid;grid-template-columns:minmax(260px,1.05fr) minmax(0,1.2fr);gap:14px}.match-context{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.match-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.pill{font:8px var(--fm);color:#8d99a6;border:1px solid #263440;padding:4px 6px;text-transform:uppercase}.pill.good{color:#83e7aa;border-color:rgba(53,233,147,.22)}.pill.bad{color:#ff9696;border-color:rgba(224,25,25,.24)}
+.stats-table{width:100%;border-collapse:collapse}.stats-table th{padding:4px 5px 7px;text-align:center;font:600 8px var(--fh);color:#607080;letter-spacing:.10em;text-transform:uppercase}.stats-table th:first-child,.stats-table td:first-child{text-align:left}.stats-table td{padding:5px;border-top:1px solid rgba(255,255,255,.04)}.stats-table td:first-child{font:600 .62rem var(--fh);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}.stats-table input{padding:7px 4px;text-align:center;font:.68rem var(--fm);color:var(--cyan);background:#070c11;border-color:#1d2a35}.match-factors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:10px}.factor{border:1px solid #1d2a35;background:#070c11;padding:7px;cursor:pointer}.factor input{accent-color:var(--gold);margin-right:5px}.factor span{font:8px var(--fm);color:#7c8996;text-transform:uppercase}.factor-note{margin-top:8px}
+.empty{padding:32px;text-align:center;color:#5e6b78;font:9px var(--fm);letter-spacing:.08em;border:1px dashed #2a3947}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.kpi{padding:13px;border:1px solid #1c2935;background:linear-gradient(180deg,#0c1218,#080d12)}.kpi span{display:block;color:#768493;font:600 8px var(--fh);letter-spacing:.09em;text-transform:uppercase}.kpi b{display:block;margin-top:5px;color:var(--gold2);font:24px var(--fm)}.kpi small{display:block;color:#566472;font-size:8px;margin-top:4px}
+
+/* DASHBOARD */
+.dashboard{margin-top:24px}.dashboard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:15px}.chart-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.75fr);gap:16px}.chart-box{min-height:350px;padding:13px;border:1px solid #1b2934;background:#070c11}.chart-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.05);margin-bottom:8px}.chart-head strong{font:700 .68rem var(--fh);letter-spacing:.08em;text-transform:uppercase}.legend{display:flex;gap:10px;flex-wrap:wrap;color:#71808e;font:8px var(--fm)}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}canvas{display:block;width:100%;height:285px}
+.captura-analisis{background:linear-gradient(180deg,#080d12,#05080c)!important;border-color:#354454!important;box-shadow:0 18px 48px rgba(0,0,0,.5)!important}.captura-analisis:before{background:linear-gradient(90deg,var(--gold),var(--cyan),transparent)!important}.captura-analisis .btn{display:none!important}
+.player-overview{display:grid;gap:7px}.overview-row{display:grid;grid-template-columns:1fr repeat(4,65px);gap:5px;align-items:center;padding:8px;border:1px solid #1b2934;background:#090e13}.overview-name{font:700 .58rem var(--fh);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.overview-cell{text-align:center}.overview-cell span{display:block;font:7px var(--fm);color:#5c6977}.overview-cell b{font:700 .68rem var(--fm);color:#e7edf2}.compare-table{width:100%;border-collapse:collapse}.compare-table th,.compare-table td{padding:8px 7px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05)}.compare-table th:first-child,.compare-table td:first-child{text-align:left}.compare-table th{font:700 8px var(--fh);color:#667482;letter-spacing:.1em;text-transform:uppercase}.compare-table td{font:9px var(--fm);color:#d8e0e6}.delta-pos{color:var(--green)!important}.delta-neg{color:#ff8585!important}.delta-neutral{color:#84909d!important}
+
+/* FACTORES */
+.factor-dashboard{display:grid;grid-template-columns:1fr 1fr;gap:14px}.factor-card{border:1px solid #1c2935;background:#080d12;padding:13px}.factor-row{display:grid;grid-template-columns:minmax(0,1fr) 110px 45px;gap:8px;align-items:center;margin:9px 0}.factor-label{font:600 .57rem var(--fh);text-transform:uppercase;color:#cbd3db}.factor-bar{height:7px;background:#121a21;border:1px solid #1c2833}.factor-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2))}.factor-count{font:9px var(--fm);color:#768391;text-align:right}.factor-copy{font-size:.68rem;color:#74818f;line-height:1.55}.signal{display:inline-flex;font:8px var(--fm);text-transform:uppercase;padding:3px 5px;border:1px solid #2a3947;margin:0 3px 3px 0}.signal.bad{color:#ff9999;border-color:rgba(224,25,25,.25)}.signal.good{color:#8deeb0;border-color:rgba(53,233,147,.2)}
+
+/* ASISTENCIA */
+.attendance-wrap{display:flex;flex-direction:column;gap:14px}.attendance-form{display:grid;grid-template-columns:1.2fr .7fr .7fr 1fr auto;gap:9px;align-items:end}.attendance-form .btn{min-height:40px}.attendance-catalog{display:flex;flex-direction:column;gap:10px}.att-record{border:1px solid #1d2934;background:linear-gradient(180deg,#0c1319,#080d12);overflow:hidden}.att-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;border-bottom:1px solid rgba(255,255,255,.05);background:linear-gradient(90deg,rgba(255,204,0,.035),transparent 75%)}.att-title{display:flex;align-items:center;gap:9px;min-width:0}.att-type{font:8px var(--fm);color:var(--gold);border:1px solid rgba(255,204,0,.22);padding:4px 6px;white-space:nowrap}.att-name{font:700 .7rem var(--fh);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.att-meta{font:8px var(--fm);color:#62707e;margin-top:3px}.att-actions{display:flex;gap:5px;flex:none}.att-players{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:11px}.att-player{border:1px solid #1d2a35;background:#070c11;padding:9px;cursor:pointer}.att-player:hover{border-color:#465869}.att-player.on{border-color:rgba(53,233,147,.35);background:rgba(53,233,147,.045);box-shadow:inset 2px 0 0 var(--green)}.att-player-top{display:flex;align-items:center;justify-content:space-between;gap:6px}.att-player input{accent-color:var(--green);width:15px;height:15px}.att-player-name{font:700 .56rem var(--fh);text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.att-player-state{font:8px var(--fm);color:#617080;margin-top:5px;letter-spacing:.08em}.att-player.on .att-player-state{color:#75dfa1}.att-player-count{margin-top:5px;font:9px var(--fm);color:var(--gold2)}.att-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.att-kpi{padding:10px;border:1px solid #1b2833;background:#090e13}.att-kpi span{display:block;color:#70808f;font:8px var(--fh);letter-spacing:.1em;text-transform:uppercase}.att-kpi b{display:block;color:var(--gold2);margin-top:4px;font:20px var(--fm)}.att-table-wrap{overflow:auto;border:1px solid #1b2833;background:#080d12}.att-table{width:100%;border-collapse:collapse;min-width:720px}.att-table th,.att-table td{padding:9px;border-bottom:1px solid rgba(255,255,255,.045);text-align:center}.att-table th{font:700 8px var(--fh);letter-spacing:.1em;color:#667482;text-transform:uppercase}.att-table th:first-child,.att-table td:first-child{text-align:left}.att-table td{font:9px var(--fm);color:#d6dfe6}.att-table td:first-child{font:700 .58rem var(--fh)}.att-rate{font:10px var(--fm);color:var(--gold2)}.att-good{color:#76e4a2}.att-low{color:#ff8f8f}.att-note{font:8px var(--fm);color:#596775;line-height:1.5}
+
+/* RESUMEN */
+#resumen-container{display:none;margin-top:24px;background:#070c11;border:1px solid var(--gold);padding:24px;box-shadow:0 16px 42px rgba(0,0,0,.28)}.res-title{text-align:center;color:var(--gold);font:700 italic 1.5rem var(--fh);letter-spacing:.08em}.res-sub{text-align:center;color:#748291;margin-top:5px;font-size:.7rem}.res-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0}.res-kpi{text-align:center;border:1px solid #1b2834;background:#0b1117;padding:12px}.res-kpi span{display:block;color:#71808d;font:8px var(--fh);text-transform:uppercase}.res-kpi b{display:block;margin-top:3px;color:var(--gold2);font:22px var(--fm)}
+
+
+/* ANALYTICS V6 · PERFIL / MAPAS / CONTEXTO */
+.profile-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.5fr);gap:16px}.profile-card{border:1px solid #1b2934;background:linear-gradient(180deg,#0b1117,#080d12);padding:16px}.profile-head{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(255,255,255,.05);padding-bottom:10px;margin-bottom:12px}.profile-name{font:700 1.05rem var(--fh);text-transform:uppercase}.profile-role{font:8px var(--fm);letter-spacing:.11em;color:var(--gold);border:1px solid rgba(255,204,0,.22);padding:4px 6px}.profile-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.profile-kpi{padding:10px;border:1px solid #1b2834;background:#080d12}.profile-kpi span{display:block;color:#697786;font:8px var(--fh);text-transform:uppercase;letter-spacing:.08em}.profile-kpi b{display:block;margin-top:5px;color:#eef3f7;font:18px var(--fm)}.profile-kpi b.gold{color:var(--gold2)}.profile-note{margin-top:10px;font-size:.68rem;color:#748291;line-height:1.55}.profile-history{display:flex;flex-direction:column;gap:6px;max-height:250px;overflow:auto}.profile-history-row{display:grid;grid-template-columns:50px minmax(0,1fr) repeat(5,52px);gap:5px;align-items:center;padding:7px;border:1px solid #1b2834;background:#070c11}.profile-history-row span,.profile-history-row b{font:8px var(--fm);text-align:center;color:#d8e0e6}.profile-history-row .pname{text-align:left;font:700 .56rem var(--fh);text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.profile-history-row small{display:block;color:#5f6c79;font:7px var(--fm);margin-top:2px}.context-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.context-card{border:1px solid #1b2934;background:#080d12;padding:13px}.context-card .context-name{font:700 .66rem var(--fh);text-transform:uppercase;letter-spacing:.07em;color:#dfe6ec}.context-card .context-meta{font:8px var(--fm);color:#667483;margin-top:4px}.context-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:9px}.context-metric{padding:6px;background:#0a1016;border:1px solid #182631;text-align:center}.context-metric span{display:block;color:#63717f;font:7px var(--fm)}.context-metric b{display:block;margin-top:3px;color:var(--gold2);font:11px var(--fm)}.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:13px}.filter-row .field{min-width:170px;flex:1}.impact-table{width:100%;border-collapse:collapse}.impact-table th,.impact-table td{padding:8px 7px;border-bottom:1px solid rgba(255,255,255,.05);text-align:center}.impact-table th:first-child,.impact-table td:first-child{text-align:left}.impact-table th{font:700 8px var(--fh);color:#667482;letter-spacing:.1em;text-transform:uppercase}.impact-table td{font:9px var(--fm);color:#d6dfe6}.impact-table td:first-child{font:700 .57rem var(--fh);text-transform:uppercase}.impact-good{color:var(--green)!important}.impact-bad{color:#ff9090!important}.match-id{font:8px var(--fm);color:#5c6875;margin-top:3px}.match-ref{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.mini-list{display:flex;flex-wrap:wrap;gap:5px}.mini-tag{font:7px var(--fm);color:#8b98a5;border:1px solid #273642;padding:4px 6px;text-transform:uppercase;background:#070c11}.stat-more{margin-top:8px;color:#657381;font:7px var(--fm);letter-spacing:.08em;text-transform:uppercase}
+@media(max-width:1000px){.profile-grid{grid-template-columns:1fr}.context-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.profile-kpis{grid-template-columns:repeat(2,1fr)}.profile-history-row{grid-template-columns:45px 1fr repeat(3,45px)}.profile-history-row .extra-col{display:none}.context-grid{grid-template-columns:1fr}.match-ref{grid-template-columns:1fr}}
+
+/* BREAKPOINTS */
+@media(max-width:1100px){.page-head{flex-direction:column}.head-actions{justify-content:flex-start}.grid-main>aside{grid-template-columns:repeat(2,minmax(0,1fr))}.chart-layout{grid-template-columns:1fr}.roster{grid-template-columns:repeat(3,minmax(0,1fr))}.attendance-form{grid-template-columns:1fr 1fr}.attendance-form .btn{grid-column:1/-1}.att-players{grid-template-columns:repeat(3,minmax(0,1fr))}.factor-dashboard{grid-template-columns:1fr}}
+@media(max-width:800px){.top-nav{padding:0 15px}.nav-tabs{display:none;position:absolute;top:68px;left:0;width:100%;padding:22px 0;flex-direction:column;gap:18px;background:rgba(8,10,14,.98);border-bottom:1px solid var(--line)}.nav-tabs.open{display:flex}.nav-tabs a:after{display:none}.menu-toggle{display:flex}.nav-action{display:none}.app{padding:18px 12px 50px}.page-head{padding:20px 17px;margin-bottom:18px}.page-head:after{display:none}.grid-main>aside{grid-template-columns:1fr}.grid-3,.grid-2,.match-grid{grid-template-columns:1fr}.match-context{grid-template-columns:repeat(2,minmax(0,1fr))}.match-factors{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.roster{grid-template-columns:repeat(3,minmax(0,1fr))}.overview-row{grid-template-columns:1fr repeat(4,50px)}}
+@media(max-width:540px){.brand-text{font-size:.96rem}.page-head h1{font-size:2.1rem}.head-actions{width:100%}.head-actions .btn{flex:1}.toolbar{flex-direction:column}.toolbar>.btn{width:100%}.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.roster{grid-template-columns:1fr 1fr}.match-context,.match-factors{grid-template-columns:1fr}.att-players{grid-template-columns:1fr 1fr}.att-summary{grid-template-columns:1fr 1fr}.attendance-form{grid-template-columns:1fr}.attendance-form .btn{grid-column:auto}.res-kpis{grid-template-columns:1fr 1fr}.overview-row{grid-template-columns:1fr repeat(4,43px)}}
+</style>
+</head>
+<body>
+
+<nav class="top-nav" id="navbar">
+  <div class="brand">
+    <div class="brand-logo">TR</div>
+    <div class="brand-text">TR-eSport</div>
+  </div>
+  <div class="nav-tabs" id="navMenu">
+    <a href="index.html">Inicio</a>
+    <a href="Táctil.html">Panel Táctil</a>
+    <a href="#dashboard" class="active">Estadísticas</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:9px">
+    <a class="nav-action" href="index.html">← INDEX</a>
+    <div class="menu-toggle" id="menuBtn"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<main class="app">
+  <section class="page-head">
+    <div>
+      <div class="kicker">TR-eSport // PLAYER PERFORMANCE LAB</div>
+      <h1>Estadísticas de <span style="color:var(--gold)">Jugadores</span></h1>
+      <p>Centraliza el rendimiento de cada jugador, conserva el historial de todas las partidas y relaciona resultados, contexto y factores para detectar patrones de ejecución.</p>
+    </div>
+    <div class="head-meta">
+      <span class="status-chip"><i></i> HISTORIAL LOCAL</span>
+      <span class="status-chip muted">6 SLOTS · 6 PARTIDAS</span>
+    </div>
+    <div class="head-actions">
+      <button class="btn" id="btnImportar">⇧ Importar</button>
+      <input type="file" id="fileImportar" accept="application/json,.json" hidden>
+      <button class="btn" id="btnExportar">⇩ Extraer datos</button>
+      <button class="btn gold" id="btnGenerar">▦ Generar resumen</button>
+    </div>
+  </section>
+
+  <section class="grid grid-main">
+    <div>
+      <section class="card">
+        <div class="card-title">IDENTIDAD DEL ROSTER</div>
+        <div class="grid grid-3">
+          <div class="field"><label>Equipo</label><input id="teamName" type="text" value="TR-eSport" placeholder="Nombre del equipo"></div>
+          <div class="field"><label>Competencia</label><input id="eventName" type="text" placeholder="Ej. FFWS / Scrim / Torneo"></div>
+          <div class="field"><label>Bloque</label><select id="eventBlock"><option>ASCENSO</option><option>BLOQUE</option><option>TORNEO</option><option>SCRIM</option><option>ENTRENAMIENTO</option></select></div>
+        </div>
+        <div class="section-label">Jugadores vinculados al historial</div>
+        <div class="roster" id="roster"></div>
+        <div class="save-line">
+          <span class="save-state" id="saveState">● DATOS LOCALES ACTIVOS</span>
+          <button class="btn small" id="btnGuardarEquipo">Guardar roster</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="toolbar">
+          <div>
+            <div class="card-title" style="margin-bottom:2px">HISTORIAL DE PARTIDAS</div>
+            <div class="card-sub">Cada partida queda guardada y se utiliza para las comparativas individuales y el análisis acumulado.</div>
+          </div>
+          <button class="btn gold" id="btnNueva">+ Nueva partida</button>
+        </div>
+        <div id="matchList" class="match-list"></div>
+        <div id="empty" class="empty">NO HAY PARTIDAS REGISTRADAS · CREA LA PRIMERA PARA INICIAR EL HISTORIAL.</div>
+      </section>
+    </div>
+
+    <aside>
+      <section class="card">
+        <div class="card-title">PANEL GLOBAL</div>
+        <div class="kpi-grid">
+          <div class="kpi"><span>Partidas</span><b id="kMatches">0</b><small>historial acumulado</small></div>
+          <div class="kpi"><span>Puntos</span><b id="kPoints">0</b><small>posición + producción</small></div>
+          <div class="kpi"><span>Kills</span><b id="kKills">0</b><small>registro acumulado</small></div>
+          <div class="kpi"><span>Daño</span><b id="kDamage">0</b><small>impacto acumulado</small></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-title">LECTURA ACUMULADA</div>
+        <p class="factor-copy" id="globalNarrative">Agrega partidas para construir una lectura histórica del rendimiento.</p>
+        <div style="margin-top:11px" id="globalSignals"></div>
+      </section>
+
+      <section class="card">
+        <div class="card-title">SELECTOR DE ANÁLISIS</div>
+        <div class="field"><label>Jugador</label><select id="playerSelect"></select></div>
+        <div class="field" style="margin-top:9px"><label>Métrica</label>
+          <select id="metricSelect">
+            <option value="kills">Kills</option>
+            <option value="damage">Daño</option>
+            <option value="points">Puntos</option>
+            <option value="position">Posición</option>
+          </select>
+        </div>
+      </section>
+    </aside>
+  </section>
+
+  <section id="dashboard" class="card dashboard">
+    <div class="dashboard-top">
+      <div>
+        <div class="card-title" style="margin-bottom:4px">ANÁLISIS INDIVIDUAL</div>
+        <div class="card-sub">Visualiza la evolución del jugador seleccionado partida por partida, manteniendo la relación con el historial guardado.</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="btn cyan" id="btnResetChart">↺ Últimas partidas</button>
+        <button class="btn gold" id="btnGuardarAnalisis">▣ Guardar análisis</button>
+      </div>
+    </div>
+
+    <div class="chart-layout">
+      <div class="chart-box">
+        <div class="chart-head">
+          <strong id="chartTitle">Evolución del jugador</strong>
+          <div class="legend">
+            <span><i class="dot" style="background:var(--gold)"></i>Métrica</span>
+            <span><i class="dot" style="background:var(--cyan)"></i>Promedio</span>
+          </div>
+        </div>
+        <canvas id="trendChart" width="1000" height="330"></canvas>
+      </div>
+      <div>
+        <div class="section-label" style="margin-top:0">Ficha individual acumulada</div>
+        <div class="player-overview" id="playerOverview"></div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:18px">SECUENCIA DE RENDIMIENTO</div>
+    <div class="card" style="padding:7px;background:#090a0e">
+      <table class="compare-table">
+        <thead><tr><th>Partida</th><th>Mapa</th><th>Posición</th><th>Kills</th><th>Daño</th><th>Puntos</th><th>Variación</th></tr></thead>
+        <tbody id="compareBody"></tbody>
+      </table>
+    </div>
+
+    <div class="section-label" style="margin-top:18px">TABLA DE RENDIMIENTO</div>
+    <div id="allPlayers" class="player-overview"></div>
+  </section>
+
+  <section class="card dashboard" id="perfilJugador">
+    <div class="dashboard-top">
+      <div>
+        <div class="card-title" style="margin-bottom:4px">PERFIL INDIVIDUAL</div>
+        <div class="card-sub">Ficha del jugador seleccionado, evolución reciente y acumulados vinculados al mismo historial de partidas.</div>
+      </div>
+    </div>
+    <div class="profile-grid">
+      <div class="profile-card">
+        <div class="profile-head">
+          <div><div class="profile-name" id="profileName">Jugador 1</div><div class="match-id" id="profileId">ID: slot_1</div></div>
+          <span class="profile-role" id="profileRole">FLEX</span>
+        </div>
+        <div class="profile-kpis" id="profileKpis"></div>
+        <div class="profile-note" id="profileNarrative">Registra partidas para construir el perfil histórico.</div>
+      </div>
+      <div class="profile-card">
+        <div class="section-label" style="margin-top:0">Últimas partidas del jugador</div>
+        <div class="profile-history" id="profileHistory"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card dashboard" id="contextoAnalitico">
+    <div class="dashboard-top">
+      <div>
+        <div class="card-title" style="margin-bottom:4px">ANÁLISIS POR CONTEXTO</div>
+        <div class="card-sub">Compara el comportamiento del historial según mapa y tipo de competencia, sin mezclar categorías.</div>
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="field"><label>Tipo de competencia</label><select id="analysisType"><option value="TODOS">TODOS</option><option value="BLOQUE">BLOQUE</option><option value="SCRIM">SCRIM</option><option value="LIGA">LIGA</option><option value="TORNEO">TORNEO</option><option value="ENTRENAMIENTO">ENTRENAMIENTO</option></select></div>
+      <div class="field"><label>Mapa</label><select id="analysisMap"><option value="TODOS">TODOS LOS MAPAS</option><option>BERMUDA</option><option>PURGATORIO</option><option>NEX TERRA</option><option>KALAHARI</option><option>SOLARA</option></select></div>
+    </div>
+    <div class="context-grid" id="contextGrid"></div>
+  </section>
+
+  <section class="card dashboard">
+    <div class="card-title">FACTORES DE RENDIMIENTO</div>
+    <div class="card-sub">Se acumulan las causas marcadas en cada partida para observar cuáles se repiten y cómo se comporta el resultado cuando aparecen.</div>
+    <div class="factor-dashboard">
+      <div class="factor-card">
+        <div class="section-label" style="margin-top:0">Factores negativos / de riesgo</div>
+        <div id="negativeFactors"></div>
+      </div>
+      <div class="factor-card">
+        <div class="section-label" style="margin-top:0">Factores favorables</div>
+        <div id="positiveFactors"></div>
+      </div>
+    </div>
+    <div class="factor-card" style="margin-top:12px">
+      <div class="section-label" style="margin-top:0">Relación entre factores y partidas</div>
+      <div class="factor-copy" id="factorRelation">Todavía no hay suficientes partidas para identificar recurrencias.</div>
+    </div>
+    <div class="factor-card" style="margin-top:12px">
+      <div class="section-label" style="margin-top:0">Impacto por factor · jugador seleccionado</div>
+      <div style="overflow:auto"><table class="impact-table"><thead><tr><th>Factor</th><th>Partidas</th><th>Prom. Kills</th><th>Prom. Daño</th><th>Prom. Puntos</th><th>Comparación</th></tr></thead><tbody id="factorImpactBody"></tbody></table></div>
+    </div>
+  </section>
+
+
+  <section id="attendance" class="card dashboard">
+    <div class="toolbar">
+      <div>
+        <div class="card-title" style="margin-bottom:4px">ASISTENCIA DE BLOQUE / SCRIM / LIGA / TORNEO</div>
+        <div class="card-sub">Pase de lista independiente del historial de rendimiento. Cada registro conserva qué jugadores estuvieron presentes y enlaza las partidas registradas dentro de ese bloque.</div>
+      </div>
+      <button class="btn gold" id="btnNuevaAsistencia">+ Nuevo pase de lista</button>
+    </div>
+    <div class="attendance-wrap">
+      <div class="attendance-form">
+        <div class="field"><label>Nombre del bloque / evento</label><input id="attName" type="text" placeholder="Ej. Scrim Semana 3"></div>
+        <div class="field"><label>Tipo</label><select id="attType"><option>BLOQUE</option><option>SCRIM</option><option>LIGA</option><option>TORNEO</option></select></div>
+        <div class="field"><label>Fecha</label><input id="attDate" type="date"></div>
+        <div class="field"><label>Nota</label><input id="attNote" type="text" placeholder="Ej. Jornada nocturna"></div>
+        <button class="btn gold" id="btnCrearAsistencia">CREAR REGISTRO</button>
+      </div>
+      <div class="att-summary" id="attendanceSummary"></div>
+      <div id="attendanceCatalog" class="attendance-catalog"></div>
+      <div id="attendanceEmpty" class="empty">NO HAY REGISTROS DE ASISTENCIA · CREA EL PRIMERO PARA INICIAR EL PASE DE LISTA.</div>
+      <div class="section-label" style="margin-top:4px">RESUMEN POR JUGADOR</div>
+      <div class="att-table-wrap">
+        <table class="att-table">
+          <thead><tr><th>Jugador</th><th>Registros</th><th>Asistencias</th><th>% Asistencia</th><th>Partidas vinculadas</th><th>Última actividad</th></tr></thead>
+          <tbody id="attendancePlayers"></tbody>
+        </table>
+      </div>
+      <div class="att-note">La asistencia se guarda con el mismo identificador de cada jugador del roster. Las partidas se pueden vincular a un registro desde el campo “Pase de lista” dentro de cada partida.</div>
+    </div>
+  </section>
+
+  <section id="resumen-container">
+    <div class="res-title">ESTADÍSTICAS DE JUGADORES</div>
+    <div class="res-sub" id="resSub">TR-eSport · Historial</div>
+    <div class="res-kpis">
+      <div class="res-kpi"><span>Partidas</span><b id="resM">0</b></div>
+      <div class="res-kpi"><span>Puntos</span><b id="resP">0</b></div>
+      <div class="res-kpi"><span>Kills</span><b id="resK">0</b></div>
+      <div class="res-kpi"><span>Daño</span><b id="resD">0</b></div>
+    </div>
+    <table class="compare-table">
+      <thead><tr><th>Jugador</th><th>Kills</th><th>Daño</th><th>Puntos</th><th>Prom. kills</th><th>Prom. daño</th></tr></thead>
+      <tbody id="resPlayers"></tbody>
+    </table>
+  </section>
+</main>
+
+<script>
+'use strict';
+const LS = 'TR_ESPORT_STATS_PLAYERS_V4';
+const MAX_PLAYERS = 6;
+const FACTORS = {
+  negative:['Caída disputada','Rotación tardía','Loot insuficiente','Mala zona','Error individual','Comunicación','Falta de información','Ping / conexión','Desconcentración','Decisión de push','Mala gestión de recursos','Presión externa'],
+  positive:['Caída segura','Buena comunicación','Rotación temprana','Loot completo','Buena lectura de zona','Control de altura','Ventaja de información','Buen posicionamiento','Coordinación de push','Gestión de recursos','Adaptación rápida','Confianza']
+};
+const POINTS = {1:12,2:9,3:8,4:7,5:6,6:5,7:4,8:3,9:2,10:1,11:0,12:0};
+let data = load();
+let chartLimit = 12;
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+
+function uid(){return 'p_'+Math.random().toString(36).slice(2)+Date.now().toString(36)}
+function blank(){
+  return {team:'TR-eSport',event:'',block:'TORNEO',
+    players:Array.from({length:MAX_PLAYERS},(_,i)=>({id:'slot_'+(i+1),name:'Jugador '+(i+1),role:'FLEX'})),
+    matches:[],
+    attendance:[]
+  };
+}
+function load(){
+  try{
+    const raw=localStorage.getItem(LS);
+    const d=raw?JSON.parse(raw):blank();
+    if(!d.players||d.players.length!==MAX_PLAYERS)d.players=blank().players;
+    d.players=d.players.map((p,i)=>({...p,id:p.id||('slot_'+(i+1)),name:p.name||('Jugador '+(i+1)),role:p.role||'FLEX'}));
+    if(!Array.isArray(d.matches))d.matches=[];
+    if(!Array.isArray(d.attendance))d.attendance=[];
+    d.matches=d.matches.map(m=>({...m,sessionId:m.sessionId||'',category:m.category||d.block||'TORNEO',tacticalRef:m.tacticalRef||'',notes:m.notes||'',factorsNeg:m.factorsNeg||[],factorsPos:m.factorsPos||[],players:(m.players||[]).map(x=>({...x,downs:Number(x.downs)||0,deaths:Number(x.deaths)||0,revives:Number(x.revives)||0}))}));
+    d.attendance=d.attendance.map(a=>({...a,players:{...(a.players||{})},type:a.type||'BLOQUE',date:a.date||'',note:a.note||''}));
+    return {...blank(),...d,players:d.players,matches:d.matches,attendance:d.attendance};
+  }catch(e){return blank()}
+}
+function save(show=true){
+  localStorage.setItem(LS,JSON.stringify(data));
+  if(show){$('#saveState').textContent='● GUARDADO AUTOMÁTICAMENTE · '+new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});$('#saveState').className='save-state'}
+}
+function makeMatch(){
+  return {
+    id:uid(),name:'Partida '+(data.matches.length+1),map:'BERMUDA',phase:'INICIO',
+    drop:'',rotation:'',position:12,category:data.block||'TORNEO',tacticalRef:'',notes:'',sessionId:'',
+    factorsNeg:[],factorsPos:[],
+    players:data.players.map(p=>({playerId:p.id,kills:0,damage:0,assists:0,survival:0,downs:0,deaths:0,revives:0})),
+    createdAt:new Date().toISOString()
+  }
+}
+
+function renderRoster(){
+  $('#teamName').value=data.team||'TR-eSport';
+  $('#eventName').value=data.event||'';
+  $('#eventBlock').value=data.block||'TORNEO';
+  $('#roster').innerHTML=data.players.map((p,i)=>`
+    <div class="field player-field">
+      <label>Jugador ${i+1}</label>
+      <input type="text" class="playerName" data-pid="${esc(p.id)}" value="${esc(p.name)}" placeholder="Nick ${i+1}">
+      <select class="playerRole" data-pid="${esc(p.id)}">${opts(['IGL','RUSHER','SNIPER','SUPPORT','FLEX'],p.role||'FLEX')}</select>
+      <span class="player-index">P${i+1}</span>
+    </div>`).join('');
+  $('.playerName', $('#roster')) && $('#roster').querySelectorAll('.playerName').forEach(inp=>inp.addEventListener('input',()=>{
+    const p=data.players.find(x=>x.id===inp.dataset.pid); if(p)p.name=inp.value||('Jugador '+(data.players.indexOf(p)+1));
+    save(false);renderAll(false);
+  }));
+  $('#roster').querySelectorAll('.playerRole').forEach(sel=>sel.addEventListener('change',()=>{
+    const p=data.players.find(x=>x.id===sel.dataset.pid); if(p)p.role=sel.value; save(false); updateDash();
+  }));
+}
+function opts(list,sel){return list.map(v=>`<option ${v===sel?'selected':''}>${esc(v)}</option>`).join('')}
+function renderMatch(m){
+  const players=data.players;
+  return `<article class="match" data-mid="${m.id}">
+    <div class="match-head">
+      <div class="match-title">
+        <span class="match-badge">${esc(m.name)}</span>
+        <div><div class="match-name">${esc(m.map)} · ${esc(m.phase)}</div><div class="match-meta">${new Date(m.createdAt||Date.now()).toLocaleString('es-MX',{dateStyle:'short',timeStyle:'short'})}</div></div>
+      </div>
+      <button class="btn red small" data-act="remove-match">✕ Eliminar</button>
+    </div>
+    <div class="match-body">
+      <div class="match-grid">
+        <div>
+          <div class="match-context">
+            <div class="field"><label>Nombre</label><input data-k="name" type="text" value="${esc(m.name)}"></div>
+            <div class="field"><label>Mapa</label><select data-k="map">${opts(['BERMUDA','PURGATORIO','NEX TERRA','KALAHARI','SOLARA'],m.map)}</select></div>
+            <div class="field"><label>Fase</label><select data-k="phase">${opts(['INICIO','MEDIO JUEGO','FINAL','BOOYAH'],m.phase)}</select></div>
+            <div class="field"><label>Tipo de competencia</label><select data-k="category">${opts(['BLOQUE','SCRIM','LIGA','TORNEO','ENTRENAMIENTO'],m.category||data.block||'TORNEO')}</select></div>
+            <div class="field"><label>Posición</label><input data-k="position" type="number" min="1" max="12" value="${Number(m.position)||12}"></div>
+            <div class="field"><label>Lugar de caída</label><input data-k="drop" type="text" value="${esc(m.drop||'')}" placeholder="Ej. Pochinok"></div>
+            <div class="field"><label>Rotación</label><input data-k="rotation" type="text" value="${esc(m.rotation||'')}" placeholder="Ej. Norte → centro"></div>
+            <div class="field"><label>Referencia táctica</label><input data-k="tacticalRef" type="text" value="${esc(m.tacticalRef||'')}" placeholder="Ej. TACT-001"></div>
+            <div class="field"><label>Pase de lista</label><select data-k="sessionId"><option value="">SIN VINCULAR</option>${data.attendance.map(a=>`<option value="${esc(a.id)}" ${m.sessionId===a.id?'selected':''}>${esc(a.name)} · ${esc(a.type)}</option>`).join('')}</select></div>
+          </div>
+          <div class="match-pills">
+            <span class="pill">${POINTS[Math.max(1,Math.min(12,Number(m.position)||12))]||0} PTS POS.</span>
+            <span class="pill">${esc(m.category||'TORNEO')}</span>
+            <span class="pill">FACTORES: ${(m.factorsNeg||[]).length+(m.factorsPos||[]).length}</span>
+          </div>
+          <div class="section-label">Observación de la partida</div>
+          <textarea data-k="notes" placeholder="Anotar qué ocurrió y cómo influyó en la ejecución...">${esc(m.notes||'')}</textarea>
+        </div>
+        <div>
+          <div class="section-label" style="margin-top:0">Datos individuales</div>
+          <table class="stats-table">
+            <thead><tr><th>Jugador</th><th>Kills</th><th>Daño</th><th>Asist.</th><th>Superv.</th><th>Downs</th><th>Muertes</th><th>Rev.</th></tr></thead>
+            <tbody>
+            ${players.map((p,i)=>{
+              let s=(m.players||[]).find(x=>x.playerId===p.id)||{kills:0,damage:0,assists:0,survival:0};
+              return `<tr>
+                <td title="${esc(p.name)}">${esc(p.name)}</td>
+                <td><input type="number" min="0" data-pid="${p.id}" data-stat="kills" value="${Number(s.kills)||0}"></td>
+                <td><input type="number" min="0" data-pid="${p.id}" data-stat="damage" value="${Number(s.damage)||0}"></td>
+                <td><input type="number" min="0" data-pid="${p.id}" data-stat="assists" value="${Number(s.assists)||0}"></td>
+                <td><input type="number" min="0" data-pid="${p.id}" data-stat="survival" value="${Number(s.survival)||0}"></td>
+                <td><input type="number" min="0" data-pid="${p.id}" data-stat="downs" value="${Number(s.downs)||0}"></td>
+                <td><input type="number" min="0" data-pid="${p.id}" data-stat="deaths" value="${Number(s.deaths)||0}"></td>
+                <td><input type="number" min="0" data-pid="${p.id}" data-stat="revives" value="${Number(s.revives)||0}"></td>
+              </tr>`;
+            }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="section-label">Factores que afectaron esta partida</div>
+      <div class="match-factors">
+        ${FACTORS.negative.map(f=>`<label class="factor"><input type="checkbox" data-factor="neg" value="${esc(f)}" ${(m.factorsNeg||[]).includes(f)?'checked':''}><span>− ${esc(f)}</span></label>`).join('')}
+        ${FACTORS.positive.map(f=>`<label class="factor"><input type="checkbox" data-factor="pos" value="${esc(f)}" ${(m.factorsPos||[]).includes(f)?'checked':''}><span>+ ${esc(f)}</span></label>`).join('')}
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="btn small gold" data-act="save-match">✓ Guardar partida</button></div>
+    </div>
+  </article>`;
+}
+
+function renderMatches(){
+  $('#matchList').innerHTML=data.matches.map(renderMatch).join('');
+  $('#empty').style.display=data.matches.length?'none':'block';
+}
+
+function attachMatchEvents(){
+  $('#matchList').querySelectorAll('.match').forEach(card=>{
+    const mid=card.dataset.mid, m=data.matches.find(x=>x.id===mid);
+    card.querySelector('[data-act="remove-match"]').addEventListener('click',()=>{
+      if(!confirm('¿Eliminar esta partida del historial?'))return;
+      data.matches=data.matches.filter(x=>x.id!==mid);save();renderAll(false);
+    });
+    card.querySelectorAll('[data-k]').forEach(el=>el.addEventListener('input',()=>{
+      let v=el.value;
+      if(el.type==='number')v=Math.max(0,Number(v)||0);
+      m[el.dataset.k]=v;
+      save(false);updateDash();
+    }));
+    card.querySelectorAll('[data-stat]').forEach(el=>el.addEventListener('input',()=>{
+      let s=m.players.find(x=>x.playerId===el.dataset.pid); if(!s){s={playerId:el.dataset.pid};m.players.push(s)}
+      s[el.dataset.stat]=Math.max(0,Number(el.value)||0);save(false);updateDash();
+    }));
+    card.querySelectorAll('[data-factor]').forEach(ch=>ch.addEventListener('change',()=>{
+      m.factorsNeg=[...card.querySelectorAll('[data-factor="neg"]:checked')].map(x=>x.value);
+      m.factorsPos=[...card.querySelectorAll('[data-factor="pos"]:checked')].map(x=>x.value);
+      save(false);updateDash();renderMatches();attachMatchEvents(); // conserva estado visual
+    }));
+    card.querySelector('[data-act="save-match"]').addEventListener('click',()=>{save();renderAll(false);flashSaved()});
+  });
+}
+function flashSaved(){const s=$('#saveState');s.textContent='● PARTIDA GUARDADA · HISTORIAL ACTUALIZADO';s.className='save-state';setTimeout(()=>{s.textContent='● DATOS LOCALES ACTIVOS'},1700)}
+function renderPlayerSelect(){
+  const current=$('#playerSelect').value;
+  $('#playerSelect').innerHTML=data.players.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
+  $('#playerSelect').value=data.players.some(p=>p.id===current)?current:data.players[0].id;
+}
+function sums(){
+  const map={};
+  data.players.forEach(p=>map[p.id]={id:p.id,name:p.name,role:p.role||'FLEX',matches:0,kills:0,damage:0,assists:0,points:0,survival:0,downs:0,deaths:0,revives:0});
+  data.matches.forEach(m=>{
+    const pts=POINTS[Math.max(1,Math.min(12,Number(m.position)||12))]||0;
+    (m.players||[]).forEach(s=>{
+      if(!map[s.playerId])return;
+      const a=map[s.playerId];a.matches++;a.kills+=Number(s.kills)||0;a.damage+=Number(s.damage)||0;a.assists+=Number(s.assists)||0;a.survival+=Number(s.survival)||0;a.downs+=Number(s.downs)||0;a.deaths+=Number(s.deaths)||0;a.revives+=Number(s.revives)||0;a.points+=pts+Number(s.kills||0);
+    });
+  });
+  return Object.values(map);
+}
+function playerSeries(pid,metric){
+  return data.matches.slice(-chartLimit).map((m,i)=>{
+    const s=(m.players||[]).find(x=>x.playerId===pid)||{kills:0,damage:0};
+    let v=metric==='kills'?Number(s.kills)||0:metric==='damage'?Number(s.damage)||0:metric==='points'?((POINTS[Number(m.position)]||0)+(Number(s.kills)||0)):Number(m.position)||12;
+    return {label:'P'+(data.matches.indexOf(m)+1),value:v};
+  });
+}
+function updateKPIs(){
+  let points=0,kills=0,damage=0;
+  data.matches.forEach(m=>{
+    points+=POINTS[Math.max(1,Math.min(12,Number(m.position)||12))]||0;
+    (m.players||[]).forEach(s=>{kills+=Number(s.kills)||0;damage+=Number(s.damage)||0;points+=Number(s.kills)||0});
+  });
+  $('#kMatches').textContent=data.matches.length;$('#kPoints').textContent=points;$('#kKills').textContent=kills;$('#kDamage').textContent=damage;
+  $('#globalNarrative').textContent=data.matches.length?`El historial contiene ${data.matches.length} partidas. La lectura individual se actualiza con cada registro y permite contrastar producción, daño, puntos y contexto.`:'Agrega partidas para construir una lectura histórica del rendimiento.';
+  $('#globalSignals').innerHTML=data.matches.length?`<span class="signal">${data.matches.length} REGISTROS</span><span class="signal good">HISTORIAL VINCULADO</span>${data.event?`<span class="signal">${esc(data.event)}</span>`:''}`:'';
+}
+function drawChart(){
+  const c=$('#trendChart'),ctx=c.getContext('2d');
+  const dpr=window.devicePixelRatio||1,w=c.clientWidth||900,h=285;
+  c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+  const pid=$('#playerSelect').value,metric=$('#metricSelect').value;
+  const p=data.players.find(x=>x.id===pid)||data.players[0],series=playerSeries(pid,metric);
+  $('#chartTitle').textContent=`${p?.name||'Jugador'} · ${metric.toUpperCase()}`;
+  if(!series.length){ctx.fillStyle='#5c5d69';ctx.font='12px Share Tech Mono';ctx.textAlign='center';ctx.fillText('AGREGA PARTIDAS PARA MOSTRAR LA GRÁFICA',w/2,h/2);return}
+  const pad={l:42,r:18,t:18,b:30},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;
+  let vals=series.map(x=>x.value), min=Math.min(...vals),max=Math.max(...vals); if(min===max){min-=1;max+=1}
+  const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
+  ctx.strokeStyle='rgba(255,255,255,.07)';ctx.lineWidth=1;ctx.font='10px Share Tech Mono';ctx.fillStyle='#5c5d69';ctx.textAlign='right';
+  for(let g=0;g<=4;g++){let y=pad.t+ch*g/4;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();let val=max-(max-min)*g/4;ctx.fillText(metric==='position'?Math.round(val):val.toFixed(metric==='damage'?0:1),pad.l-6,y+3)}
+  const x=i=>pad.l+(series.length===1?cw/2:cw*i/(series.length-1));
+  const y=v=>pad.t+ch*(max-v)/(max-min);
+  ctx.strokeStyle='#00e5ff';ctx.lineWidth=1;ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(pad.l,y(avg));ctx.lineTo(w-pad.r,y(avg));ctx.stroke();ctx.setLineDash([]);
+  ctx.strokeStyle='#ffcc00';ctx.lineWidth=2;ctx.beginPath();series.forEach((pt,i)=>{i?ctx.lineTo(x(i),y(pt.value)):ctx.moveTo(x(i),y(pt.value))});ctx.stroke();
+  series.forEach((pt,i)=>{ctx.fillStyle='#090a0e';ctx.strokeStyle='#ffcc00';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x(i),y(pt.value),4,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle='#6f7180';ctx.font='9px Share Tech Mono';ctx.textAlign='center';ctx.fillText(pt.label,x(i),h-8)});
+}
+function updateOverview(){
+  const ss=sums();
+  $('#playerOverview').innerHTML=ss.map(a=>`<div class="overview-row">
+    <div class="overview-name">${esc(a.name)}</div>
+    <div class="overview-cell"><span>K</span><b>${a.kills}</b></div>
+    <div class="overview-cell"><span>DMG</span><b>${a.damage}</b></div>
+    <div class="overview-cell"><span>PTS</span><b>${a.points}</b></div>
+    <div class="overview-cell"><span>AVG K</span><b>${a.matches?(a.kills/a.matches).toFixed(1):'0.0'}</b></div>
+  </div>`).join('');
+  $('#allPlayers').innerHTML=ss.map(a=>`<div class="overview-row">
+    <div class="overview-name">${esc(a.name)}</div>
+    <div class="overview-cell"><span>PART</span><b>${a.matches}</b></div>
+    <div class="overview-cell"><span>KILLS</span><b>${a.kills}</b></div>
+    <div class="overview-cell"><span>DAÑO</span><b>${a.damage}</b></div>
+    <div class="overview-cell"><span>PTS</span><b>${a.points}</b></div>
+  </div>`).join('');
+}
+function updateCompare(){
+  const pid=$('#playerSelect').value,matches=data.matches.slice(-chartLimit);
+  const vals=playerSeries(pid,$('#metricSelect').value).map(x=>x.value);
+  $('#compareBody').innerHTML=matches.map((m,i)=>{
+    const s=(m.players||[]).find(x=>x.playerId===pid)||{kills:0,damage:0};
+    const pts=(POINTS[Number(m.position)]||0)+(Number(s.kills)||0);
+    const prev=vals[i-1];let delta=prev==null?'—':(vals[i]-prev);const cls=delta==='—'?'delta-neutral':delta>0?'delta-pos':delta<0?'delta-neg':'delta-neutral';
+    return `<tr><td>${esc(m.name)}</td><td>${esc(m.map)}</td><td>${Number(m.position)||12}</td><td>${Number(s.kills)||0}</td><td>${Number(s.damage)||0}</td><td>${pts}</td><td class="${cls}">${delta==='—'?'—':(delta>0?'+':'')+delta}</td></tr>`;
+  }).join('');
+}
+function factorStats(){
+  const neg={},pos={};FACTORS.negative.forEach(f=>neg[f]=0);FACTORS.positive.forEach(f=>pos[f]=0);
+  data.matches.forEach(m=>{(m.factorsNeg||[]).forEach(f=>neg[f]=(neg[f]||0)+1);(m.factorsPos||[]).forEach(f=>pos[f]=(pos[f]||0)+1)});
+  return {neg,pos};
+}
+function renderFactors(){
+  const {neg,pos}=factorStats();
+  const render=(obj,target)=>{const rows=Object.entries(obj).filter(([,n])=>n>0).sort((a,b)=>b[1]-a[1]); if(!rows.length){$(target).innerHTML='<div class="empty">SIN FACTORES REGISTRADOS</div>';return}
+    const max=rows[0][1];$(target).innerHTML=rows.slice(0,8).map(([f,n])=>`<div class="factor-row"><div class="factor-label">${esc(f)}</div><div class="factor-bar"><i style="width:${(n/max)*100}%"></i></div><div class="factor-count">${n} PART.</div></div>`).join('');
+  };
+  render(neg,'#negativeFactors');render(pos,'#positiveFactors');
+  const pairs=[];
+  data.matches.forEach(m=>{
+    const kills=(m.players||[]).reduce((a,s)=>a+(Number(s.kills)||0),0);
+    const risk=(m.factorsNeg||[]).length;
+    if(risk)pairs.push({name:m.name,risk,kills});
+  });
+  if(!pairs.length){$('#factorRelation').textContent='Marca factores dentro de cada partida para relacionarlos con el resultado acumulado.'}
+  else{
+    const avgK=data.matches.length?data.matches.reduce((a,m)=>a+(m.players||[]).reduce((z,s)=>z+(Number(s.kills)||0),0),0)/data.matches.length:0;
+    const riskK=pairs.reduce((a,x)=>a+x.kills,0)/pairs.length;
+    $('#factorRelation').innerHTML=`En ${pairs.length} partida(s) se registraron factores negativos. Producción promedio con riesgo marcado: <b style="color:${riskK<avgK?'var(--red2)':'var(--green)'}">${riskK.toFixed(2)} kills</b> · promedio general: <b>${avgK.toFixed(2)} kills</b>.`;
+  }
+}
+
+function linkedMatchesForSession(sessionId){return data.matches.filter(m=>m.sessionId===sessionId)}
+function attendanceTotals(){
+  const records=data.attendance.length;
+  const totalChecks=data.attendance.reduce((a,r)=>a+Object.values(r.players||{}).filter(Boolean).length,0);
+  const linked=data.matches.filter(m=>m.sessionId).length;
+  const unique=Math.max(1,data.players.length*records);
+  const rate=records?Math.round((totalChecks/unique)*100):0;
+  return {records,totalChecks,linked,rate};
+}
+function renderAttendance(){
+  const t=attendanceTotals();
+  $('#attendanceSummary').innerHTML=`
+    <div class="att-kpi"><span>Registros</span><b>${t.records}</b></div>
+    <div class="att-kpi"><span>Asistencias</span><b>${t.totalChecks}</b></div>
+    <div class="att-kpi"><span>Partidas vinculadas</span><b>${t.linked}</b></div>
+    <div class="att-kpi"><span>Cobertura</span><b>${t.rate}%</b></div>
+    <div class="att-kpi"><span>Jugadores</span><b>${data.players.length}</b></div>`;
+  $('#attendanceEmpty').style.display=data.attendance.length?'none':'block';
+  $('#attendanceCatalog').innerHTML=data.attendance.map(a=>{
+    const ms=linkedMatchesForSession(a.id), count=Object.values(a.players||{}).filter(Boolean).length;
+    const pct=Math.round((count/Math.max(1,data.players.length))*100);
+    return `<article class="att-record" data-attid="${esc(a.id)}">
+      <div class="att-head">
+        <div class="att-title">
+          <span class="att-type">${esc(a.type)}</span>
+          <div style="min-width:0"><div class="att-name">${esc(a.name)}</div><div class="att-meta">${esc(a.date||'SIN FECHA')} · ${count}/${data.players.length} PRESENTES · ${ms.length} PARTIDAS VINCULADAS${a.note?` · ${esc(a.note)}`:''}</div></div>
+        </div>
+        <div class="att-actions">
+          <button class="btn small" data-att-act="all">TODOS</button>
+          <button class="btn small" data-att-act="none">NINGUNO</button>
+          <button class="btn red small" data-att-act="remove">✕</button>
+        </div>
+      </div>
+      <div class="att-players">
+        ${data.players.map(p=>{
+          const on=!!(a.players||{})[p.id], games=ms.reduce((n,m)=>{
+            const s=(m.players||[]).find(x=>x.playerId===p.id);
+            const hasStats=s&&((Number(s.kills)||0)+(Number(s.damage)||0)+(Number(s.assists)||0)+(Number(s.survival)||0)>0);
+            return n+(on||hasStats?1:0);
+          },0);
+          return `<label class="att-player ${on?'on':''}">
+            <div class="att-player-top"><span class="att-player-name">${esc(p.name)}</span><input type="checkbox" data-att-player="${esc(p.id)}" ${on?'checked':''}></div>
+            <div class="att-player-state">${on?'PRESENTE':'AUSENTE'}</div>
+            <div class="att-player-count">${games} PART. JUGADAS</div>
+          </label>`;
+        }).join('')}
+      </div>
+    </article>`;
+  }).join('');
+
+  const rows=data.players.map(p=>{
+    const records=data.attendance.length;
+    const attended=data.attendance.filter(a=>!!(a.players||{})[p.id]).length;
+    const linked=data.matches.filter(m=>{
+      if(!m.sessionId)return false;
+      const session=data.attendance.find(a=>a.id===m.sessionId);
+      const s=(m.players||[]).find(x=>x.playerId===p.id);
+      const hasStats=s&&((Number(s.kills)||0)+(Number(s.damage)||0)+(Number(s.assists)||0)+(Number(s.survival)||0)>0);
+      return !!(session?.players||{})[p.id] || hasStats;
+    }).length;
+    const last=data.attendance.filter(a=>!!(a.players||{})[p.id]).sort((a,b)=>(b.date||'').localeCompare(a.date||''))[0];
+    const rate=records?Math.round(attended/records*100):0;
+    return `<tr><td>${esc(p.name)}</td><td>${records}</td><td>${attended}</td><td class="att-rate ${rate>=75?'att-good':rate<50?'att-low':''}">${rate}%</td><td>${linked}</td><td>${esc(last?.date||'—')}</td></tr>`;
+  }).join('');
+  $('#attendancePlayers').innerHTML=rows||'<tr><td colspan="6">SIN JUGADORES</td></tr>';
+
+  $('#attendanceCatalog').querySelectorAll('.att-record').forEach(card=>{
+    const id=card.dataset.attid, a=data.attendance.find(x=>x.id===id); if(!a)return;
+    card.querySelectorAll('[data-att-player]').forEach(ch=>ch.addEventListener('change',()=>{
+      a.players=a.players||{};a.players[ch.dataset.attPlayer]=ch.checked;save(false);renderAttendance();renderMatches();attachMatchEvents();
+    }));
+    card.querySelector('[data-att-act="all"]').addEventListener('click',()=>{a.players={};data.players.forEach(p=>a.players[p.id]=true);save();renderAttendance()});
+    card.querySelector('[data-att-act="none"]').addEventListener('click',()=>{a.players={};save();renderAttendance()});
+    card.querySelector('[data-att-act="remove"]').addEventListener('click',()=>{
+      if(!confirm('¿Eliminar este registro de asistencia? Las partidas vinculadas conservarán sus estadísticas y quedarán sin pase de lista.'))return;
+      data.matches.forEach(m=>{if(m.sessionId===id)m.sessionId=''});data.attendance=data.attendance.filter(x=>x.id!==id);save();renderAll(false);
+    });
+  });
+}
+function createAttendance(){
+  const name=$('#attName').value.trim()||(`${$('#attType').value} ${data.attendance.length+1}`);
+  const a={id:uid(),name,type:$('#attType').value,date:$('#attDate').value||new Date().toISOString().slice(0,10),note:$('#attNote').value.trim(),players:{}};
+  data.attendance.push(a);save();
+  $('#attName').value='';$('#attNote').value='';
+  renderAttendance();renderMatches();attachMatchEvents();
+  document.querySelector(`[data-attid="${a.id}"]`)?.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+
+function currentPlayer(){return data.players.find(p=>p.id===$('#playerSelect').value)||data.players[0]}
+function playerStats(pid){return sums().find(x=>x.id===pid)||{id:pid,name:'Jugador',role:'FLEX',matches:0,kills:0,damage:0,assists:0,points:0,survival:0,downs:0,deaths:0,revives:0}}
+function updateProfile(){
+  const p=currentPlayer(), a=playerStats(p.id); if(!p)return;
+  $('#profileName').textContent=p.name;$('#profileId').textContent='ID: '+p.id;$('#profileRole').textContent=p.role||'FLEX';
+  $('#profileKpis').innerHTML=`
+    <div class="profile-kpi"><span>Partidas</span><b class="gold">${a.matches}</b></div>
+    <div class="profile-kpi"><span>Prom. kills</span><b>${a.matches?(a.kills/a.matches).toFixed(2):'0.00'}</b></div>
+    <div class="profile-kpi"><span>Prom. daño</span><b>${a.matches?(a.damage/a.matches).toFixed(0):'0'}</b></div>
+    <div class="profile-kpi"><span>Asistencias</span><b>${a.assists}</b></div>
+    <div class="profile-kpi"><span>Downs</span><b>${a.downs}</b></div>
+    <div class="profile-kpi"><span>Muertes</span><b>${a.deaths}</b></div>`;
+  $('#profileNarrative').textContent=a.matches?`Acumulado de ${a.matches} partida(s): ${a.kills} kills, ${a.damage} de daño, ${a.assists} asistencias y ${a.revives} revividas. La ficha se actualiza automáticamente con el historial.`:'Registra partidas para construir el perfil histórico.';
+  const rows=data.matches.slice(-8).reverse().map(m=>{const s=(m.players||[]).find(x=>x.playerId===p.id)||{};const pts=(POINTS[Number(m.position)]||0)+(Number(s.kills)||0);return `<div class="profile-history-row"><span>#${data.matches.indexOf(m)+1}</span><div class="pname">${esc(m.name)}<small>${esc(m.map)} · ${esc(m.category||'TORNEO')}</small></div><b>${Number(s.kills)||0}</b><b>${Number(s.damage)||0}</b><b>${Number(s.assists)||0}</b><b>${pts}</b><b class="extra-col">${Number(s.survival)||0}</b><span class="extra-col">P${Number(m.position)||12}</span></div>`}).join('');
+  $('#profileHistory').innerHTML=rows||'<div class="empty">SIN PARTIDAS</div>';
+}
+function filteredMatches(){
+  const type=$('#analysisType').value,map=$('#analysisMap').value;
+  return data.matches.filter(m=>(type==='TODOS'||String(m.category||'TORNEO')===type)&&(map==='TODOS'||m.map===map));
+}
+function updateContext(){
+  const list=filteredMatches();
+  const ctx=[...new Set(list.map(m=>m.map))];
+  $('#contextGrid').innerHTML=(ctx.length?ctx:['SIN DATOS']).map(mapName=>{
+    const ms=list.filter(m=>m.map===mapName), p=currentPlayer();let kills=0,damage=0,assists=0,pts=0;
+    ms.forEach(m=>{const s=(m.players||[]).find(x=>x.playerId===p.id)||{};kills+=Number(s.kills)||0;damage+=Number(s.damage)||0;assists+=Number(s.assists)||0;pts+=(POINTS[Number(m.position)]||0)+(Number(s.kills)||0)});
+    return `<div class="context-card"><div class="context-name">${esc(mapName)}</div><div class="context-meta">${ms.length} PARTIDA(S) · ${$('#analysisType').value}</div><div class="context-metrics"><div class="context-metric"><span>PROM. KILLS</span><b>${ms.length?(kills/ms.length).toFixed(2):'0.00'}</b></div><div class="context-metric"><span>PROM. DAÑO</span><b>${ms.length?(damage/ms.length).toFixed(0):'0'}</b></div><div class="context-metric"><span>PROM. PTS</span><b>${ms.length?(pts/ms.length).toFixed(2):'0.00'}</b></div></div><div class="stat-more">Asistencias acumuladas: ${assists}</div></div>`;
+  }).join('');
+}
+function updateFactorImpact(){
+  const pid=currentPlayer().id; const allKills=data.matches.length?data.matches.reduce((a,m)=>a+(Number((m.players||[]).find(s=>s.playerId===pid)?.kills)||0),0)/data.matches.length:0;
+  const allDamage=data.matches.length?data.matches.reduce((a,m)=>a+(Number((m.players||[]).find(s=>s.playerId===pid)?.damage)||0),0)/data.matches.length:0;
+  const allPts=data.matches.length?data.matches.reduce((a,m)=>{const s=(m.players||[]).find(x=>x.playerId===pid)||{};return a+(POINTS[Number(m.position)]||0)+(Number(s.kills)||0)},0)/data.matches.length:0;
+  const rows=[...FACTORS.negative,...FACTORS.positive].map(f=>{const ms=data.matches.filter(m=>(m.factorsNeg||[]).includes(f)||(m.factorsPos||[]).includes(f));if(!ms.length)return null;let k=0,d=0,pt=0;ms.forEach(m=>{const s=(m.players||[]).find(x=>x.playerId===pid)||{};k+=Number(s.kills)||0;d+=Number(s.damage)||0;pt+=(POINTS[Number(m.position)]||0)+(Number(s.kills)||0)});const ak=k/ms.length,ad=d/ms.length,ap=pt/ms.length;const diff=ak-allKills;return {f,n:ms.length,ak,ad,ap,diff}}).filter(Boolean).sort((a,b)=>b.n-a.n);
+  $('#factorImpactBody').innerHTML=rows.length?rows.map(r=>`<tr><td>${esc(r.f)}</td><td>${r.n}</td><td>${r.ak.toFixed(2)}</td><td>${r.ad.toFixed(0)}</td><td>${r.ap.toFixed(2)}</td><td class="${r.diff>0.05?'impact-good':r.diff<-0.05?'impact-bad':''}">${r.diff>0?'+':''}${r.diff.toFixed(2)} K</td></tr>`).join(''):'<tr><td colspan="6">SIN FACTORES REGISTRADOS</td></tr>';
+}
+
+function updateDash(){
+  renderPlayerSelect();updateKPIs();updateOverview();renderFactors();updateProfile();updateContext();updateFactorImpact();drawChart();updateCompare();renderAttendance();
+}
+function renderAll(doSave=true){
+  if(doSave)save(false);
+  renderRoster();renderMatches();attachMatchEvents();updateDash();
+}
+async function guardarAnalisisIndividual(){
+  const section=$('#dashboard');
+  const player=currentPlayer();
+  if(!section || !player){alert('No hay un análisis disponible para guardar.');return}
+  const btn=$('#btnGuardarAnalisis');
+  const old=btn.textContent;
+  btn.disabled=true;
+  btn.textContent='▣ GENERANDO…';
+  section.classList.add('captura-analisis');
+  try{
+    if(window.html2canvas){
+      await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+      const canvas=await html2canvas(section,{
+        backgroundColor:'#060708',
+        scale:2,
+        useCORS:true,
+        logging:false,
+        windowWidth:document.documentElement.scrollWidth,
+        width:section.scrollWidth,
+        height:section.scrollHeight,
+        scrollX:0,
+        scrollY:-window.scrollY
+      });
+      const safe=(player.name||'Jugador').replace(/[^a-z0-9áéíóúñü _-]/gi,'_').trim()||'Jugador';
+      const metric=($('#metricSelect')?.value||'analisis').toUpperCase();
+      const link=document.createElement('a');
+      link.download=`TR-eSport_Analisis_${safe}_${metric}_${Date.now()}.png`;
+      link.href=canvas.toDataURL('image/png');
+      document.body.appendChild(link);link.click();link.remove();
+    }else{
+      alert('No se pudo cargar el generador de imágenes.');
+    }
+  }catch(err){
+    console.error(err);
+    alert('No se pudo guardar el análisis como imagen.');
+  }finally{
+    section.classList.remove('captura-analisis');
+    btn.disabled=false;
+    btn.textContent=old;
+  }
+}
+
+function makeSummary(){
+  let points=0,kills=0,damage=0;
+  data.matches.forEach(m=>{points+=POINTS[Number(m.position)]||0;(m.players||[]).forEach(s=>{kills+=Number(s.kills)||0;damage+=Number(s.damage)||0;points+=Number(s.kills)||0})});
+  $('#resSub').textContent=`${data.team||'Equipo'} · ${data.event||'Historial'} · ${data.matches.length} partidas`;
+  $('#resM').textContent=data.matches.length;$('#resP').textContent=points;$('#resK').textContent=kills;$('#resD').textContent=damage;
+  $('#resPlayers').innerHTML=sums().map(a=>`<tr><td>${esc(a.name)}</td><td>${a.kills}</td><td>${a.damage}</td><td>${a.points}</td><td>${a.matches?(a.kills/a.matches).toFixed(2):'0.00'}</td><td>${a.matches?(a.damage/a.matches).toFixed(0):'0'}</td></tr>`).join('');
+  const box=$('#resumen-container');box.style.display='block';
+  setTimeout(()=>{
+    if(window.html2canvas){
+      html2canvas(box,{backgroundColor:'#090a0e',scale:2}).then(canvas=>{const a=document.createElement('a');a.download=`TR-eSport_Stats_${Date.now()}.png`;a.href=canvas.toDataURL('image/png');a.click();});
+    }
+    setTimeout(()=>box.style.display='none',1600);
+  },120);
+}
+
+$('#teamName').addEventListener('input',()=>{data.team=$('#teamName').value;save(false)});
+$('#eventName').addEventListener('input',()=>{data.event=$('#eventName').value;save(false)});
+$('#eventBlock').addEventListener('change',()=>{data.block=$('#eventBlock').value;save(false)});
+$('#btnGuardarEquipo').addEventListener('click',()=>{save();flashSaved();renderAll(false)});
+$('#btnNueva').addEventListener('click',()=>{data.matches.push(makeMatch());save();renderAll(false);setTimeout(()=>document.querySelector('.match:last-child')?.scrollIntoView({behavior:'smooth',block:'center'}),50)});
+$('#playerSelect').addEventListener('change',updateDash);
+$('#metricSelect').addEventListener('change',updateDash);
+$('#analysisType').addEventListener('change',updateDash);
+$('#analysisMap').addEventListener('change',updateDash);
+$('#btnResetChart').addEventListener('click',()=>{chartLimit=12;updateDash()});
+$('#btnGuardarAnalisis').addEventListener('click',guardarAnalisisIndividual);
+$('#btnNuevaAsistencia').addEventListener('click',()=>document.querySelector('#attName')?.focus());
+$('#btnCrearAsistencia').addEventListener('click',createAttendance);
+$('#btnGenerar').addEventListener('click',makeSummary);
+$('#btnExportar').addEventListener('click',()=>{
+  save(false);const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`TR-eSport_Stats_${Date.now()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500);
+});
+$('#btnImportar').addEventListener('click',()=>$('#fileImportar').click());
+$('#fileImportar').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.players||!Array.isArray(d.matches))throw new Error('Formato incompatible');data={...blank(),...d};save();renderAll(false);alert('Datos importados correctamente.')}catch(err){alert('No se pudo importar el archivo JSON.')}};r.readAsText(file);e.target.value='';
+});
+$('#menuBtn').addEventListener('click',()=>$('#navMenu').classList.toggle('open'));
+let lastY=window.scrollY;window.addEventListener('scroll',()=>{const n=$('#navbar');if(window.scrollY>lastY&&window.scrollY>100)n.classList.add('hide');else n.classList.remove('hide');lastY=window.scrollY});
+window.addEventListener('resize',drawChart);
+
+renderAll(false);
+</script>
+</body>
+</html>
