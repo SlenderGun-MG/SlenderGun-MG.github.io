@@ -1,683 +1,2026 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Central de Estrategias - SlenderGun MG</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,700&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg-dark: #070709;
-  --bg-panel: #101014;
-  --lux-gold: #ffcc00;
-  --lux-gold-dim: rgba(255, 204, 0, 0.15);
-  --lux-red: #e61919;
-  --text-main: #ffffff;
-  --text-dim: #8b8b99;
-  --border-color: #262633;
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08090d">
+  <meta name="description" content="Centro de competencia TR-eSport y KAELIX ESPORT: módulos de análisis, entrenamiento y gestión de jugadores.">
+  <title>TR-eSport | Centro de competencia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08090d;
+      --panel: #10131b;
+      --panel-2: #151925;
+      --line: rgba(255,255,255,.09);
+      --text: #f5f6fa;
+      --muted: #9299aa;
+      --yellow: #ffd400;
+      --red: #ff3d4f;
+      --cyan: #52e5ff;
+      --font-display: 'Chakra Petch', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Share Tech Mono', monospace;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 120px; }
+    body {
+      min-width: 320px;
+      overflow-x: hidden;
+      background:
+        radial-gradient(ellipse at 12% 8%, rgba(255,61,79,.08), transparent 27rem),
+        radial-gradient(ellipse at 88% 38%, rgba(82,229,255,.055), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+    }
+    a { color: inherit; }
+
+    /* Cabecera: redes arriba y accesos a cada módulo debajo. */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(8,9,13,.94);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+    .social-strip {
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(18px, 4vw, 48px);
+      padding: 8px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.055);
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .social-strip a {
+      color: #c7cbd4;
+      text-decoration: none;
+      transition: color .2s ease;
+      white-space: nowrap;
+    }
+    .social-strip a:hover { color: var(--yellow); }
+    .social-strip strong { color: var(--yellow); font-weight: 400; }
+    .module-nav-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 1480px;
+      margin: auto;
+      padding: 0 20px;
+    }
+    .module-nav {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(15px, 2.3vw, 32px);
+      min-height: 58px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .module-nav::-webkit-scrollbar { display: none; }
+    .module-nav a {
+      position: relative;
+      flex: 0 0 auto;
+      padding: 21px 0 19px;
+      color: #b3b8c5;
+      text-decoration: none;
+      font: 600 .78rem var(--font-display);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      transition: color .2s ease;
+    }
+    .module-nav a::after {
+      position: absolute;
+      content: '';
+      left: 0;
+      right: 100%;
+      bottom: 10px;
+      height: 2px;
+      background: var(--yellow);
+      transition: right .22s ease;
+    }
+    .module-nav a:hover { color: var(--yellow); }
+    .module-nav a:hover::after { right: 0; }
+    .fullscreen-toggle {
+      flex: 0 0 auto;
+      padding: 8px 11px;
+      border: 1px solid rgba(255,212,0,.4);
+      border-radius: 4px;
+      background: rgba(255,212,0,.07);
+      color: var(--yellow);
+      cursor: pointer;
+      font: 600 .7rem var(--font-display);
+      letter-spacing: .06em;
+      white-space: nowrap;
+    }
+    .fullscreen-toggle:hover { background: var(--yellow); color: #090a0d; }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      max-width: var(--max);
+      min-height: 270px;
+      margin: auto;
+      padding: 76px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .hero::before {
+      position: absolute;
+      content: 'TR';
+      z-index: -1;
+      right: 4%;
+      top: 8px;
+      color: rgba(255,255,255,.025);
+      font: 700 clamp(10rem, 24vw, 19rem)/1 var(--font-display);
+      letter-spacing: -.09em;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      color: var(--yellow);
+      font: .78rem var(--font-mono);
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ''; width: 28px; height: 2px; background: var(--yellow); }
+    .hero h1 {
+      max-width: 800px;
+      font: 700 clamp(2.6rem, 6vw, 5rem)/.98 var(--font-display);
+      letter-spacing: -.035em;
+      text-transform: uppercase;
+    }
+    .hero h1 span { color: var(--yellow); }
+    .hero p {
+      max-width: 600px;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: clamp(.92rem, 1.4vw, 1.05rem);
+      line-height: 1.7;
+    }
+
+    .section-heading {
+      max-width: var(--max);
+      margin: 0 auto 28px;
+      padding: 0 24px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .section-heading .eyebrow { margin-bottom: 8px; }
+    .section-heading h2 {
+      font: 700 clamp(1.8rem, 3.5vw, 2.65rem)/1.05 var(--font-display);
+      text-transform: uppercase;
+    }
+    .section-heading p {
+      max-width: 370px;
+      color: var(--muted);
+      font-size: .88rem;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    .modules-container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 10px 24px 78px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .spot {
+      --accent: var(--yellow);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: stretch;
+      gap: clamp(22px, 4vw, 52px);
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: linear-gradient(115deg, rgba(255,255,255,.035), rgba(255,255,255,.012));
+      box-shadow: 0 18px 55px rgba(0,0,0,.14);
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .65s ease, transform .65s ease, border-color .25s ease;
+    }
+    .spot.visible { opacity: 1; transform: translateY(0); }
+    .spot:hover { border-color: color-mix(in srgb, var(--accent) 38%, transparent); }
+    .spot:nth-child(even) .spot-img { order: 2; }
+    .spot:nth-child(even) .spot-info { order: 1; }
+    .spot-rojo { --accent: var(--red); }
+    .spot-azul { --accent: var(--cyan); }
+    .spot-reaction { --accent: #54e5ff; }
+    .spot-img {
+      position: relative;
+      min-height: 275px;
+      overflow: hidden;
+      border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+      border-radius: 8px;
+      background-color: #111722;
+      background-position: center;
+      background-size: cover;
+      isolation: isolate;
+    }
+    .spot-img::after {
+      position: absolute;
+      inset: 0;
+      content: '';
+      pointer-events: none;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 13%, transparent), transparent 48%, rgba(0,0,0,.25));
+    }
+    .spot-img:not(.con-imagen):not(.reaction-art) {
+      background-image:
+        linear-gradient(135deg, rgba(255,255,255,.035) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.035) 50%, rgba(255,255,255,.035) 75%, transparent 75%);
+      background-size: 36px 36px;
+    }
+    .spot-img:not(.con-imagen):not(.reaction-art)::before {
+      position: absolute;
+      inset: 0;
+      content: attr(data-art);
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,.2);
+      font: 700 clamp(2rem, 5vw, 4rem) var(--font-display);
+      letter-spacing: .08em;
+    }
+    .spot-info { align-self: center; padding: 12px clamp(2px, 1vw, 18px); }
+    .spot-tag {
+      display: inline-block;
+      margin-bottom: 11px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--accent);
+      color: var(--accent);
+      font: .76rem var(--font-mono);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .spot-info h3 {
+      margin-bottom: 13px;
+      font: 700 clamp(1.9rem, 3.5vw, 2.75rem)/1.05 var(--font-display);
+      text-transform: uppercase;
+    }
+    .spot-info h3 span { color: var(--accent); }
+    .spot-info p {
+      max-width: 540px;
+      margin-bottom: 22px;
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.75;
+    }
+    .btn-entrar {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 21px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: var(--accent);
+      color: #08090d;
+      text-decoration: none;
+      font: 700 .85rem var(--font-display);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      transition: transform .2s ease, background .2s ease, color .2s ease;
+    }
+    .btn-entrar::after { content: '→'; font-size: 1.1rem; }
+    .btn-entrar:hover { transform: translateY(-2px); background: transparent; color: var(--accent); }
+    .btn-disabled { border-color: #343946; background: #252a35; color: #858b98; pointer-events: none; }
+    .btn-disabled::after { content: ''; }
+
+    /* Gráfico de Centro de entrenamiento conservado del index original. */
+    .reaction-art {
+      background: radial-gradient(circle at 50% 48%, #12303d 0%, #07141e 52%, #05080d 100%);
+      border-color: rgba(84,229,255,.28);
+    }
+    .reaction-art-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(84,229,255,.09) 1px, transparent 1px), linear-gradient(90deg, rgba(84,229,255,.09) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .reaction-art-target {
+      position: absolute; width: 58px; height: 58px;
+      display: grid; place-items: center;
+      border: 1px solid rgba(84,229,255,.8); border-radius: 50%;
+      box-shadow: 0 0 28px rgba(0,217,255,.12), inset 0 0 20px rgba(0,217,255,.08);
+    }
+    .reaction-art-target::before, .reaction-art-target::after { position: absolute; content: ''; background: #54e5ff; opacity: .65; }
+    .reaction-art-target::before { width: 78px; height: 1px; }
+    .reaction-art-target::after { width: 1px; height: 78px; }
+    .reaction-art-target i { width: 15px; height: 15px; border: 3px solid #54e5ff; border-radius: 50%; background: rgba(84,229,255,.2); }
+    .target-a { top: 22%; left: 18%; transform: scale(.75); }
+    .target-b { top: 30%; right: 18%; transform: scale(1.08); }
+    .target-c { bottom: 22%; left: 44%; transform: scale(.62); }
+    .reaction-art-path { position: absolute; inset: 18% 15% 22%; border: 1px dashed rgba(84,229,255,.28); border-radius: 48% 52% 38% 62%; transform: rotate(-18deg); }
+    .reaction-art-hud { position: absolute; top: 18px; left: 20px; display: flex; flex-direction: column; gap: 4px; }
+    .reaction-art-hud span, .reaction-art-hud small, .reaction-art-stats small { color: #8eafbe; font: .65rem var(--font-mono); letter-spacing: 1px; }
+    .reaction-art-hud b { color: #effcff; font: 700 1.55rem var(--font-display); letter-spacing: 2px; }
+    .reaction-art-stats { position: absolute; right: 18px; bottom: 16px; left: 18px; display: flex; gap: 8px; justify-content: space-between; }
+    .reaction-art-stats span { flex: 1; display: flex; flex-direction: column; gap: 4px; padding: 8px 10px; border: 1px solid rgba(84,229,255,.18); background: rgba(3,12,18,.82); }
+    .reaction-art-stats b { color: #54e5ff; font: 700 1.05rem var(--font-display); }
+    .reaction-art-stats small { font-size: .52rem; }
+
+    /* Escenario de marcas: animación de energía, no una marquesina de texto. */
+    .brand-marquee {
+      --tr-glow: rgba(255, 212, 0, .24);
+      --kaelix-glow: rgba(82, 229, 255, .22);
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      padding: clamp(34px, 5.5vw, 66px) 20px;
+      border-top: 1px solid rgba(255,255,255,.09);
+      border-bottom: 1px solid rgba(255,255,255,.09);
+      background:
+        radial-gradient(ellipse at 8% 50%, var(--tr-glow), transparent 33%),
+        radial-gradient(ellipse at 92% 50%, var(--kaelix-glow), transparent 33%),
+        linear-gradient(115deg, #0b0e14 0%, #111722 48%, #090d14 100%);
+    }
+    .brand-marquee::before {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      content: '';
+      opacity: .22;
+      background-image:
+        linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+    }
+    .brand-marquee::after {
+      position: absolute;
+      z-index: -1;
+      top: -45%;
+      bottom: -45%;
+      left: -24%;
+      width: 17%;
+      content: '';
+      transform: skewX(-22deg);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.11), transparent);
+      animation: arena-sweep 7s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .showdown-shell {
+      position: relative;
+      max-width: 1160px;
+      margin: auto;
+      padding: clamp(18px, 3vw, 30px) clamp(17px, 4vw, 46px) 19px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 13px 4px 13px 4px;
+      background: linear-gradient(105deg, rgba(8,10,15,.91), rgba(13,17,25,.82) 50%, rgba(8,10,15,.91));
+      box-shadow: 0 22px 70px rgba(0,0,0,.38), inset 0 1px rgba(255,255,255,.055);
+    }
+    .showdown-shell::before,
+    .showdown-shell::after {
+      position: absolute;
+      width: 90px;
+      height: 2px;
+      content: '';
+      opacity: .9;
+    }
+    .showdown-shell::before { top: 0; left: 0; background: var(--yellow); box-shadow: 0 0 18px var(--yellow); }
+    .showdown-shell::after { right: 0; bottom: 0; background: var(--cyan); box-shadow: 0 0 18px var(--cyan); }
+    .showdown-topline,
+    .showdown-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      color: #8c95a7;
+      font: .68rem var(--font-mono);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .showdown-topline { margin-bottom: clamp(19px, 3vw, 31px); }
+    .showdown-status { display: inline-flex; align-items: center; gap: 9px; color: #d7dce6; }
+    .showdown-status i {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #81ffb0;
+      box-shadow: 0 0 0 0 rgba(129,255,176,.55);
+      animation: status-pulse 1.8s ease-out infinite;
+    }
+    .showdown-topline > span:last-child { color: #657084; text-align: right; }
+    .showdown-stage {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr);
+      align-items: center;
+      gap: clamp(12px, 2.5vw, 30px);
+      min-height: 150px;
+    }
+    .showdown-team {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: clamp(12px, 2vw, 22px);
+      min-width: 0;
+      animation: team-arrive 1s cubic-bezier(.2,.8,.2,1) both;
+    }
+    .showdown-team.kaelix { flex-direction: row-reverse; text-align: right; animation-delay: .12s; animation-name: team-arrive-right; }
+    .team-emblem {
+      position: relative;
+      flex: 0 0 clamp(68px, 8vw, 94px);
+      width: clamp(68px, 8vw, 94px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid var(--team-color);
+      border-radius: 9px 2px 9px 2px;
+      background: linear-gradient(145deg, color-mix(in srgb, var(--team-color) 19%, #10141d), #080a10 70%);
+      box-shadow: 0 0 28px color-mix(in srgb, var(--team-color) 17%, transparent), inset 0 0 24px color-mix(in srgb, var(--team-color) 10%, transparent);
+    }
+    .team-emblem::before {
+      position: absolute;
+      inset: -45%;
+      content: '';
+      transform: rotate(35deg) translateX(-85%);
+      background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--team-color) 35%, transparent), transparent);
+      animation: emblem-sweep 4.4s ease-in-out infinite;
+    }
+    .team-emblem::after {
+      position: absolute;
+      inset: 7px;
+      border: 1px solid color-mix(in srgb, var(--team-color) 34%, transparent);
+      content: '';
+      border-radius: 5px 1px 5px 1px;
+    }
+    .team-emblem b {
+      position: relative;
+      z-index: 1;
+      color: var(--team-color);
+      font: 700 clamp(1.5rem, 3.3vw, 2.35rem)/1 var(--font-display);
+      letter-spacing: -.09em;
+      text-shadow: 0 0 20px color-mix(in srgb, var(--team-color) 36%, transparent);
+    }
+    .showdown-team.tr { --team-color: var(--yellow); }
+    .showdown-team.kaelix { --team-color: var(--cyan); }
+    .team-copy { min-width: 0; }
+    .team-copy small {
+      display: block;
+      margin-bottom: 5px;
+      color: #727e91;
+      font: .62rem var(--font-mono);
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+    .team-copy strong {
+      display: block;
+      color: #f5f7fb;
+      font: 700 clamp(1.55rem, 3.5vw, 3.15rem)/.98 var(--font-display);
+      letter-spacing: -.045em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .showdown-team.tr .team-copy strong span { color: var(--yellow); }
+    .showdown-team.kaelix .team-copy strong { color: var(--cyan); }
+    .team-copy em {
+      display: block;
+      margin-top: 8px;
+      color: #788294;
+      font: normal .62rem var(--font-mono);
+      letter-spacing: .13em;
+    }
+    .versus-core {
+      position: relative;
+      z-index: 2;
+      width: 136px;
+      height: 136px;
+      display: grid;
+      place-items: center;
+      margin: auto;
+      isolation: isolate;
+    }
+    .versus-orbit {
+      position: absolute;
+      inset: 8px;
+      border: 1px dashed rgba(255,255,255,.24);
+      border-radius: 50%;
+      animation: orbit-spin 15s linear infinite;
+    }
+    .versus-orbit::before,
+    .versus-orbit::after {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      content: '';
+      border-radius: 50%;
+    }
+    .versus-orbit::before { top: 10px; left: 20px; background: var(--yellow); box-shadow: 0 0 12px var(--yellow); }
+    .versus-orbit::after { right: 15px; bottom: 15px; background: var(--cyan); box-shadow: 0 0 12px var(--cyan); }
+    .versus-orbit.orbit-two { inset: 22px; border-style: solid; border-color: rgba(255,255,255,.1); animation: orbit-spin 10s linear infinite reverse; }
+    .versus-mark {
+      position: relative;
+      z-index: 2;
+      width: 68px;
+      height: 68px;
+      display: grid;
+      place-items: center;
+      transform: rotate(45deg);
+      border: 1px solid rgba(255,255,255,.58);
+      background: linear-gradient(135deg, rgba(255,212,0,.22), rgba(82,229,255,.18));
+      box-shadow: 0 0 34px rgba(255,255,255,.12), inset 0 0 20px rgba(255,255,255,.08);
+      animation: mark-float 3.2s ease-in-out infinite;
+    }
+    .versus-mark span {
+      transform: rotate(-45deg);
+      color: #fff;
+      font: 700 2.5rem/.8 var(--font-display);
+      text-shadow: 0 0 18px rgba(255,255,255,.7);
+    }
+    .versus-core small {
+      position: absolute;
+      bottom: -1px;
+      color: #a6adba;
+      font: .57rem var(--font-mono);
+      letter-spacing: .22em;
+    }
+    .showdown-footer { margin-top: clamp(18px, 3vw, 28px); }
+    .showdown-footer > span:last-child { text-align: right; }
+    .energy-rail {
+      position: relative;
+      flex: 1;
+      height: 2px;
+      overflow: hidden;
+      background: linear-gradient(90deg, rgba(255,212,0,.45), rgba(255,255,255,.1), rgba(82,229,255,.45));
+    }
+    .energy-rail i {
+      position: absolute;
+      top: -2px;
+      left: -25%;
+      width: 25%;
+      height: 6px;
+      background: #fff;
+      filter: blur(2px);
+      box-shadow: 0 0 14px 3px rgba(255,255,255,.65);
+      animation: rail-travel 2.8s ease-in-out infinite;
+    }
+    @keyframes arena-sweep { 0%, 18% { left: -24%; opacity: 0; } 35% { opacity: .8; } 70%, 100% { left: 115%; opacity: 0; } }
+    @keyframes status-pulse { 0% { box-shadow: 0 0 0 0 rgba(129,255,176,.55); } 70%, 100% { box-shadow: 0 0 0 8px rgba(129,255,176,0); } }
+    @keyframes team-arrive { from { opacity: 0; filter: blur(7px); transform: translateX(-24px); } to { opacity: 1; filter: blur(0); transform: translateX(0); } }
+    @keyframes team-arrive-right { from { opacity: 0; filter: blur(7px); transform: translateX(24px); } to { opacity: 1; filter: blur(0); transform: translateX(0); } }
+    @keyframes emblem-sweep { 0%, 25% { transform: rotate(35deg) translateX(-85%); } 65%, 100% { transform: rotate(35deg) translateX(85%); } }
+    @keyframes orbit-spin { to { transform: rotate(360deg); } }
+    @keyframes mark-float { 0%, 100% { transform: rotate(45deg) translateY(0) scale(1); } 50% { transform: rotate(45deg) translateY(-5px) scale(1.06); } }
+    @keyframes rail-travel { 0% { left: -25%; } 100% { left: 105%; } }
+
+    /* Roster showcase: paneles editoriales, jugador estrella y banca visual. */
+    .players-section { max-width: 1400px; margin: 0 auto; padding: 100px 28px 104px; }
+    .players-intro { position:relative; margin:0 auto 48px; text-align:center; }
+    .players-intro::before { content:'OFFICIAL PLANTILLA // JUGADOR DATABASE'; display:block; margin-bottom:12px; color:#7d8796; font: .72rem var(--font-mono); letter-spacing:.24em; }
+    .players-intro h2 { font:700 clamp(2.25rem,5vw,4rem) var(--font-display); text-transform:uppercase; letter-spacing:.015em; }
+    .players-intro h2::after { display:block; width:110px; height:3px; margin:17px auto 0; content:''; background:linear-gradient(90deg,var(--yellow),#fff,var(--cyan)); box-shadow:0 0 20px rgba(255,255,255,.22); }
+    .team-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:26px; align-items:stretch; }
+    .team-card { --team-accent:var(--yellow); position:relative; min-width:0; padding:0; overflow:hidden; border:1px solid color-mix(in srgb,var(--team-accent) 34%,rgba(255,255,255,.12)); border-radius:5px; isolation:isolate; background:linear-gradient(145deg,#111722,#080b11 72%); box-shadow:0 24px 70px rgba(0,0,0,.34); }
+    .team-card::before { position:absolute; z-index:-1; inset:0; content:''; opacity:.42; background:radial-gradient(ellipse at 15% 8%,color-mix(in srgb,var(--team-accent) 20%,transparent),transparent 38%),linear-gradient(120deg,transparent 45%,color-mix(in srgb,var(--team-accent) 7%,transparent)); }
+    .team-card::after { position:absolute; z-index:3; top:0; left:-35%; width:22%; height:100%; content:''; pointer-events:none; transform:skewX(-18deg); background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--team-accent) 7%,transparent),transparent); animation:roster-scan 8s ease-in-out infinite; }
+    .team-card.kaelix { --team-accent:var(--cyan); }
+    .team-topline { height:4px; background:linear-gradient(90deg,transparent,var(--team-accent),transparent); box-shadow:0 0 18px color-mix(in srgb,var(--team-accent) 35%,transparent); }
+    .team-heading { position:relative; display:flex; align-items:center; gap:16px; margin:0; padding:25px 25px 22px; border-bottom:1px solid rgba(255,255,255,.09); }
+    .team-symbol { flex:0 0 58px; width:58px; height:58px; display:grid; place-items:center; border:1px solid color-mix(in srgb,var(--team-accent) 70%,transparent); background:linear-gradient(145deg,color-mix(in srgb,var(--team-accent) 19%,#080a10),#090c12); color:var(--team-accent); font:700 1.5rem var(--font-display); transform:skew(-8deg); box-shadow:0 0 30px color-mix(in srgb,var(--team-accent) 13%,transparent),inset 0 0 18px color-mix(in srgb,var(--team-accent) 10%,transparent); }
+    .team-heading-copy { min-width:0; flex:1; }
+    .team-kicker { display:block; margin-bottom:5px; color:#818b9b; font:.66rem var(--font-mono); letter-spacing:.19em; text-transform:uppercase; }
+    .team-card h3 { margin:0; color:var(--team-accent); font:700 clamp(1.55rem,2.6vw,2.2rem) var(--font-display); letter-spacing:.025em; text-transform:uppercase; }
+    .team-status { margin-left:auto; align-self:flex-start; display:inline-flex; align-items:center; gap:7px; padding:7px 9px; border:1px solid color-mix(in srgb,var(--team-accent) 34%,transparent); color:#dbe0e8; font:.58rem var(--font-mono); letter-spacing:.1em; white-space:nowrap; }
+    .team-status i { width:6px; height:6px; border-radius:50%; background:var(--team-accent); box-shadow:0 0 10px var(--team-accent); }
+    .roster-content { display:grid; grid-template-columns:1.05fr .95fr; gap:15px; padding:20px; }
+    .player-card { --team-accent:var(--yellow); position:relative; min-width:0; overflow:hidden; border:1px solid rgba(255,255,255,.14); background:#090c12; transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s; }
+    .player-card:hover { transform:translateY(-6px); border-color:var(--team-accent); box-shadow:0 18px 34px color-mix(in srgb,var(--team-accent) 16%,transparent); }
+    .player-card.featured { grid-row:span 2; }
+    .player-photo { position:relative; display:grid; place-items:center; overflow:hidden; isolation:isolate; aspect-ratio:4/5.1; background:radial-gradient(ellipse at 50% 34%,color-mix(in srgb,var(--team-accent) 28%,#202938),#090c12 72%); background-image:linear-gradient(145deg,color-mix(in srgb,var(--team-accent) 17%,transparent),rgba(10,13,19,.1)),var(--player-photo); background-size:cover; background-position:center; }
+    .player-card:not(.featured) .player-photo { aspect-ratio:4/4.15; }
+    .player-photo::before { position:absolute; z-index:0; inset:0; content:''; background:linear-gradient(180deg,rgba(0,0,0,.05),transparent 34%,rgba(0,0,0,.92)); }
+    .player-photo::after { position:absolute; z-index:0; inset:9px; content:''; border:1px solid color-mix(in srgb,var(--team-accent) 42%,transparent); clip-path:polygon(0 0,100% 0,100% 82%,50% 100%,0 82%); pointer-events:none; }
+    .player-card.featured .player-photo { aspect-ratio:4/5.9; }
+    .player-rating { position:absolute; z-index:2; top:13px; left:13px; min-width:48px; padding:7px 8px 6px; display:flex; flex-direction:column; align-items:center; border:1px solid color-mix(in srgb,var(--team-accent) 60%,transparent); background:rgba(5,7,11,.78); color:var(--team-accent); font:700 1.55rem var(--font-display); line-height:.9; text-shadow:0 0 14px color-mix(in srgb,var(--team-accent) 28%,transparent); }
+    .player-rating small { margin-top:5px; color:#dfe4ec; font:.48rem var(--font-mono); letter-spacing:.15em; }
+    .player-number { position:absolute; z-index:2; top:16px; right:13px; color:rgba(255,255,255,.82); font:.62rem var(--font-mono); letter-spacing:.1em; }
+    .player-rank { position:absolute; z-index:2; left:13px; bottom:66px; color:var(--team-accent); font:.56rem var(--font-mono); letter-spacing:.16em; text-transform:uppercase; }
+    .photo-placeholder { position:relative; z-index:1; padding:10px; color:rgba(255,255,255,.42); font:600 .62rem var(--font-mono); letter-spacing:.15em; text-align:center; }
+    .player-card.featured .photo-placeholder { font-size:.75rem; }
+    .player-label { position:relative; padding:12px 10px 14px; color:#f4f6fa; font:700 .91rem var(--font-display); text-align:left; text-transform:uppercase; letter-spacing:.055em; }
+    .player-card.featured .player-label { padding:15px 14px 17px; font-size:1.15rem; }
+    .player-label::before { display:block; width:32px; height:2px; margin:0 0 9px; content:''; background:var(--team-accent); box-shadow:0 0 12px var(--team-accent); }
+    .player-role { display:block; margin-top:5px; color:#8e98a8; font:.56rem var(--font-mono); font-weight:400; letter-spacing:.13em; }
+    .roster-side { display:grid; grid-template-rows:1fr 1fr; gap:15px; min-width:0; }
+    .roster-bottom { margin:0 20px 20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px; border-top:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.025); color:#8d96a5; font:.59rem var(--font-mono); letter-spacing:.12em; text-transform:uppercase; }
+    .roster-bottom strong { color:var(--team-accent); font-weight:400; }
+    .roster-mark { color:rgba(255,255,255,.22); font:700 1.1rem var(--font-display); letter-spacing:.08em; }
+    @keyframes roster-scan { 0%,55% { left:-35%; opacity:0; } 62% { opacity:1; } 88%,100% { left:125%; opacity:0; } }
+    @media (prefers-reduced-motion: reduce) { .team-card::after { animation:none; display:none; } .player-card,.player-card:hover { transition:none; transform:none; } }
+
+    .promotion-section { padding: 0 24px 88px; }
+    .promotion-card {
+      position: relative;
+      max-width: 940px;
+      margin: auto;
+      padding: clamp(28px, 5vw, 48px);
+      overflow: hidden;
+      border: 1px solid rgba(255,212,0,.3);
+      border-radius: 12px;
+      background: radial-gradient(circle at 100% 0%, rgba(255,212,0,.14), transparent 38%), linear-gradient(110deg, #151821, #0c0e14);
+      text-align: center;
+    }
+    .promotion-card::before { position: absolute; content: '↑'; right: 7%; top: -35%; color: rgba(255,212,0,.055); font: 700 15rem var(--font-display); }
+    .promotion-card .eyebrow { justify-content: center; }
+    .promotion-card h2 { position: relative; margin-bottom: 12px; font: 700 clamp(1.8rem, 4.2vw, 3.2rem) var(--font-display); text-transform: uppercase; }
+    .promotion-card p { position: relative; margin: 0 auto 23px; max-width: 600px; color: var(--muted); font-size: .9rem; line-height: 1.65; }
+    .promotion-button {
+      position: relative;
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 13px 24px;
+      border: 1px solid var(--yellow);
+      border-radius: 4px;
+      background: var(--yellow);
+      color: #090a0d;
+      text-decoration: none;
+      font: 700 .9rem var(--font-display);
+      letter-spacing: .045em;
+      text-transform: uppercase;
+      transition: transform .2s ease, background .2s ease, color .2s ease;
+    }
+    .promotion-button::after { content: '↗'; font-size: 1.1rem; }
+    .promotion-button:hover { transform: translateY(-3px); background: transparent; color: var(--yellow); }
+
+    footer { padding: 22px 20px; border-top: 1px solid var(--line); color: #737988; font: .72rem var(--font-mono); letter-spacing: .08em; text-align: center; text-transform: uppercase; }
+
+    @media (max-width: 820px) {
+      .module-nav-wrap { justify-content: flex-start; padding: 0 14px; }
+      .module-nav { justify-content: flex-start; gap: 22px; }
+      .spot { gap: 22px; }
+      .spot-img { min-height: 245px; }
+      .section-heading { align-items: flex-start; flex-direction: column; }
+      .section-heading p { text-align: left; }
+    }
+    @media (max-width: 820px) and (min-width: 621px) {
+      .showdown-stage { grid-template-columns: minmax(0, 1fr) 112px minmax(0, 1fr); gap: 12px; }
+      .versus-core { width: 112px; height: 112px; }
+      .versus-mark { width: 58px; height: 58px; }
+      .team-copy strong { font-size: clamp(1.35rem, 3.2vw, 2.2rem); }
+      .team-emblem { flex-basis: 70px; width: 70px; }
+    }
+    @media (max-width: 620px) {
+      html { scroll-padding-top: 105px; }
+      .social-strip { min-height: 40px; gap: 13px; padding: 8px 10px; font-size: .65rem; letter-spacing: .025em; }
+      .module-nav { min-height: 52px; gap: 19px; }
+      .module-nav a { padding: 18px 0 17px; font-size: .72rem; }
+      .module-nav a::after { bottom: 7px; }
+      .fullscreen-toggle { padding: 7px 8px; font-size: .64rem; }
+      .hero { min-height: 230px; padding: 58px 20px 48px; }
+      .hero::before { right: 1%; top: 35px; }
+      .hero h1 { font-size: clamp(2.45rem, 12vw, 3.5rem); }
+      .section-heading { padding: 0 20px; }
+      .modules-container { padding: 0 14px 56px; gap: 14px; }
+      .spot, .spot:nth-child(even) { grid-template-columns: 1fr; gap: 13px; padding: 12px; }
+      .spot:nth-child(even) .spot-img, .spot:nth-child(even) .spot-info { order: initial; }
+      .spot-img { min-height: 190px; }
+      .spot-info { padding: 9px 5px 6px; }
+      .spot-info h3 { font-size: 1.9rem; }
+      .spot-info p { margin-bottom: 17px; font-size: .87rem; }
+      .btn-entrar { width: 100%; }
+      .reaction-art-hud { top: 13px; left: 14px; }
+      .reaction-art-hud b { font-size: 1.25rem; }
+      .reaction-art-stats { right: 10px; bottom: 10px; left: 10px; gap: 5px; }
+      .reaction-art-stats span { padding: 6px; }
+      .reaction-art-stats small { font-size: .45rem; }
+      .reaction-art-target { width: 45px; height: 45px; }
+      .brand-marquee { padding: 24px 12px; }
+      .showdown-shell { padding: 16px 13px 14px; }
+      .showdown-topline, .showdown-footer { font-size: .53rem; letter-spacing: .08em; gap: 8px; }
+      .showdown-topline { margin-bottom: 19px; }
+      .showdown-stage { grid-template-columns: minmax(0, 1fr) 68px minmax(0, 1fr); gap: 4px; min-height: 104px; }
+      .showdown-team, .showdown-team.kaelix { flex-direction: column; justify-content: flex-start; align-items: center; gap: 6px; text-align: center; }
+      .team-emblem { flex: 0 0 38px; width: 38px; border-radius: 6px 2px 6px 2px; }
+      .team-emblem::after { inset: 4px; }
+      .team-emblem b { font-size: 1.05rem; }
+      .team-copy { width: 100%; }
+      .team-copy small { margin-bottom: 4px; font-size: .42rem; letter-spacing: .045em; }
+      .team-copy strong { font-size: clamp(.78rem, 3.5vw, .98rem); line-height: 1.05; letter-spacing: -.035em; white-space: normal; }
+      .team-copy em { margin-top: 4px; font-size: .36rem; letter-spacing: .025em; }
+      .versus-core { width: 66px; height: 82px; }
+      .versus-orbit { inset: 6px; }
+      .versus-orbit.orbit-two { inset: 14px; }
+      .versus-mark { width: 37px; height: 37px; }
+      .versus-mark span { font-size: 1.65rem; }
+      .versus-core small { bottom: -3px; font-size: .42rem; letter-spacing: .1em; }
+      .showdown-footer { margin-top: 14px; }
+      .players-section { padding: 58px 14px 60px; }
+      .team-grid { grid-template-columns: 1fr; }
+      .team-card { padding: 16px; }
+      .player-grid { gap: 9px; }
+      .promotion-section { padding: 0 14px 60px; }
+      .promotion-card { padding: 28px 17px; }
+      .promotion-button { width: 100%; font-size: .78rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .spot { opacity: 1; transform: none; }
+    }
+    :fullscreen { background: var(--bg); }
   
-  --font-title: 'Chakra Petch', sans-serif;
-  --font-mono: 'Share Tech Mono', monospace;
-  --font-text: 'Inter', sans-serif;
+    @media(max-width:900px) {
+      .players-section { padding:76px 20px 80px; }
+      .team-grid { grid-template-columns:1fr; gap:20px; }
+      .roster-content { grid-template-columns:1.05fr .95fr; }
+    }
+    @media(max-width:560px) {
+      .players-section { padding:58px 13px 64px; }
+      .players-intro { margin-bottom:27px; }
+      .players-intro::before { font-size:.58rem; letter-spacing:.14em; }
+      .team-heading { padding:17px 14px; gap:11px; }
+      .team-symbol { flex-basis:46px; width:46px; height:46px; font-size:1.2rem; }
+      .team-status { padding:6px; font-size:.48rem; gap:5px; }
+      .roster-content { gap:9px; padding:12px; }
+      .roster-side { gap:9px; }
+      .player-photo { aspect-ratio:4/5.2; }
+      .player-card:not(.featured) .player-photo { aspect-ratio:4/4.3; }
+      .player-card.featured .player-photo { aspect-ratio:4/6.1; }
+      .player-rating { top:8px; left:8px; min-width:39px; padding:6px; font-size:1.2rem; }
+      .player-number { top:10px; right:8px; font-size:.52rem; }
+      .player-rank { left:8px; bottom:57px; font-size:.45rem; }
+      .photo-placeholder { font-size:.48rem; letter-spacing:.08em; }
+      .player-label { padding:9px 7px 10px; font-size:.72rem; }
+      .player-card.featured .player-label { padding:11px 9px 12px; font-size:.95rem; }
+      .player-role { font-size:.45rem; }
+      .roster-bottom { margin:0 12px 12px; padding:10px 8px; font-size:.48rem; }
+    }
+
+    /* ===== ADAPTACIÓN TÁCTICA: lenguaje visual del formato de referencia ===== */
+    :root{
+      --bg:#0c0e0d;--panel:#1b1f1d;--panel-2:#151a17;--line:#2c322f;
+      --text:#eceae2;--muted:#8a918c;--yellow:#d7ff3b;--red:#ff4b3e;--cyan:#8cebff;
+      --font-display:'Big Shoulders Display',sans-serif;
+      --font-body:'Geist',sans-serif;--font-mono:'Geist Mono',monospace;
+    }
+    body{background:#0c0e0d;color:var(--text)}
+    .site-header{background:rgba(12,14,13,.96);border-color:var(--line);backdrop-filter:blur(14px)}
+    .social-strip{min-height:42px;border-color:var(--line);font-size:.7rem}
+    .social-strip a{color:#c8ccc5}
+    .social-strip strong{color:var(--yellow)}
+    .module-nav{min-height:64px}
+    .module-nav a{font-size:.8rem;color:#aeb5ae}
+    .module-nav a::after{background:var(--yellow)}
+    .fullscreen-toggle{border-radius:0;border-color:var(--yellow);background:var(--yellow);color:var(--bg)}
+    .fullscreen-toggle:hover{background:transparent;color:var(--yellow)}
+    .tactical-ticker{height:34px;overflow:hidden;background:var(--yellow);color:var(--bg);display:flex;align-items:center;font:600 .68rem var(--font-mono);letter-spacing:.14em}
+    .ticker-track{display:flex;align-items:center;gap:28px;width:max-content;white-space:nowrap;animation:ticker-run 32s linear infinite}
+    .ticker-track span{display:inline-flex;align-items:center;gap:10px}
+    .ticker-track b{font-size:1rem}
+    .ticker-track i{width:5px;height:5px;background:var(--bg);transform:rotate(45deg);opacity:.65}
+    @keyframes ticker-run{to{transform:translateX(-50%)}}
+    .hero{max-width:none;width:100%;min-height:590px;padding:46px max(5vw,28px) 48px;display:flex;align-items:stretch;justify-content:space-between;flex-direction:column;overflow:hidden;border-bottom:1px solid var(--line);background:#0c0e0d}
+    .hero::before{content:'TR';right:5%;top:5%;font-size:clamp(16rem,38vw,34rem);color:rgba(236,234,226,.025)}
+    .hero-grid{position:absolute;inset:0;z-index:-1;opacity:.28;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:80px 80px;mask-image:linear-gradient(to bottom,#000,transparent 95%)}
+    .hero-meta{display:flex;justify-content:space-between;gap:20px;color:var(--muted);font: .68rem var(--font-mono);letter-spacing:.14em}
+    .hero-meta span:first-child{display:flex;align-items:center;gap:10px}
+    .hero-meta i{width:7px;height:7px;background:var(--red);display:inline-block;animation:status-blink 1.2s steps(1) infinite}
+    @keyframes status-blink{50%{opacity:0}}
+    .hero-title-wrap{position:relative;margin:55px 0 35px;max-width:1100px}
+    .hero h1.hero-display{position:relative;max-width:none;margin:0;color:transparent;-webkit-text-stroke:1.5px var(--text);font:900 clamp(5rem,13.5vw,12.5rem)/.76 var(--font-display);letter-spacing:-.035em;text-transform:uppercase}
+    .hero h1 .hero-x{display:inline-block;color:var(--yellow);-webkit-text-stroke:0;font-size:.58em;margin:0 .08em;vertical-align:middle}
+    .hero h1 em{font-style:normal;color:var(--yellow);-webkit-text-stroke:0}
+    .hero-scan{position:absolute;inset:0;pointer-events:none;overflow:hidden;color:var(--yellow);font:900 clamp(5rem,13.5vw,12.5rem)/.76 var(--font-display);letter-spacing:-.035em;clip-path:inset(0 88% 0 0);animation:title-scan 4.2s cubic-bezier(.77,0,.175,1) infinite alternate}
+    @keyframes title-scan{to{clip-path:inset(0 0 0 88%)}}
+    .hero-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;max-width:1080px}
+    .hero-bottom p{max-width:440px;margin:0;color:#a2aaa3;font-size:1rem;line-height:1.65}
+    .hero-cta{display:inline-flex;align-items:center;gap:24px;padding:16px 22px;background:var(--yellow);color:var(--bg);text-decoration:none;font:600 .72rem var(--font-mono);letter-spacing:.08em;transition:.2s}
+    .hero-cta:hover{background:var(--text);transform:translateY(-3px)}
+    .hero-cta span{font-size:1.2rem}
+    .hero-coordinate{position:absolute;right:5%;bottom:48px;color:#626b64;font: .62rem/1.8 var(--font-mono);letter-spacing:.12em;text-align:right}
+    .section-heading{max-width:1320px;margin-top:54px}
+    .section-heading h2{font-size:clamp(2.8rem,6vw,5.4rem);line-height:.85}
+    .section-heading .eyebrow,.spot-tag{font-family:var(--font-mono)}
+    .spot{border-radius:0;border-color:var(--line);background:var(--panel);box-shadow:none}
+    .spot-img{border-radius:0}
+    .spot-info h3{font-size:clamp(2.6rem,5vw,4rem);line-height:.9}
+    .btn-entrar{border-radius:0;font-family:var(--font-mono)}
+    .brand-marquee{border-radius:0;background:radial-gradient(ellipse at 8% 50%,rgba(215,255,59,.14),transparent 33%),radial-gradient(ellipse at 92% 50%,rgba(140,235,255,.13),transparent 33%),#101411}
+    .showdown-shell{border-radius:0;background:rgba(12,14,13,.9);box-shadow:none}
+    .showdown-team.tr .team-copy strong span,.team-emblem b{color:var(--team-color)}
+    .versus-mark{border-radius:0}
+    .players-section{max-width:1480px}
+    .players-intro{text-align:left;margin-bottom:35px}
+    .players-intro::before{color:var(--muted);letter-spacing:.18em}
+    .players-intro h2{font:900 clamp(3.5rem,8vw,7rem)/.82 var(--font-display);letter-spacing:-.02em}
+    .players-intro h2::after{margin:18px 0 0;width:95px;background:var(--yellow);box-shadow:none}
+    .team-grid{gap:18px}
+    .team-card{border-radius:0;background:#101411;box-shadow:none}
+    .team-card::before{opacity:.25}
+    .team-heading{padding:22px 24px;border-bottom:1px solid var(--line)}
+    .team-symbol{border-radius:0;background:var(--team-accent);color:#0c0e0d;box-shadow:none}
+    .team-heading-copy h3{font:900 clamp(2rem,4vw,3.5rem)/.9 var(--font-display);letter-spacing:-.02em}
+    .team-kicker,.team-status,.player-number,.player-rank,.player-role,.roster-bottom{font-family:var(--font-mono)}
+    .team-status{border-radius:0}
+    .roster-content{padding:18px 20px 12px;gap:14px}
+    .player-card{border-radius:0;background:#1b1f1d}
+    .player-photo{border-radius:0;aspect-ratio:4/5;background-color:#171d19}
+    .player-photo::before{background:linear-gradient(180deg,rgba(12,14,13,.04),rgba(12,14,13,.2) 48%,rgba(12,14,13,.96))}
+    .player-photo::after{border-radius:0;inset:8px;border:1px solid rgba(236,234,226,.13)}
+    .player-rating{border-radius:0;background:var(--team-accent);color:#0c0e0d;box-shadow:none}
+    .player-label{background:#171c19;font:800 1.2rem var(--font-display);letter-spacing:.04em}
+    .player-role{color:var(--muted)}
+    .roster-bottom{border-radius:0;border-top:1px solid var(--line)}
+    .promotion-card{border-radius:0;background:#101411;border-color:var(--line);box-shadow:none}
+    .promotion-card h2{font:900 clamp(4rem,9vw,8rem)/.8 var(--font-display)}
+    .promotion-button{border-radius:0;font-family:var(--font-mono)}
+    footer{font-family:var(--font-mono);letter-spacing:.08em}
+    @media(max-width:900px){
+      .hero{min-height:510px;padding:34px 24px 38px}
+      .hero-title-wrap{margin:65px 0 45px}
+      .hero-bottom{align-items:flex-start;flex-direction:column}
+      .hero-coordinate{display:none}
+      .team-grid{grid-template-columns:1fr}
+      .section-heading{align-items:flex-start;flex-direction:column}
+      .section-heading p{text-align:left}
+    }
+    @media(max-width:600px){
+      .social-strip{gap:12px;flex-wrap:wrap;font-size:.62rem}
+      .module-nav-wrap{padding:0 10px}
+      .module-nav{justify-content:flex-start;gap:19px}
+      .module-nav a{font-size:.72rem}
+      .tactical-ticker{height:30px}
+      .hero{min-height:430px;padding:28px 18px 32px}
+      .hero-meta{font-size:.55rem;letter-spacing:.06em}
+      .hero-meta span:last-child{display:none}
+      .hero-title-wrap{margin:62px 0 48px}
+      .hero h1.hero-display,.hero-scan{font-size:clamp(4.1rem,16vw,6.8rem)}
+      .hero-bottom p{font-size:.9rem}
+      .hero-cta{width:100%;justify-content:space-between}
+      .section-heading{padding:0 18px}
+      .modules-container{padding-left:15px;padding-right:15px}
+      .players-section{padding:70px 15px}
+      .players-intro h2{font-size:clamp(3.4rem,14vw,5rem)}
+      .team-heading{padding:16px 14px}
+      .roster-content{padding:12px}
+      .player-card.featured .player-photo{aspect-ratio:4/5}
+      .team-status{font-size:.52rem}
+      .showdown-stage{grid-template-columns:1fr 76px 1fr;gap:6px}
+      .versus-core{width:72px;height:72px}
+      .versus-mark{width:42px;height:42px}
+      .versus-mark span{font-size:1.7rem}
+      .team-emblem{flex-basis:48px;width:48px}
+      .team-copy strong{font-size:1.15rem;white-space:normal}
+      .team-copy em{font-size:.48rem}
+      .showdown-topline,.showdown-footer{font-size:.5rem;letter-spacing:.06em}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .ticker-track,.hero-scan,.hero-meta i{animation:none!important}
+    }
+
+    /* PLANTILLA FIX: composición limpia, proporciones coherentes y móvil real */
+    .players-section { width:min(100%,1460px); }
+    .team-grid { gap:22px; }
+    .team-card { padding:0 !important; }
+    .team-heading { min-height:108px; }
+    .roster-content { align-items:stretch; }
+    .player-card { display:flex; flex-direction:column; }
+    .player-photo { flex:1 1 auto; min-height:0; }
+    .player-card.featured .player-photo { aspect-ratio:4/5.15; }
+    .player-card:not(.featured) .player-photo { aspect-ratio:4/4.05; }
+    .player-label { min-height:62px; }
+    .roster-side { grid-template-rows:minmax(0,1fr) minmax(0,1fr); }
+    .roster-side .player-card { min-height:0; }
+    .team-status { flex-shrink:0; }
+    .photo-placeholder { max-width:100%; padding:10px 8px; text-wrap:balance; }
+    .player-photo[style*="--player-photo"] { background-repeat:no-repeat; }
+    .player-card:focus-visible { outline:2px solid var(--team-accent); outline-offset:3px; }
+    @media (max-width:900px) {
+      .team-grid { grid-template-columns:minmax(0,1fr); }
+      .team-card { max-width:760px; width:100%; margin-inline:auto; }
+      .roster-content { grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); }
+    }
+    @media (max-width:560px) {
+      .players-section { padding:54px 12px 58px; }
+      .players-intro { margin-bottom:24px; }
+      .players-intro h2 { font-size:clamp(2rem,9vw,3rem); }
+      .team-heading { min-height:unset; padding:15px 12px; gap:10px; }
+      .team-heading-copy { overflow-wrap:anywhere; }
+      .team-kicker { font-size:.52rem; letter-spacing:.1em; }
+      .team-card h3 { font-size:clamp(1.25rem,6vw,1.8rem); }
+      .team-status { font-size:.43rem; padding:5px 6px; letter-spacing:.04em; }
+      .team-symbol { flex-basis:42px; width:42px; height:42px; }
+      .roster-content { grid-template-columns:minmax(0,1fr); gap:10px; padding:10px; }
+      .player-card.featured { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.85fr); align-items:stretch; }
+      .player-card.featured .player-photo { aspect-ratio:1/1; min-height:150px; }
+      .player-card.featured .player-label { display:flex; flex-direction:column; justify-content:center; padding:14px 12px; font-size:1rem; }
+      .player-card.featured .player-role { overflow-wrap:anywhere; line-height:1.5; }
+      .roster-side { grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:auto; gap:10px; }
+      .roster-side .player-photo { aspect-ratio:4/4.3; }
+      .player-card:not(.featured) .player-photo { aspect-ratio:4/4.3; }
+      .player-label { min-height:58px; font-size:.72rem; }
+      .player-role { font-size:.43rem; letter-spacing:.07em; }
+      .player-rank { bottom:12px; }
+      .roster-bottom { margin:0 10px 10px; font-size:.48rem; }
+    }
+    @media (max-width:360px) {
+      .team-status { display:none; }
+      .player-card.featured { grid-template-columns:1fr; }
+      .player-card.featured .player-photo { aspect-ratio:4/3; }
+      .player-card.featured .player-label { min-height:58px; }
+    }
+
+/* PLANTILLA HORIZONTAL - TR / KX */
+.players-section{max-width:1500px;margin:0 auto;padding:88px 28px 96px}
+.players-intro{margin-bottom:36px}
+.players-intro h2{font-size:clamp(2rem,4vw,3.3rem);letter-spacing:.04em}
+.team-grid{display:grid;grid-template-columns:1fr;gap:28px}
+.team-card{--team-accent:#d7b13d;overflow:hidden;background:#101412;border:1px solid color-mix(in srgb,var(--team-accent) 45%,#2c322f);border-radius:4px}
+.team-card.kaelix{--team-accent:#7628df}
+.team-heading{padding:18px 24px;min-height:106px;display:flex;align-items:center;gap:18px;border-bottom:1px solid rgba(255,255,255,.10)}
+.team-symbol{display:none}
+.team-logo{width:76px;height:76px;flex:0 0 76px;object-fit:contain;filter:drop-shadow(0 0 15px color-mix(in srgb,var(--team-accent) 30%,transparent))}
+.team-heading-copy h3{font-size:clamp(1.8rem,3vw,2.65rem);line-height:1}
+.team-kicker{letter-spacing:.2em}
+.team-status{margin-left:auto}
+.roster-content{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:18px 22px 22px}
+.roster-side{display:contents}
+.player-card,.player-card.featured{grid-row:auto;display:flex;flex-direction:column}
+.player-photo,.player-card:not(.featured) .player-photo,.player-card.featured .player-photo{aspect-ratio:16/9;min-height:190px;max-height:260px;background-size:cover;background-position:center}
+.player-rating{font-size:1.35rem}
+.player-number{font-size:.72rem}
+.player-rank{bottom:12px;left:auto;right:13px}
+.photo-placeholder{padding:12px}
+.player-label,.player-card.featured .player-label{padding:13px 14px 15px;font-size:1.08rem}
+.player-role{font-size:.58rem}
+.roster-bottom{margin:0 22px 18px}
+.team-card::after{pointer-events:none}
+@media(max-width:760px){
+ .players-section{padding:58px 14px 68px}
+ .team-heading{padding:14px;gap:12px}
+ .team-logo{width:60px;height:60px;flex-basis:60px}
+ .team-status{font-size:.48rem;padding:6px}
+ .roster-content{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px}
+ .player-photo,.player-card:not(.featured) .player-photo,.player-card.featured .player-photo{min-height:120px;aspect-ratio:3/4}
+ .player-label,.player-card.featured .player-label{padding:9px 8px;font-size:.82rem}
+ .player-role{font-size:.46rem;letter-spacing:.05em}
+ .player-rating{top:7px;left:7px;min-width:34px;font-size:1.05rem;padding:5px}
+ .player-number{top:8px;right:7px;font-size:.46rem}
+ .photo-placeholder{font-size:.42rem;letter-spacing:.04em}
+ .roster-bottom{margin:0 12px 12px;font-size:.46rem}
+}
+@media(max-width:430px){
+ .team-heading-copy h3{font-size:1.65rem}
+ .team-kicker{font-size:.52rem}
+ .team-logo{width:50px;height:50px;flex-basis:50px}
+ .team-status{font-size:0}
+ .team-status i{width:8px;height:8px}
+ .player-photo,.player-card:not(.featured) .player-photo,.player-card.featured .player-photo{min-height:104px}
+ .player-label,.player-card.featured .player-label{font-size:.72rem}
+ .player-role{font-size:.4rem}
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
 
-body { 
-  background-color: var(--bg-dark);
-  color: var(--text-main); 
-  font-family: var(--font-text); 
-  overflow-x: hidden;
+/* Plantillas limpias: seis tarjetas parejas, con márgenes y alineación uniformes */
+.team-grid{gap:32px!important}
+.team-card{border-radius:8px!important;overflow:hidden!important}
+.team-heading{min-height:112px!important;padding:20px 26px!important;gap:18px!important}
+.team-logo{width:68px!important;height:68px!important;flex:0 0 68px!important;object-fit:contain!important}
+.team-heading-copy{display:flex;flex-direction:column;justify-content:center;gap:6px;min-width:0}
+.team-heading-copy h3{margin:0!important;line-height:1.05!important}
+.team-kicker{margin:0!important;line-height:1.3!important}
+.team-status{align-self:center!important;margin-left:auto!important;padding:8px 12px!important}
+.roster-content{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;align-items:stretch!important;gap:14px!important;padding:22px 24px 24px!important}
+.roster-content>.player-card{grid-row:auto!important;min-width:0!important;width:100%!important;display:flex!important;flex-direction:column!important;border-radius:6px!important;overflow:hidden!important}
+.roster-content .player-photo,.roster-content .player-card:not(.featured) .player-photo,.roster-content .player-card.featured .player-photo{width:100%!important;aspect-ratio:3/4!important;min-height:0!important;max-height:none!important;background-size:cover!important;background-position:center!important;flex:none!important}
+.roster-content .player-label,.roster-content .player-card.featured .player-label{min-height:72px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;padding:12px 10px!important;font-size:clamp(.68rem,.9vw,.9rem)!important;line-height:1.15!important;overflow-wrap:anywhere!important}
+.roster-content .player-label::before{margin-bottom:8px!important}
+.roster-content .player-role{font-size:.55rem!important;line-height:1.3!important;letter-spacing:.05em!important}
+.roster-content .player-rating{font-size:1.05rem!important}
+.roster-content .player-number{font-size:.56rem!important;letter-spacing:.06em!important}
+.roster-bottom{margin:0 24px 20px!important;padding:13px 15px!important;border-radius:4px!important}
+@media(max-width:1100px){.roster-content{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important}}
+@media(max-width:600px){.team-heading{padding:15px!important;gap:12px!important;min-height:unset!important}.team-logo{width:52px!important;height:52px!important;flex-basis:52px!important}.team-status{padding:6px 8px!important;font-size:.45rem!important}.roster-content{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;padding:12px!important}.roster-content .player-photo,.roster-content .player-card:not(.featured) .player-photo,.roster-content .player-card.featured .player-photo{aspect-ratio:4/5!important}.roster-content .player-label,.roster-content .player-card.featured .player-label{min-height:64px!important;font-size:.78rem!important;padding:10px 8px!important}.roster-bottom{margin:0 12px 12px!important}}
+
+/* Identidad de color de cada plantilla: TR dorado y KAELIX morado */
+.team-card.tresport{--team-accent:#E2B84B!important}
+.team-card.kaelix{--team-accent:#8B45E8!important}
+.team-card.tresport .team-heading,
+.team-card.tresport .player-label{border-color:rgba(226,184,75,.28)}
+.team-card.kaelix .team-heading,
+.team-card.kaelix .player-label{border-color:rgba(139,69,232,.32)}
+.team-card.tresport .team-status,
+.team-card.tresport .roster-bottom strong{color:#E2B84B}
+.team-card.kaelix .team-status,
+.team-card.kaelix .roster-bottom strong{color:#A66AF0}
+.team-card.tresport .player-rating{border-color:rgba(226,184,75,.8);color:#E2B84B}
+.team-card.kaelix .player-rating{border-color:rgba(139,69,232,.8);color:#A66AF0}
+.team-card.tresport .player-label::before{background:#E2B84B;box-shadow:0 0 12px #E2B84B}
+.team-card.kaelix .player-label::before{background:#A66AF0;box-shadow:0 0 12px #A66AF0}
+.team-card.tresport .player-rank{color:#E2B84B}
+.team-card.kaelix .player-rank{color:#A66AF0}
+.team-card.tresport .player-photo{background-color:#211b0d}
+.team-card.kaelix .player-photo{background-color:#1a1028}
+.team-card.tresport .player-number{color:#E2B84B}
+.team-card.kaelix .player-number{color:#A66AF0}
+
+
+/* Corrección del rectángulo TR/KX: evitar el relleno amarillo fosforescente */
+.roster-content .player-rating,
+.roster-content .player-card.featured .player-rating {
+  background: rgba(8, 11, 15, .92) !important;
+  color: var(--team-accent) !important;
+  border: 1px solid var(--team-accent) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,.35), inset 0 0 12px color-mix(in srgb, var(--team-accent) 9%, transparent) !important;
+  min-width: 54px !important;
+  padding: 8px 9px 7px !important;
+  line-height: 1 !important;
+  text-shadow: none !important;
 }
-
-/* ── Barra Superior (Pestañas) ── */
-.top-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 70px;
-  background: rgba(16, 16, 20, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 50px;
-  z-index: 1000;
-  transition: transform 0.4s ease;
+.roster-content .player-rating small {
+  color: #e7e9ed !important;
+  font-size: .43rem !important;
+  letter-spacing: .12em !important;
+  margin-top: 5px !important;
+  white-space: nowrap !important;
 }
+.team-card.tresport .player-rating { --team-accent: #E2B84B; }
+.team-card.kaelix .player-rating { --team-accent: #A66AF0; }
 
-.nav-hidden {
-  transform: translateY(-100%);
-}
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.brand-logo {
-  width: 35px;
-  height: 35px;
-  background: var(--lux-gold);
-  clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-title);
-  font-weight: 700;
-  color: #000;
-  font-size: 1rem;
-}
-
-.brand-text {
-  font-family: var(--font-title);
-  font-size: 1.2rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  line-height: 1;
-}
-
-.nav-tabs {
-  display: flex;
-  gap: 30px;
-}
-
-.nav-tabs a {
-  color: var(--text-dim);
-  text-decoration: none;
-  font-family: var(--font-title);
-  font-weight: 600;
-  font-size: 1rem;
-  text-transform: uppercase;
-  transition: 0.3s;
-  position: relative;
-}
-
-.nav-tabs a:hover { color: var(--lux-gold); }
-.nav-tabs a::after {
-  content: '';
-  position: absolute;
-  bottom: -25px; left: 0; width: 0%; height: 3px;
-  background: var(--lux-gold);
-  transition: 0.3s;
-}
-.nav-tabs a:hover::after { width: 100%; }
-
-/* Botón Menú Hamburguesa (oculto por defecto) */
-.menu-toggle {
-  display: none;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 30px;
-  height: 21px;
+/* Interacción de cartas: elevación y panel de estadísticas */
+.team-card .player-card,
+.team-card .player,
+.team-card .roster-player,
+.team-card .player-item {
+  transition: transform .28s cubic-bezier(.2,.8,.2,1), filter .28s ease, box-shadow .28s ease;
+  transform-origin: center bottom;
   cursor: pointer;
-  z-index: 1001;
 }
-
-.menu-toggle span {
-  display: block;
-  height: 3px;
-  width: 100%;
-  background-color: var(--lux-gold);
-  border-radius: 3px;
-  transition: all 0.3s ease;
+.team-card .player-card:hover,
+.team-card .player:hover,
+.team-card .roster-player:hover,
+.team-card .player-item:hover {
+  transform: translateY(-9px) scale(1.025);
+  filter: brightness(1.08);
+  z-index: 5;
 }
-
-/* ── Pliegue Inicial (Hero Section) ── */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 80px 20px 40px 20px;
-  background-image: 
-    linear-gradient(to bottom, rgba(7, 7, 9, 0.3), var(--bg-dark)),
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: cover, 40px 40px, 40px 40px;
+.team-card .player-card:focus-visible,
+.team-card .player:focus-visible,
+.team-card .roster-player:focus-visible,
+.team-card .player-item:focus-visible {
+  outline: 2px solid var(--team-accent, #E2B84B);
+  outline-offset: 4px;
 }
-
-.hero h1 {
-  font-family: var(--font-title);
-  font-size: 4.5rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 20px;
-}
-.hero h1 span { color: var(--lux-gold); }
-
-.hero p {
-  color: var(--text-dim);
-  font-size: 1.2rem;
-  max-width: 700px;
-  line-height: 1.6;
-  margin-bottom: 30px;
-}
-
-/* ── Redes Sociales ── */
-.social-links {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 50px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.social-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-color);
-  padding: 12px 24px;
-  border-radius: 50px;
-  color: var(--text-main);
-  text-decoration: none;
-  font-family: var(--font-mono);
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.social-btn svg {
-  width: 20px;
-  height: 20px;
-  fill: currentColor;
-  transition: 0.3s ease;
-}
-
-.social-btn:hover {
-  background: var(--bg-panel);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-}
-
-.social-btn.tiktok:hover { border-color: #00f2fe; color: #00f2fe; }
-.social-btn.youtube:hover { border-color: #ff0000; color: #ff0000; }
-.social-btn.instagram:hover { border-color: #e1306c; color: #e1306c; }
-.social-btn.whatsapp:hover { border-color: #25d366; color: #25d366; background: rgba(37, 211, 102, 0.06); }
-
-
-.scroll-indicator {
-  position: absolute;
-  bottom: 40px;
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  color: var(--lux-gold);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-15px); }
-  60% { transform: translateY(-7px); }
-}
-
-/* ── Spots de Módulos ── */
-.modules-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 50px 20px 100px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 100px;
-}
-
-.spot {
-  display: flex;
-  align-items: center;
-  gap: 50px;
+.player-stats-panel {
+  display: grid;
+  grid-template-rows: 0fr;
   opacity: 0;
-  transform: translateY(50px);
-  transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.spot.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.spot:nth-child(even) {
-  flex-direction: row-reverse;
-}
-
-.spot-img {
-  flex: 1;
-  width: 100%;
-  height: 400px;
-  background-color: var(--bg-panel);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  position: relative;
+  max-height: 0;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.spot-img::before {
-  content: 'IMAGEN DEL MÓDULO';
-  font-family: var(--font-title);
-  color: var(--border-color);
-  font-size: 1.5rem;
-  letter-spacing: 2px;
-  text-align: center;
-  padding: 0 10px;
-}
-
-/* Ocultar el texto si hay imagen de fondo */
-.spot-img.con-imagen::before {
-  display: none;
-}
-
-.spot-img::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(45deg, transparent 40%, rgba(255, 204, 0, 0.05) 50%, transparent 60%);
-}
-
-.spot-info {
-  flex: 1;
-}
-
-.spot-tag {
-  font-family: var(--font-mono);
-  color: var(--lux-gold);
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-  display: inline-block;
-  border-bottom: 1px solid var(--lux-gold);
-  padding-bottom: 3px;
-}
-
-.spot-info h2 {
-  font-family: var(--font-title);
-  font-size: 2.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  line-height: 1.1;
-}
-
-.spot-info p {
-  color: var(--text-dim);
-  font-size: 1.1rem;
-  line-height: 1.7;
-  margin-bottom: 35px;
-}
-
-.btn-entrar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--lux-gold);
-  color: #000;
-  font-family: var(--font-title);
-  font-weight: 700;
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  text-decoration: none;
-  padding: 15px 40px;
-  border-radius: 4px;
-  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-  transition: 0.3s;
-}
-
-.btn-entrar:hover {
-  background: #fff;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(255, 204, 0, 0.2);
-}
-
-/* Clase para los botones deshabilitados "Próximamente" */
-.btn-entrar.btn-disabled,
-.spot-rojo .btn-entrar.btn-disabled,
-.spot-azul .btn-entrar.btn-disabled {
-  background: var(--border-color);
-  color: var(--text-dim);
+  transition: grid-template-rows .3s ease, opacity .25s ease, max-height .3s ease, margin .3s ease;
+  margin-top: 0;
   pointer-events: none;
-  box-shadow: none;
-  transform: none;
 }
-
-.spot-rojo .spot-tag { color: var(--lux-red); border-color: var(--lux-red); }
-.spot-rojo .btn-entrar:not(.btn-disabled) { background: var(--lux-red); color: white; }
-.spot-rojo .btn-entrar:not(.btn-disabled):hover { background: #fff; color: var(--lux-red); box-shadow: 0 10px 20px rgba(230, 25, 25, 0.2); }
-.spot-rojo .spot-img::after { background: linear-gradient(45deg, transparent 40%, rgba(230, 25, 25, 0.05) 50%, transparent 60%); }
-
-.spot-azul .spot-tag { color: #00e5ff; border-color: #00e5ff; }
-.spot-azul .btn-entrar:not(.btn-disabled) { background: #00e5ff; color: #000; }
-.spot-azul .btn-entrar:not(.btn-disabled):hover { background: #fff; box-shadow: 0 10px 20px rgba(0, 229, 255, 0.2); }
-.spot-azul .spot-img::after { background: linear-gradient(45deg, transparent 40%, rgba(0, 229, 255, 0.05) 50%, transparent 60%); }
-
-/* ── Responsividad (Tablets) ── */
-@media (max-width: 900px) {
-  .top-nav { padding: 0 20px; justify-content: space-between; }
-  
-  .menu-toggle { display: flex; }
-  .nav-tabs { 
-    position: absolute;
-    top: 70px;
-    left: 0;
-    width: 100%;
-    background: rgba(16, 16, 20, 0.98);
-    flex-direction: column;
-    align-items: center;
-    padding: 30px 0;
-    gap: 25px;
-    border-bottom: 1px solid var(--border-color);
-    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-    transition: clip-path 0.4s ease-in-out;
-  }
-  
-  .nav-tabs.menu-open {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  }
-  
-  .nav-tabs a::after { display: none; } 
-
-  .hero h1 { font-size: 3rem; }
-  .spot, .spot:nth-child(even) { flex-direction: column; text-align: center; gap: 40px; }
-  .spot-img { width: 100%; height: 300px; }
-  .spot-tag { margin: 0 auto 10px auto; }
-  .modules-container { gap: 80px; padding: 40px 20px 80px 20px; }
+.player-stats-panel > .player-stats-inner { min-height: 0; overflow: hidden; }
+.player-card.stats-open .player-stats-panel,
+.player.stats-open .player-stats-panel,
+.roster-player.stats-open .player-stats-panel,
+.player-item.stats-open .player-stats-panel {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  max-height: 180px;
+  margin-top: 10px;
+  pointer-events: auto;
 }
-
-/* ── Responsividad (Móviles - Optimización Profunda) ── */
+.player-stats-inner {
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--team-accent, #E2B84B) 55%, transparent);
+  border-radius: 6px;
+  background: rgba(5,8,12,.92);
+}
+.player-stats-title {
+  color: var(--team-accent, #E2B84B);
+  font: 700 .62rem/1.2 sans-serif;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.player-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 7px 12px;
+}
+.player-stat { display:flex; flex-direction:column; gap:3px; min-width:0; }
+.player-stat b { color:#f4f5f7; font:700 .78rem/1.1 sans-serif; }
+.player-stat span { color:#9ca3af; font: .52rem/1.2 sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+.player-stats-hint {
+  color:#9ca3af; font: .52rem/1.3 sans-serif; margin-top:8px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .team-card .player-card, .team-card .player, .team-card .roster-player, .team-card .player-item,
+  .player-stats-panel { transition:none !important; }
+}
 @media (max-width: 600px) {
-  .top-nav { padding: 0 15px; }
-  .brand-text { font-size: 1.1rem; }
-  
-  .hero { padding: 90px 15px 40px 15px; }
-  .hero h1 { font-size: 2.2rem; margin-bottom: 15px; line-height: 1.2; }
-  .hero p { font-size: 0.95rem; margin-bottom: 30px; }
-  
-  .social-links { width: 100%; flex-direction: column; gap: 12px; margin-bottom: 40px; }
-  .social-btn { width: 100%; justify-content: center; padding: 16px; font-size: 1rem; }
-  
-  .modules-container { padding: 30px 15px 60px 15px; gap: 40px; }
-  
-  .spot { 
-    gap: 20px; 
-    background: rgba(255, 255, 255, 0.02); 
-    padding: 20px; 
-    border-radius: 16px; 
-    border: 1px solid rgba(255, 255, 255, 0.05);
+  .team-card .player-card:hover, .team-card .player:hover,
+  .team-card .roster-player:hover, .team-card .player-item:hover {
+    transform: translateY(-4px) scale(1.01);
   }
-  
-  .spot-img { height: 180px; border-radius: 10px; }
-  .spot-img::before { font-size: 1.1rem; }
-  
-  .spot-info h2 { font-size: 1.8rem; margin-bottom: 10px; }
-  .spot-info p { font-size: 0.95rem; margin-bottom: 20px; text-align: left; }
-  
-  .spot:nth-child(odd), .spot:nth-child(even) { text-align: left; }
-  .spot-tag { margin: 0 0 10px 0; display: inline-block; }
-  
-  .btn-entrar { width: 100%; padding: 16px; font-size: 1.05rem; }
 }
-/* ── REACTION LAB · Módulo de entrenamiento ── */
-.spot-reaction .spot-tag{color:#54e5ff;border-color:#54e5ff}
-.spot-reaction .spot-info h2 span{color:#54e5ff}
-.spot-reaction .reaction-enter{background:linear-gradient(100deg,#54e5ff,#00b8d7);color:#041016;clip-path:none;border-radius:5px;box-shadow:0 8px 24px rgba(0,217,255,.12)}
-.spot-reaction .reaction-enter:hover{background:#fff;color:#041016;box-shadow:0 12px 28px rgba(0,217,255,.22)}
-.spot-reaction .spot-img::after{background:linear-gradient(145deg,rgba(0,217,255,.05),transparent 45%,rgba(0,217,255,.10))}
-.reaction-art{isolation:isolate;background:radial-gradient(circle at 50% 48%,#12303d 0%,#07141e 50%,#05080d 100%);border-color:rgba(84,229,255,.25)}
-.reaction-art-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(84,229,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(84,229,255,.09) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(to bottom,transparent,#000 15%,#000 85%,transparent)}
-.reaction-art-target{position:absolute;width:64px;height:64px;border:1px solid rgba(84,229,255,.8);border-radius:50%;display:grid;place-items:center;box-shadow:0 0 28px rgba(0,217,255,.12),inset 0 0 20px rgba(0,217,255,.08)}
-.reaction-art-target::before,.reaction-art-target::after{content:"";position:absolute;background:#54e5ff;opacity:.6}
-.reaction-art-target::before{height:1px;width:84px}.reaction-art-target::after{height:84px;width:1px}
-.reaction-art-target i{width:17px;height:17px;border:3px solid #54e5ff;border-radius:50%;background:rgba(84,229,255,.2);box-shadow:0 0 15px rgba(84,229,255,.8)}
-.target-a{top:22%;left:18%;transform:scale(.75)}.target-b{top:35%;right:18%;transform:scale(1.1)}.target-c{bottom:23%;left:43%;transform:scale(.62)}
-.reaction-art-path{position:absolute;inset:18% 15% 22%;border:1px dashed rgba(84,229,255,.28);border-radius:48% 52% 38% 62%;transform:rotate(-18deg)}
-.reaction-art-hud{position:absolute;left:22px;top:20px;display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left}
-.reaction-art-hud span,.reaction-art-hud small,.reaction-art-stats small{font-family:var(--font-mono);font-size:.67rem;letter-spacing:1.4px;color:#8eafbe}
-.reaction-art-hud b{font-family:var(--font-title);font-size:1.8rem;letter-spacing:2px;color:#effcff;text-shadow:0 0 20px rgba(84,229,255,.24)}
-.reaction-art-stats{position:absolute;left:22px;right:22px;bottom:18px;display:flex;gap:10px;justify-content:space-between}
-.reaction-art-stats span{min-width:0;flex:1;display:flex;flex-direction:column;gap:4px;padding:10px 12px;background:rgba(3,12,18,.82);border:1px solid rgba(84,229,255,.18);backdrop-filter:blur(6px)}
-.reaction-art-stats b{font-family:var(--font-title);font-size:1.15rem;color:#54e5ff}.reaction-art-stats small{font-size:.56rem}
-@media(max-width:600px){.reaction-art-hud{left:14px;top:14px}.reaction-art-hud b{font-size:1.35rem}.reaction-art-stats{left:12px;right:12px;bottom:12px;gap:5px}.reaction-art-stats span{padding:7px 8px}.reaction-art-stats b{font-size:1rem}.reaction-art-stats small{font-size:.48rem}.reaction-art-target{width:48px;height:48px}}
 
 
-/* Fullscreen / pantalla grande */
-.fullscreen-toggle{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(84,229,255,.55);background:linear-gradient(110deg,#54e5ff,#00b8d7);color:#041016;border-radius:7px;padding:9px 12px;font-family:var(--font-title);font-weight:700;font-size:.82rem;letter-spacing:.035em;white-space:nowrap;cursor:pointer;touch-action:manipulation;transition:filter .2s,transform .2s}
-.fullscreen-toggle:hover,.fullscreen-toggle:focus-visible{filter:brightness(1.1);transform:translateY(-1px);outline:2px solid #54e5ff;outline-offset:2px}
-@media(max-width:900px){.nav-tabs .fullscreen-toggle{padding:11px 16px;width:min(90%,320px);font-size:.95rem}}
-:fullscreen{background-color:#070709}
+/* KAELIX: contorno morado neón al pasar el cursor */
+.team-card.kaelix .player-card,
+.team-card.kaelix .player,
+.team-card.kaelix .roster-player,
+.team-card.kaelix .player-item {
+  border-color: rgba(166,106,240,.45) !important;
+  transition: transform .28s cubic-bezier(.2,.8,.2,1),
+              filter .28s ease, box-shadow .28s ease,
+              border-color .28s ease !important;
+}
+.team-card.kaelix .player-card:hover,
+.team-card.kaelix .player:hover,
+.team-card.kaelix .roster-player:hover,
+.team-card.kaelix .player-item:hover {
+  border-color: #bd78ff !important;
+  box-shadow: 0 0 0 1px #bd78ff,
+              0 0 9px rgba(189,120,255,.95),
+              0 0 22px rgba(139,69,232,.72),
+              0 0 38px rgba(139,69,232,.38) !important;
+}
+.team-card.kaelix .player-card:hover::before,
+.team-card.kaelix .player:hover::before,
+.team-card.kaelix .roster-player:hover::before,
+.team-card.kaelix .player-item:hover::before {
+  border-color: #bd78ff !important;
+  box-shadow: 0 0 12px rgba(189,120,255,.85) !important;
+}
+.team-card.kaelix .player-card:focus-visible,
+.team-card.kaelix .player:focus-visible,
+.team-card.kaelix .roster-player:focus-visible,
+.team-card.kaelix .player-item:focus-visible {
+  outline: 2px solid #bd78ff !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 12px rgba(189,120,255,.9) !important;
+}
+
+
+
+/* TR-eSport: aparición breve de entrada al cruzar con el cursor */
+.team-card.tresport { position:relative; overflow:visible; }
+.team-card.tresport .tr-hover-emblem {
+  position:absolute;
+  z-index:20;
+  top:50%; left:50%;
+  width:clamp(118px,17vw,220px);
+  aspect-ratio:1;
+  object-fit:contain;
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.35) rotate(-18deg);
+  filter:drop-shadow(0 0 10px rgba(226,184,75,.95))
+         drop-shadow(0 0 28px rgba(226,184,75,.72));
+}
+.team-card.tresport .tr-emblem-aura {
+  position:absolute;
+  z-index:19;
+  top:50%; left:50%;
+  width:clamp(135px,19vw,245px);
+  aspect-ratio:1;
+  border-radius:50%;
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.3);
+  background:radial-gradient(circle,rgba(226,184,75,.28) 0%,rgba(226,184,75,.10) 42%,transparent 72%);
+}
+.team-card.tresport .tr-hover-emblem.tr-enter-once {
+  animation:trEmblemEntrance 1.15s cubic-bezier(.16,.8,.25,1) both;
+}
+.team-card.tresport .tr-emblem-aura.tr-enter-once {
+  animation:trAuraEntrance 1.15s ease-out both;
+}
+@keyframes trEmblemEntrance {
+  0% { opacity:0; transform:translate(-50%,-42%) scale(.25) rotate(-24deg); }
+  22% { opacity:1; transform:translate(-50%,-52%) scale(1.08) rotate(5deg); }
+  42% { opacity:1; transform:translate(-50%,-50%) scale(1) rotate(0deg); }
+  72% { opacity:.95; transform:translate(-50%,-50%) scale(1) rotate(0deg); }
+  100% { opacity:0; transform:translate(-50%,-58%) scale(.88) rotate(3deg); }
+}
+@keyframes trAuraEntrance {
+  0% { opacity:0; transform:translate(-50%,-50%) scale(.3); }
+  28% { opacity:1; transform:translate(-50%,-50%) scale(1.12); }
+  65% { opacity:.7; transform:translate(-50%,-50%) scale(1.2); }
+  100% { opacity:0; transform:translate(-50%,-50%) scale(1.42); }
+}
+@media (prefers-reduced-motion:reduce) {
+  .team-card.tresport .tr-hover-emblem.tr-enter-once,
+  .team-card.tresport .tr-emblem-aura.tr-enter-once { animation:none; }
+}
+
+/* KAELIX: aparición breve de entrada al cruzar con el cursor */
+.team-card.kaelix { position:relative; overflow:visible; }
+.team-card.kaelix .kx-hover-emblem {
+  position:absolute;
+  z-index:20;
+  top:50%; left:50%;
+  width:clamp(118px,17vw,220px);
+  aspect-ratio:1;
+  object-fit:contain;
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.35) rotate(18deg);
+  filter:drop-shadow(0 0 10px rgba(166,106,240,.98))
+         drop-shadow(0 0 28px rgba(139,69,232,.78));
+}
+.team-card.kaelix .kx-emblem-aura {
+  position:absolute;
+  z-index:19;
+  top:50%; left:50%;
+  width:clamp(135px,19vw,245px);
+  aspect-ratio:1;
+  border-radius:50%;
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.3);
+  background:radial-gradient(circle,rgba(166,106,240,.30) 0%,rgba(139,69,232,.11) 42%,transparent 72%);
+}
+.team-card.kaelix .kx-hover-emblem.kx-enter-once {
+  animation:kxEmblemEntrance 1.15s cubic-bezier(.16,.8,.25,1) both;
+}
+.team-card.kaelix .kx-emblem-aura.kx-enter-once {
+  animation:kxAuraEntrance 1.15s ease-out both;
+}
+@keyframes kxEmblemEntrance {
+  0% { opacity:0; transform:translate(-50%,-42%) scale(.25) rotate(25deg); }
+  22% { opacity:1; transform:translate(-50%,-52%) scale(1.08) rotate(-5deg); }
+  42% { opacity:1; transform:translate(-50%,-50%) scale(1) rotate(0deg); }
+  72% { opacity:.95; transform:translate(-50%,-50%) scale(1) rotate(0deg); }
+  100% { opacity:0; transform:translate(-50%,-58%) scale(.88) rotate(-3deg); }
+}
+@keyframes kxAuraEntrance {
+  0% { opacity:0; transform:translate(-50%,-50%) scale(.3); }
+  28% { opacity:1; transform:translate(-50%,-50%) scale(1.12); }
+  65% { opacity:.7; transform:translate(-50%,-50%) scale(1.2); }
+  100% { opacity:0; transform:translate(-50%,-50%) scale(1.42); }
+}
+@media (prefers-reduced-motion:reduce) {
+  .team-card.kaelix .kx-hover-emblem.kx-enter-once,
+  .team-card.kaelix .kx-emblem-aura.kx-enter-once { animation:none; }
+}
+
+
+/* MODULOS: tarjetas interactivas con profundidad y acento esports */
+:where(.modules, .modules-grid, .module-grid, .modulos, .modulos-grid, #modules, #modulos) {
+  gap: clamp(14px, 2vw, 22px) !important;
+}
+:where(.module-card, .module, .modulo-card, .modulo, .training-card, .module-item) {
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  border:1px solid rgba(226,184,75,.22) !important;
+  border-radius:12px !important;
+  background:
+    linear-gradient(145deg, rgba(28,31,38,.98), rgba(10,12,17,.98)) !important;
+  box-shadow:0 8px 24px rgba(0,0,0,.24);
+  transform:translateY(0) scale(1);
+  transition:transform .28s cubic-bezier(.2,.8,.2,1),
+             border-color .28s ease, box-shadow .28s ease,
+             background .28s ease, filter .28s ease !important;
+  cursor:pointer;
+}
+:where(.module-card, .module, .modulo-card, .modulo, .training-card, .module-item)::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  opacity:0;
+  background:linear-gradient(115deg, transparent 12%, rgba(255,255,255,.10) 42%, transparent 66%);
+  transform:translateX(-120%);
+  transition:transform .65s ease, opacity .25s ease;
+  pointer-events:none;
+}
+:where(.module-card, .module, .modulo-card, .modulo, .training-card, .module-item):hover {
+  transform:translateY(-8px) scale(1.018);
+  border-color:rgba(226,184,75,.85) !important;
+  box-shadow:0 14px 34px rgba(0,0,0,.42),
+             0 0 0 1px rgba(226,184,75,.22),
+             0 0 22px rgba(226,184,75,.18) !important;
+  filter:brightness(1.08);
+}
+:where(.module-card, .module, .modulo-card, .modulo, .training-card, .module-item):hover::before {
+  opacity:1;
+  transform:translateX(120%);
+}
+:where(.module-card, .module, .modulo-card, .modulo, .training-card, .module-item):focus-within {
+  outline:2px solid rgba(226,184,75,.8);
+  outline-offset:3px;
+}
+:where(.module-card, .module, .modulo-card, .modulo, .training-card, .module-item) :where(h2,h3,h4,.module-title,.modulo-title) {
+  transition:color .25s ease, letter-spacing .25s ease;
+}
+:where(.module-card, .module, .modulo-card, .modulo, .training-card, .module-item):hover :where(h2,h3,h4,.module-title,.modulo-title) {
+  color:#f2cc68;
+  letter-spacing:.035em;
+}
+:where(.module-card, .module, .modulo-card, .modulo, .training-card, .module-item) :where(img,.module-icon,.icon,.module-number) {
+  transition:transform .35s cubic-bezier(.2,.8,.2,1), filter .35s ease;
+}
+:where(.module-card, .module, .modulo-card, .modulo, .training-card, .module-item):hover :where(img,.module-icon,.icon) {
+  transform:translateY(-3px) scale(1.08);
+  filter:drop-shadow(0 0 10px rgba(226,184,75,.36));
+}
+:where(.module-card, .module, .modulo-card, .modulo, .training-card, .module-item) :where(a,button) {
+  position:relative;
+  z-index:2;
+}
+@media (max-width:700px) {
+  :where(.module-card, .module, .modulo-card, .modulo, .training-card, .module-item):active {
+    transform:translateY(-3px) scale(.99);
+    border-color:rgba(226,184,75,.9) !important;
+  }
+}
+@media (prefers-reduced-motion:reduce) {
+  :where(.module-card, .module, .modulo-card, .modulo, .training-card, .module-item),
+  :where(.module-card, .module, .modulo-card, .modulo, .training-card, .module-item)::before {
+    transition:none !important;
+  }
+}
+
+
+/* Apartado independiente: Centro de módulos de gestión */
+.management-hub {
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  margin:clamp(52px,7vw,100px) 0 clamp(58px,8vw,112px);
+  padding:clamp(26px,4vw,54px) 0 22px;
+  background:
+    radial-gradient(ellipse at 8% 18%, rgba(226,184,75,.13), transparent 34%),
+    radial-gradient(ellipse at 92% 82%, rgba(139,69,232,.10), transparent 36%),
+    linear-gradient(135deg, #11151b 0%, #090c12 48%, #111018 100%);
+  border-top:1px solid rgba(226,184,75,.35);
+  border-bottom:1px solid rgba(139,69,232,.3);
+  box-shadow:0 22px 70px rgba(0,0,0,.28);
+}
+.management-hub::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  opacity:.22;
+  background-image:
+    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
+}
+.management-hub::after {
+  content:"";
+  position:absolute;
+  z-index:-1;
+  width:min(52vw,680px);
+  aspect-ratio:1;
+  right:-18%;
+  top:8%;
+  border:1px solid rgba(226,184,75,.09);
+  border-radius:50%;
+  box-shadow:0 0 0 34px rgba(226,184,75,.025),0 0 0 72px rgba(139,69,232,.025);
+  pointer-events:none;
+}
+.management-hub-topline,
+.management-hub-footer {
+  max-width:var(--max);
+  margin:0 auto;
+  padding:0 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  color:#8f98a7;
+  font:600 .62rem/1.4 var(--font-mono);
+  letter-spacing:.16em;
+}
+.management-hub-topline { margin-bottom:clamp(24px,3vw,38px); }
+.management-hub-topline span:first-child { color:#e2b84b; }
+.management-hub-topline i {
+  display:inline-block;
+  width:7px;height:7px;
+  margin-right:9px;
+  border-radius:50%;
+  background:#e2b84b;
+  box-shadow:0 0 12px rgba(226,184,75,.9);
+}
+.management-hub .section-heading {
+  position:relative;
+  z-index:1;
+  margin-bottom:28px;
+}
+.management-hub .section-heading h2 {
+  color:#f5f6f8;
+  text-shadow:0 0 24px rgba(226,184,75,.12);
+}
+.management-hub .section-heading p { color:#a7afbb; }
+.management-hub .modules-container { position:relative; z-index:1; }
+.management-hub .spot {
+  background:linear-gradient(115deg,rgba(25,30,39,.96),rgba(12,15,22,.96)) !important;
+  border-color:rgba(255,255,255,.09);
+  box-shadow:0 18px 45px rgba(0,0,0,.28);
+}
+.management-hub .spot:hover {
+  box-shadow:0 22px 52px rgba(0,0,0,.42),0 0 24px color-mix(in srgb,var(--accent) 12%,transparent);
+}
+.management-hub-footer {
+  border-top:1px solid rgba(255,255,255,.08);
+  padding-top:16px;
+  margin-top:0;
+}
+.management-hub-footer span:last-child { color:#c6ccd5; }
+.management-hub-footer b { color:#e2b84b; font-size:.95rem; margin-left:8px; }
+@media(max-width:700px) {
+  .management-hub { margin:42px 0 54px; padding-top:25px; }
+  .management-hub-topline,.management-hub-footer { align-items:flex-start; font-size:.53rem; letter-spacing:.09em; }
+  .management-hub-topline span:last-child,.management-hub-footer span:first-child { display:none; }
+  .management-hub .section-heading { flex-direction:column; align-items:flex-start; }
+  .management-hub .section-heading p { text-align:left; }
+}
+
+
+/* Logotipos oficiales en el bloque de alianza */
+.showdown-team .team-emblem.tr-logo-frame,
+.showdown-team .team-emblem.kx-logo-frame {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  padding:7px;
+  background:rgba(5,7,10,.72);
+}
+.showdown-team .team-emblem.tr-logo-frame img,
+.showdown-team .team-emblem.kx-logo-frame img {
+  display:block;
+  width:100%;
+  height:100%;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  filter:drop-shadow(0 0 8px rgba(255,255,255,.12));
+}
+.showdown-team.tr .team-emblem.tr-logo-frame {
+  border-color:#e2b84b;
+  box-shadow:0 0 20px rgba(226,184,75,.16), inset 0 0 16px rgba(226,184,75,.08);
+}
+.showdown-team.kaelix .team-emblem.kx-logo-frame {
+  border-color:#8b45e8;
+  box-shadow:0 0 20px rgba(139,69,232,.20), inset 0 0 16px rgba(139,69,232,.09);
+}
 
 </style>
 </head>
 <body>
-
-  <!-- Barra Superior -->
-  <nav class="top-nav" id="navbar">
-    <div class="brand">
-      <div class="brand-logo">SG</div>
-      <div class="brand-text">SLENDERGUN MG</div>
+  <header class="site-header" id="top">
+    <div class="social-strip" aria-label="Redes sociales">
+      <a href="https://www.tiktok.com/@Prof.SlenderGun" target="_blank" rel="noopener noreferrer"><strong>TikTok:</strong> Prof.SlenderGun</a>
+      <a href="https://www.tiktok.com/@Coach.SlenderGun" target="_blank" rel="noopener noreferrer"><strong>TikTok:</strong> Coach.SlenderGun</a>
     </div>
-    
-    <!-- Botón Menú Hamburguesa -->
-    <div class="menu-toggle" id="mobile-menu-btn">
-      <span></span>
-      <span></span>
-      <span></span>
+    <div class="module-nav-wrap">
+      <nav class="module-nav" aria-label="Navegación de módulos">
+        <a href="#panel-tactil">Panel táctil</a>
+        <a href="#calculadora-stats">Calculadora de estadísticas</a>
+        <a href="#reaction-lab">Centro de entrenamiento</a>
+        <a href="#gestor-roster">Gestor de plantilla</a>
+        <a href="#sorteo-caidas">Sorteo de zonas de caída</a>
+        <a href="#tabla-resultados">Tabla de resultados</a>
+        <button class="fullscreen-toggle" id="fullscreenToggle" type="button" aria-pressed="false">⛶ Pantalla completa</button>
+      </nav>
     </div>
+  </header>
 
-    <div class="nav-tabs" id="nav-menu">
-      <a href="#inicio" class="nav-link">Inicio</a>
-      <a href="#modulos" class="nav-link">Módulos de Gestión</a>
-      <a href="#" class="fullscreen-toggle" id="fullscreenToggle" role="button" aria-pressed="false" title="Ver en pantalla completa">⛶ PANTALLA GRANDE</a>
+  <div class="tactical-ticker" aria-label="TR-eSport y KAELIX ESPORT">
+    <div class="ticker-track">
+      <span>TR-eSPORT <b>×</b> KAELIX ESPORT</span><i></i><span>DIVISIÓN COMPETITIVA</span><i></i><span>HECHO PARA COMPETIR</span><i></i>
+      <span>TR-eSPORT <b>×</b> KAELIX ESPORT</span><i></i><span>DIVISIÓN COMPETITIVA</span><i></i><span>HECHO PARA COMPETIR</span><i></i>
     </div>
-  </nav>
+  </div>
 
-  <!-- Pliegue Principal -->
-  <section class="hero" id="inicio">
-    <h1>Central de <span>Estrategias</span></h1>
-    <p>Plataforma táctica oficial de Prof.SlenderGun. Accede a las herramientas de análisis, evalúa el rendimiento del roster y define las rotaciones competitivas para las próximas jornadas.</p>
-    
-    <!-- REDES SOCIALES -->
-    <div class="social-links">
-      <a href="https://www.tiktok.com/@Prof.SlenderGun" target="_blank" class="social-btn tiktok">
-        <svg viewBox="0 0 448 512"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
-        @Prof.SlenderGun
-      </a>
-      <a href="https://www.youtube.com/@The_Slender_Gun" target="_blank" class="social-btn youtube">
-        <svg viewBox="0 0 576 512"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
-        @TheSlenderGun
-      </a>
-      <a href="https://www.instagram.com/TheSlenderGun" target="_blank" class="social-btn instagram">
-        <svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
-        @TheSlenderGun
-      </a>
-      <a href="https://chat.whatsapp.com/FkwbtIy6rOtIABwg9kpf04" target="_blank" rel="noopener noreferrer" class="social-btn whatsapp">
-        <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M380.9 97.1C339.4 55.6 284.2 32.7 225.5 32.7c-121.1 0-219.6 98.5-219.6 219.6 0 38.7 10.1 76.5 29.3 109.8L4.5 480l120.8-31.7c31.8 17.4 67.7 26.5 104.1 26.5h.1c121 0 219.6-98.5 219.6-219.6 0-58.7-22.9-113.9-68.2-158.1zM225.5 433.6h-.1c-32.5 0-64.3-8.7-92-25.1l-6.6-3.9-71.7 18.8 19.1-69.9-4.3-7.2c-17.9-28.5-27.3-61.5-27.3-95.9 0-99.5 81-180.5 180.6-180.5 48.2 0 93.5 18.8 127.5 52.8 34 34 52.8 79.3 52.8 127.6-.1 99.4-81 180.4-180.5 180.4z"/></svg>
-        GRUPO DE WHATSAPP
-      </a>
-    </div>
-
-    <div class="scroll-indicator">↓ Desliza para explorar ↓</div>
-  </section>
-
-  <!-- Contenedor de Módulos -->
-  <section class="modules-container" id="modulos">
-
-    <!-- Spot 1: Panel Táctil (Activo y con Imagen Vinculada) -->
-    <div class="spot spot-anim">
-      <div class="spot-img con-imagen" style="background-image: url('img/T.png'); background-size: cover; background-position: center;"></div>
-      <div class="spot-info">
-        <span class="spot-tag">Análisis de Mapas</span>
-        <h2>Panel Táctil</h2>
-        <p>Planea el macrojuego con precisión absoluta. Traza rotaciones, marca zonas de caída, calcula tiempos de desplazamiento y asegura un posicionamiento superior antes de que cierre la zona segura.</p>
-        <a href="Táctil.html" class="btn-entrar">ENTRAR</a>
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-meta"><span><i></i> TR-eSPORT / PLATAFORMA COMPETITIVA</span><span>CENTRO OFICIAL DE ESPORTS · 2026</span></div>
+      <div class="hero-title-wrap">
+        <h1 class="hero-display">TR-eSPORT</h1>
+        <div class="hero-scan" aria-hidden="true">TR-eSPORT</div>
       </div>
+      <div class="hero-bottom">
+        <p>Centro de operaciones de TR-eSport para análisis, entrenamiento y organización de jugadores. Estrategia, rendimiento y competitividad en un solo lugar.</p>
+        <a href="#modulos" class="hero-cta">EXPLORAR MÓDULOS <span>↘</span></a>
+      </div>
+      <div class="hero-coordinate" aria-hidden="true">T.R. / 001<br>SISTEMA DE COMPETENCIA</div>
+    </section>
+
+    <section class="management-hub" id="centro-gestion" aria-labelledby="management-title">
+    <div class="management-hub-topline"><span><i></i> CENTRO DE OPERACIONES</span><span>TR / GESTIÓN COMPETITIVA · 2026</span></div>
+    <div class="section-heading" id="modulos">
+      <div>
+        <span class="eyebrow">Acceso directo</span>
+        <h2 id="management-title">Módulos de gestión</h2>
+      </div>
+      <p>Selecciona una herramienta para entrar a cada apartado de la plataforma.</p>
     </div>
 
-    <!-- Spot 2: Estadísticas de Jugadores (Activo) -->
-    <div class="spot spot-rojo spot-anim">
-      <div class="spot-img" style="background-image: url(''); background-size: cover; background-position: center;"></div>
-      <div class="spot-info">
-        <span class="spot-tag">Estadísticas de Jugadores</span>
-        <h2>Calculadora Stats</h2>
-        <p>Registra y analiza el rendimiento individual de cada jugador. Captura kills, daño, posición y puntos por partida para generar un resumen estadístico de la competencia.</p>
-        <a href="estadisticas.html" class="btn-entrar">ENTRAR</a>
-      </div>
-    </div>
+    <section class="modules-container" aria-label="Módulos de la plataforma">
+      <article class="spot" id="panel-tactil">
+        <div class="spot-img con-imagen" style="background-image: url('img/T.png');" role="img" aria-label="Vista previa del panel táctil"></div>
+        <div class="spot-info">
+          <span class="spot-tag">Análisis de mapas</span>
+          <h3>Panel táctil</h3>
+          <p>Planea el macrojuego con precisión. Traza rotaciones, marca zonas de caída, calcula tiempos de desplazamiento y prepara el posicionamiento antes del cierre de la zona segura.</p>
+          <a href="Táctil.html" class="btn-entrar">Entrar al apartado</a>
+        </div>
+      </article>
 
-    <!-- Spot: Reaction Lab · nuevo centro de entrenamiento -->
-    <div class="spot spot-reaction spot-anim">
-      <div class="spot-img con-imagen reaction-art" role="img" aria-label="Panel gráfico de entrenamiento de reflejos, puntería y percepción visual">
-        <div class="reaction-art-grid"></div>
-        <div class="reaction-art-target target-a"><i></i></div>
-        <div class="reaction-art-target target-b"><i></i></div>
-        <div class="reaction-art-target target-c"><i></i></div>
-        <div class="reaction-art-path"></div>
-        <div class="reaction-art-hud"><span>TR / TRAINING SYSTEM</span><b>REACTION LAB</b><small>REFLEJOS · AIM · VISIÓN</small></div>
-        <div class="reaction-art-stats"><span><b>05</b><small>NIVELES</small></span><span><b>06</b><small>MODOS</small></span><span><b>∞</b><small>VARIANTES</small></span></div>
-      </div>
-      <div class="spot-info">
-        <span class="spot-tag">Entrenamiento competitivo</span>
-        <h2>Reaction <span>Lab</span></h2>
-        <p>Centro de entrenamiento para mejorar los <strong>reflejos</strong>, la <strong>puntería (AIM)</strong> y la <strong>percepción visual</strong>. Incluye movimientos rápidos hacia objetivos, seguimiento de una bolita con trayectoria aleatoria, precisión, velocidad, identificación visual y decisiones bajo presión. Cada modo dispone de <strong>cinco niveles de dificultad</strong> y patrones aleatorios para evitar recorridos fijos repetitivos. En los ejercicios de AIM podrás ajustar por separado la sensibilidad de <strong>primera persona</strong> y <strong>tercera persona</strong>. Los resultados resumen reacción, aciertos, precisión y errores.</p>
-        <a href="panel-reaction-lab.html" class="btn-entrar reaction-enter">ENTRAR A REACTION LAB</a>
-      </div>
-    </div>
+      <article class="spot spot-rojo" id="calculadora-stats">
+        <div class="spot-img" data-art="JUGADOR STATS" role="img" aria-label="Vista previa de estadísticas de jugadores"></div>
+        <div class="spot-info">
+          <span class="spot-tag">Estadísticas de jugadores</span>
+          <h3>Calculadora de estadísticas</h3>
+          <p>Registra y analiza el rendimiento individual. Captura bajas, daño, posición y puntos por partida para generar un resumen estadístico de la competencia.</p>
+          <a href="estadisticas.html" class="btn-entrar">Entrar al apartado</a>
+        </div>
+      </article>
 
-    <!-- Spot 3: Gestor Roster (Próximamente) -->
-    <div class="spot spot-azul spot-anim">
-      <div class="spot-img" style="background-image: url(''); background-size: cover; background-position: center;"></div>
-      <div class="spot-info">
-        <span class="spot-tag">Administración de Talento</span>
-        <h2>Gestor Roster</h2>
-        <p>Control total sobre tu plantilla. Define los roles específicos (Rusher, IGL, Sniper, Soporte), ajusta las formaciones titulares, gestiona los presupuestos y crea gráficos de presentación del equipo.</p>
-        <a href="#" class="btn-entrar btn-disabled">PRÓXIMAMENTE</a>
-      </div>
-    </div>
+      <article class="spot spot-reaction" id="reaction-lab">
+        <div class="spot-img reaction-art" role="img" aria-label="Panel gráfico de entrenamiento de reflejos, puntería y percepción visual">
+          <div class="reaction-art-grid"></div>
+          <div class="reaction-art-target target-a"><i></i></div>
+          <div class="reaction-art-target target-b"><i></i></div>
+          <div class="reaction-art-target target-c"><i></i></div>
+          <div class="reaction-art-path"></div>
+          <div class="reaction-art-hud"><span>TR / SISTEMA DE ENTRENAMIENTO</span><b>REACTION LAB</b><small>REFLEJOS · PUNTERÍA · VISIÓN</small></div>
+          <div class="reaction-art-stats"><span><b>05</b><small>NIVELES</small></span><span><b>06</b><small>MODOS</small></span><span><b>∞</b><small>VARIANTES</small></span></div>
+        </div>
+        <div class="spot-info">
+          <span class="spot-tag">Entrenamiento competitivo</span>
+          <h3>Reaction <span>Lab</span></h3>
+          <p>Centro de entrenamiento para mejorar los reflejos, la puntería (AIM) y la percepción visual. Incluye ejercicios de seguimiento, precisión, velocidad, identificación visual y decisiones bajo presión. Los resultados resumen reacción, aciertos, precisión y errores.</p>
+          <a href="panel-reaction-lab.html" class="btn-entrar">Entrar al centro de entrenamiento</a>
+        </div>
+      </article>
 
-    <!-- Spot 4: Sorteo Caídas (Próximamente) -->
-    <div class="spot spot-anim">
-      <div class="spot-img" style="background-image: url(''); background-size: cover; background-position: center;"></div>
-      <div class="spot-info">
-        <span class="spot-tag">Organización de Salas</span>
-        <h2>Sorteo Caídas</h2>
-        <p>Módulo diseñado para organizadores. Genera y asigna de manera rápida, aleatoria y justa las zonas de caída iniciales para todos los equipos en scrims y torneos privados.</p>
-        <a href="#" class="btn-entrar btn-disabled">PRÓXIMAMENTE</a>
-      </div>
-    </div>
+      <article class="spot spot-azul" id="gestor-roster">
+        <div class="spot-img" data-art="TEAM PLANTILLA" role="img" aria-label="Vista previa del gestor de roster"></div>
+        <div class="spot-info">
+          <span class="spot-tag">Administración de talento</span>
+          <h3>Gestor de plantilla</h3>
+          <p>Organiza la plantilla, define roles como Rusher, IGL, Sniper y Soporte, ajusta las formaciones titulares y prepara la presentación del equipo.</p>
+          <a href="manager.html" class="btn-entrar">Abrir gestor de plantilla</a>
+        </div>
+      </article>
 
-    <!-- Spot 5: Tabla de Resultados (Próximamente) -->
-    <div class="spot spot-rojo spot-anim">
-      <div class="spot-img" style="background-image: url(''); background-size: cover; background-position: center;"></div>
-      <div class="spot-info">
-        <span class="spot-tag">Leaderboard Competitivo</span>
-        <h2>Tabla Resultados</h2>
-        <p>Registra las puntuaciones acumuladas partida tras partida. Proyecta la tabla general en vivo, diseñada y optimizada para verse perfecta en transmisiones de OBS.</p>
-        <a href="#" class="btn-entrar btn-disabled">PRÓXIMAMENTE</a>
-      </div>
-    </div>
+      <article class="spot spot-azul" id="creador-roster">
+        <div class="spot-img" data-art="ROSTER CREATOR" role="img" aria-label="Vista previa del creador de roster"></div>
+        <div class="spot-info">
+          <span class="spot-tag">Diseño de plantillas</span>
+          <h3>Creador de roster</h3>
+          <p>Diseña la presentación visual de la plantilla, agrega fotografías, nombres, roles y estadísticas para crear una imagen lista para compartir.</p>
+          <a href="Roster.html" class="btn-entrar">Abrir creador de roster</a>
+        </div>
+      </article>
 
-  </section>
+      <article class="spot" id="sorteo-caidas">
+        <div class="spot-img" data-art="DROP ZONES" role="img" aria-label="Vista previa del sorteo de zonas de caída"></div>
+        <div class="spot-info">
+          <span class="spot-tag">Organización de salas</span>
+          <h3>Sorteo de zonas de caída</h3>
+          <p>Módulo para generar y asignar de manera rápida, aleatoria y justa las zonas de caída iniciales para los equipos en scrims y torneos privados.</p>
+          <a href="caidas.html" class="btn-entrar">Abrir sorteo de caídas</a>
+        </div>
+      </article>
+
+      <article class="spot spot-rojo" id="tabla-resultados">
+        <div class="spot-img" data-art="LEADERBOARD" role="img" aria-label="Vista previa de la tabla de resultados"></div>
+        <div class="spot-info">
+          <span class="spot-tag">Tabla de posiciones</span>
+          <h3>Tabla de resultados</h3>
+          <p>Registra las puntuaciones acumuladas partida tras partida y prepara una tabla general de resultados, optimizada para visualizarse en transmisiones.</p>
+          <a href="Tabla.html" class="btn-entrar">Abrir tabla de resultados</a>
+        </div>
+      </article>
+    </section>
+    <div class="management-hub-footer"><span>TR-eSPORT / SISTEMA DE GESTIÓN</span><span>SELECCIONA UN MÓDULO PARA CONTINUAR <b>↗</b></span></div>
+    </section>
+
+    <section class="brand-marquee" aria-label="Colaboración TR-eSport y KAELIX SPORT">
+      <div class="showdown-shell">
+        <div class="showdown-topline">
+          <span class="showdown-status"><i></i> ALIANZA COMPETITIVA</span>
+          <span>UNA MISMA ARENA · DOS IDENTIDADES</span>
+        </div>
+        <div class="showdown-stage">
+          <div class="showdown-team tr">
+            <div class="team-emblem tr-logo-frame"><img src="IMG/TR-eSport.png" alt="Logotipo de TR-eSport"></div>
+            <div class="team-copy">
+              <small>Organización de esports</small>
+              <strong>TR<span>-eSport</span></strong>
+              <em>DISCIPLINA · ESTRATEGIA · VICTORIA</em>
+            </div>
+          </div>
+
+          <div class="versus-core" aria-label="junto a">
+            <span class="versus-orbit orbit-one"></span>
+            <span class="versus-orbit orbit-two"></span>
+            <div class="versus-mark"><span>×</span></div>
+            <small>UNIR EQUIPOS</small>
+          </div>
+
+          <div class="showdown-team kaelix">
+            <div class="team-emblem kx-logo-frame"><img src="IMG/Kaelix.png" alt="Logotipo de KAELIX ESPORT"></div>
+            <div class="team-copy">
+              <small>Organización de esports</small>
+              <strong>KAELIX SPORT</strong>
+              <em>IDENTIDAD · TALENTO · COMPETENCIA</em>
+            </div>
+          </div>
+        </div>
+        <div class="showdown-footer">
+          <span>TR-eSport × KAELIX SPORT</span>
+          <div class="energy-rail" aria-hidden="true"><i></i></div>
+          <span>HECHO PARA COMPETIR</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="players-section" id="jugadores">
+      <div class="players-intro">
+        <h2>Jugadores representantes de</h2>
+      </div>
+
+      <div class="team-grid">
+        <article class="team-card tresport">
+          <div class="team-topline"></div>
+          <div class="team-heading">
+            <img class="team-logo" src="IMG/TR-eSport.png" alt="Logo TR-eSport">
+            <div class="team-heading-copy"><span class="team-kicker">División competitiva / plantilla 01</span><h3>TR-eSport</h3></div>
+            <span class="team-status"><i></i> JUGADORES REPRESENTANTES</span>
+          </div>
+          <div class="roster-content">
+<div class="player-card featured">
+      <div class="player-photo" style="--player-photo:url('img/jugadores/tr-esport-01.jpg')">
+        <span class="player-rating">TR<small>PLANTILLA</small></span>
+        <span class="player-number">TR / 01</span>
+        <span class="player-rank">01 / JUGADOR DESTACADO</span>
+        <span class="photo-placeholder">FOTO DEL JUGADOR</span>
+      </div>
+      <div class="player-label">Jugador 01<span class="player-role">JUGADOR DESTACADO · TR-ESPORT</span></div>
+    </div>
+<div class="player-card">
+      <div class="player-photo" style="--player-photo:url('img/jugadores/tr-esport-02.jpg')">
+        <span class="player-rating">TR<small>PLANTILLA</small></span>
+        <span class="player-number">TR / 02</span>
+        
+        <span class="photo-placeholder">FOTO DEL JUGADOR</span>
+      </div>
+      <div class="player-label">Jugador 02<span class="player-role">INTEGRANTE DEL EQUIPO · TR-ESPORT</span></div>
+    </div>
+<div class="player-card">
+      <div class="player-photo" style="--player-photo:url('img/jugadores/tr-esport-03.jpg')">
+        <span class="player-rating">TR<small>PLANTILLA</small></span>
+        <span class="player-number">TR / 03</span>
+        
+        <span class="photo-placeholder">FOTO DEL JUGADOR</span>
+      </div>
+      <div class="player-label">Jugador 03<span class="player-role">INTEGRANTE DEL EQUIPO · TR-ESPORT</span></div>
+    </div>
+<div class="player-card">
+      <div class="player-photo" style="--player-photo:url('img/jugadores/tr-esport-04.jpg')">
+        <span class="player-rating">TR<small>PLANTILLA</small></span>
+        <span class="player-number">TR / 04</span>
+        
+        <span class="photo-placeholder">FOTO DEL JUGADOR</span>
+      </div>
+      <div class="player-label">Jugador 04<span class="player-role">INTEGRANTE DEL EQUIPO · TR-ESPORT</span></div>
+    </div>
+<div class="player-card">
+      <div class="player-photo" style="--player-photo:url('img/jugadores/tr-esport-05.jpg')">
+        <span class="player-rating">TR<small>PLANTILLA</small></span>
+        <span class="player-number">TR / 05</span>
+        
+        <span class="photo-placeholder">FOTO DEL JUGADOR</span>
+      </div>
+      <div class="player-label">Jugador 05<span class="player-role">INTEGRANTE DEL EQUIPO · TR-ESPORT</span></div>
+    </div>
+<div class="player-card">
+      <div class="player-photo" style="--player-photo:url('img/jugadores/tr-esport-06.jpg')">
+        <span class="player-rating">TR<small>PLANTILLA</small></span>
+        <span class="player-number">TR / 06</span>
+        
+        <span class="photo-placeholder">FOTO DEL JUGADOR</span>
+      </div>
+      <div class="player-label">Jugador 06<span class="player-role">INTEGRANTE DEL EQUIPO · TR-ESPORT</span></div>
+    </div>
+          </div>
+          <div class="roster-bottom"><span><strong>DIVISIÓN TR</strong> / JUGADOR</span><span class="roster-mark">TR—01</span></div>
+        </article>
+
+        <article class="team-card kaelix">
+          <div class="team-topline"></div>
+          <div class="team-heading">
+            <img class="team-logo" src="IMG/Kaelix.png" alt="Logo KAELIX ESPORT">
+            <div class="team-heading-copy"><span class="team-kicker">División competitiva / plantilla 02</span><h3>KAELIX ESPORT</h3></div>
+            <span class="team-status"><i></i> JUGADORES REPRESENTANTES</span>
+          </div>
+          <div class="roster-content">
+<div class="player-card featured">
+      <div class="player-photo" style="--player-photo:url('img/jugadores/kaelix-01.jpg')">
+        <span class="player-rating">KX<small>PLANTILLA</small></span>
+        <span class="player-number">KX / 01</span>
+        <span class="player-rank">01 / JUGADOR DESTACADO</span>
+        <span class="photo-placeholder">FOTO DEL JUGADOR</span>
+      </div>
+      <div class="player-label">Jugador 01<span class="player-role">JUGADOR DESTACADO · KAELIX</span></div>
+    </div>
+<div class="player-card">
+      <div class="player-photo" style="--player-photo:url('img/jugadores/kaelix-02.jpg')">
+        <span class="player-rating">KX<small>PLANTILLA</small></span>
+        <span class="player-number">KX / 02</span>
+        
+        <span class="photo-placeholder">FOTO DEL JUGADOR</span>
+      </div>
+      <div class="player-label">Jugador 02<span class="player-role">INTEGRANTE DEL EQUIPO · KAELIX</span></div>
+    </div>
+<div class="player-card">
+      <div class="player-photo" style="--player-photo:url('img/jugadores/kaelix-03.jpg')">
+        <span class="player-rating">KX<small>PLANTILLA</small></span>
+        <span class="player-number">KX / 03</span>
+        
+        <span class="photo-placeholder">FOTO DEL JUGADOR</span>
+      </div>
+      <div class="player-label">Jugador 03<span class="player-role">INTEGRANTE DEL EQUIPO · KAELIX</span></div>
+    </div>
+<div class="player-card">
+      <div class="player-photo" style="--player-photo:url('img/jugadores/kaelix-04.jpg')">
+        <span class="player-rating">KX<small>PLANTILLA</small></span>
+        <span class="player-number">KX / 04</span>
+        
+        <span class="photo-placeholder">FOTO DEL JUGADOR</span>
+      </div>
+      <div class="player-label">Jugador 04<span class="player-role">INTEGRANTE DEL EQUIPO · KAELIX</span></div>
+    </div>
+<div class="player-card">
+      <div class="player-photo" style="--player-photo:url('img/jugadores/kaelix-05.jpg')">
+        <span class="player-rating">KX<small>PLANTILLA</small></span>
+        <span class="player-number">KX / 05</span>
+        
+        <span class="photo-placeholder">FOTO DEL JUGADOR</span>
+      </div>
+      <div class="player-label">Jugador 05<span class="player-role">INTEGRANTE DEL EQUIPO · KAELIX</span></div>
+    </div>
+<div class="player-card">
+      <div class="player-photo" style="--player-photo:url('img/jugadores/kaelix-06.jpg')">
+        <span class="player-rating">KX<small>PLANTILLA</small></span>
+        <span class="player-number">KX / 06</span>
+        
+        <span class="photo-placeholder">FOTO DEL JUGADOR</span>
+      </div>
+      <div class="player-label">Jugador 06<span class="player-role">INTEGRANTE DEL EQUIPO · KAELIX</span></div>
+    </div>
+          </div>
+          <div class="roster-bottom"><span><strong>DIVISIÓN KAELIX</strong> / JUGADOR</span><span class="roster-mark">KX—01</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="promotion-section" id="ascensos">
+      <div class="promotion-card">
+        <span class="eyebrow">Sistema de competencia</span>
+        <h2>Ascensos</h2>
+        <p>Consulta la sección de ascensos de la colaboración entre TR-eSport y KAELIX ESPORT.</p>
+        <a class="promotion-button" href="IMG/Kaelix.png">ASCENSOS — TR-eSport X KAELIX ESPORT</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>TR-eSport × KAELIX ESPORT · Plataforma de competencia</footer>
+
+  <script>
+    // Mostrar cada módulo al entrar en pantalla.
+    const moduleCards = document.querySelectorAll('.spot');
+    if ('IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      moduleCards.forEach(card => revealObserver.observe(card));
+    } else {
+      moduleCards.forEach(card => card.classList.add('visible'));
+    }
+
+    // Pantalla completa.
+    (() => {
+      const button = document.getElementById('fullscreenToggle');
+      const root = document.documentElement;
+      if (!button) return;
+      const isFullscreen = () => Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+      const updateButton = () => {
+        const active = isFullscreen();
+        button.textContent = active ? '⛶ Salir de pantalla grande' : '⛶ Pantalla completa';
+        button.setAttribute('aria-pressed', String(active));
+      };
+      button.addEventListener('click', async () => {
+        try {
+          if (isFullscreen()) {
+            if (document.exitFullscreen) await document.exitFullscreen();
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+          } else {
+            if (root.requestFullscreen) await root.requestFullscreen();
+            else if (root.webkitRequestFullscreen) root.webkitRequestFullscreen();
+            else throw new Error('Pantalla completa no disponible');
+          }
+        } catch (error) {
+          alert('Este navegador no permite activar la pantalla completa para esta página.');
+        }
+        updateButton();
+      });
+      document.addEventListener('fullscreenchange', updateButton);
+      document.addEventListener('webkitfullscreenchange', updateButton);
+      updateButton();
+    })();
+  </script>
 
 <script>
-  let lastScrollY = window.scrollY;
-  const navbar = document.getElementById('navbar');
-
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > lastScrollY && window.scrollY > 100) {
-      navbar.classList.add('nav-hidden');
-    } else {
-      navbar.classList.remove('nav-hidden');
-    }
-    lastScrollY = window.scrollY;
-  });
-
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.2
-  };
-
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target); 
-      }
+(() => {
+  const cardSelector = '.team-card .player-card, .team-card .player, .team-card .roster-player, .team-card .player-item';
+  const statLabels = [
+    ['Eliminaciones', '—'],
+    ['Precisión', '—'],
+    ['Daño', '—'],
+    ['Rol', 'Por definir']
+  ];
+  function addStats(card, index) {
+    if (card.querySelector('.player-stats-panel')) return;
+    const panel = document.createElement('div');
+    panel.className = 'player-stats-panel';
+    panel.setAttribute('aria-hidden', 'true');
+    const inner = document.createElement('div');
+    inner.className = 'player-stats-inner';
+    const title = document.createElement('div');
+    title.className = 'player-stats-title';
+    title.textContent = 'Estadísticas del jugador';
+    const grid = document.createElement('div');
+    grid.className = 'player-stats-grid';
+    statLabels.forEach(([label, value], i) => {
+      const item = document.createElement('div');
+      item.className = 'player-stat';
+      const val = document.createElement('b');
+      val.textContent = value;
+      const name = document.createElement('span');
+      name.textContent = label;
+      item.append(val, name);
+      grid.append(item);
     });
-  }, observerOptions);
-
-  document.querySelectorAll('.spot-anim').forEach(spot => {
-    observer.observe(spot);
-  });
-
-  // Lógica del Menú Hamburguesa para Móviles
-  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-  const navMenu = document.getElementById('nav-menu');
-  const navLinks = document.querySelectorAll('.nav-link');
-
-  // Abrir / Cerrar el menú al tocar la hamburguesa
-  mobileMenuBtn.addEventListener('click', () => {
-    navMenu.classList.toggle('menu-open');
-  });
-
-  // Cerrar el menú automáticamente cuando se hace clic en un enlace
-  navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      navMenu.classList.remove('menu-open');
+    const hint = document.createElement('div');
+    hint.className = 'player-stats-hint';
+    hint.textContent = 'Toca de nuevo para ocultar';
+    inner.append(title, grid, hint);
+    panel.append(inner);
+    card.append(panel);
+    if (!card.hasAttribute('tabindex')) card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-expanded', 'false');
+    card.setAttribute('aria-label', 'Mostrar estadísticas del jugador');
+  }
+  function toggle(card) {
+    const opened = card.classList.toggle('stats-open');
+    card.setAttribute('aria-expanded', String(opened));
+    const panel = card.querySelector('.player-stats-panel');
+    if (panel) panel.setAttribute('aria-hidden', String(!opened));
+  }
+  function init() {
+    document.querySelectorAll(cardSelector).forEach((card, i) => {
+      addStats(card, i);
+      if (card.dataset.statsBound) return;
+      card.dataset.statsBound = '1';
+      card.addEventListener('click', e => {
+        if (e.target.closest('a,button,input,select,textarea')) return;
+        toggle(card);
+      });
+      card.addEventListener('keydown', e => {
+        if ((e.key === 'Enter' || e.key === ' ') && e.target === card) {
+          e.preventDefault(); toggle(card);
+        }
+      });
     });
-  });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
+
+<script>
+(() => {
+  function initTREmblem() {
+    document.querySelectorAll('.team-card.tresport').forEach(team => {
+      if (team.querySelector('.tr-hover-emblem')) return;
+      const aura = document.createElement('span');
+      aura.className = 'tr-emblem-aura';
+      aura.setAttribute('aria-hidden', 'true');
+      const logo = document.createElement('img');
+      logo.className = 'tr-hover-emblem';
+      logo.src = 'IMG/TR-eSport.png';
+      logo.alt = '';
+      logo.setAttribute('aria-hidden', 'true');
+      team.append(aura, logo);
+
+      let resetTimer;
+      team.addEventListener('pointerenter', event => {
+        if (event.pointerType === 'touch') return;
+        clearTimeout(resetTimer);
+        logo.classList.remove('tr-enter-once');
+        aura.classList.remove('tr-enter-once');
+        // Reiniciar la animación para que cada entrada del cursor la dispare una sola vez.
+        void logo.offsetWidth;
+        logo.classList.add('tr-enter-once');
+        aura.classList.add('tr-enter-once');
+        resetTimer = setTimeout(() => {
+          logo.classList.remove('tr-enter-once');
+          aura.classList.remove('tr-enter-once');
+        }, 1250);
+      });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initTREmblem);
+  else initTREmblem();
+})();
 </script>
 
 <script>
 (() => {
-  const button = document.getElementById('fullscreenToggle');
-  if (!button) return;
-  const root = document.documentElement;
-  const isFullscreen = () => Boolean(document.fullscreenElement || document.webkitFullscreenElement);
-  const paint = () => {
-    const active = isFullscreen();
-    button.textContent = active ? '⛶ SALIR DE PANTALLA GRANDE' : '⛶ PANTALLA GRANDE';
-    button.setAttribute('aria-pressed', String(active));
-    button.setAttribute('aria-label', active ? 'Salir de pantalla completa' : 'Activar pantalla completa');
-    button.title = active ? 'Salir de pantalla completa (Esc)' : 'Ver en pantalla completa';
-  };
-  button.addEventListener('click', async (event) => {
-    event.preventDefault();
-    try {
-      if (isFullscreen()) {
-        if (document.exitFullscreen) await document.exitFullscreen();
-        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-        else throw new Error('exit-fullscreen-unsupported');
-      } else {
-        if (root.requestFullscreen) {
-          try { await root.requestFullscreen({ navigationUI: 'hide' }); }
-          catch (_) { await root.requestFullscreen(); }
-        } else if (root.webkitRequestFullscreen) {
-          root.webkitRequestFullscreen();
-        } else {
-          throw new Error('fullscreen-unsupported');
-        }
-      }
-    } catch (_) {
-      window.alert('Este navegador o modo de apertura no permite pantalla completa para esta página. Prueba abrirla en Chrome, Edge o Firefox; en algunos navegadores móviles puedes usar “Añadir a pantalla de inicio”.');
-    }
-    paint();
-  });
-  document.addEventListener('fullscreenchange', paint);
-  document.addEventListener('webkitfullscreenchange', paint);
-  paint();
+  function initKAELIXEmblem() {
+    document.querySelectorAll('.team-card.kaelix').forEach(team => {
+      if (team.querySelector('.kx-hover-emblem')) return;
+      const aura = document.createElement('span');
+      aura.className = 'kx-emblem-aura';
+      aura.setAttribute('aria-hidden', 'true');
+      const logo = document.createElement('img');
+      logo.className = 'kx-hover-emblem';
+      logo.src = 'IMG/Kaelix.png';
+      logo.alt = '';
+      logo.setAttribute('aria-hidden', 'true');
+      team.append(aura, logo);
+
+      let resetTimer;
+      team.addEventListener('pointerenter', event => {
+        if (event.pointerType === 'touch') return;
+        clearTimeout(resetTimer);
+        logo.classList.remove('kx-enter-once');
+        aura.classList.remove('kx-enter-once');
+        void logo.offsetWidth;
+        logo.classList.add('kx-enter-once');
+        aura.classList.add('kx-enter-once');
+        resetTimer = setTimeout(() => {
+          logo.classList.remove('kx-enter-once');
+          aura.classList.remove('kx-enter-once');
+        }, 1250);
+      });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initKAELIXEmblem);
+  else initKAELIXEmblem();
 })();
 </script>
-
+<script>
+(() => {
+  const selectors = '.module-card,.module,.modulo-card,.modulo,.training-card,.module-item';
+  function enhanceModules() {
+    document.querySelectorAll(selectors).forEach(card => {
+      if (card.dataset.moduleFxReady) return;
+      card.dataset.moduleFxReady = '1';
+      if (!card.hasAttribute('tabindex') && !card.querySelector('a,button')) card.tabIndex = 0;
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', enhanceModules);
+  else enhanceModules();
+})();
+</script>
 </body>
 </html>

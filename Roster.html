@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Creador de Roster - SlenderGun MG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,700&family=Share+Tech+Mono&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<!-- LIBRERÍA NECESARIA PARA DESCARGAR LA IMAGEN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+  --bg-dark: #070709;
+  --bg-panel: #101014;
+  --bg-card: #16161c;
+  --lux-gold: #00ffff;
+  --lux-rojo: #ff2d2d;
+  --text-main: #ffffff;
+  --text-dim: #8b8b99;
+  --border-color: #262633;
+  
+  /* Colores editables del Roster */
+  --rost-txt-title: #ffffff;
+  --rost-txt-accent: #00ffff;
+  --rost-name-bg: rgba(0, 0, 0, 0.75);
+  --rost-name-border: #00ffff;
+  --rost-role-bg: #00ffff;
+  --rost-role-txt: #000000;
+  
+  --font-title: 'Chakra Petch', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-text: 'Inter', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { 
+  background-color: var(--bg-dark);
+  color: var(--text-main); 
+  font-family: var(--font-text); 
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Top Bar ── */
+.top-bar {
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border-color);
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+
+.brand {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  text-transform: uppercase;
+}
+.brand span { color: var(--lux-gold); }
+
+.controls-top { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.2s;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-family: var(--font-title);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn:hover { border-color: var(--lux-gold); color: var(--lux-gold); }
+.btn-red { border-color: var(--lux-rojo); color: var(--lux-rojo); }
+.btn-red:hover { background: var(--lux-rojo); color: #fff; }
+.btn-gold { background: var(--lux-gold); color: #000; border-color: var(--lux-gold); }
+.btn-gold:hover { background: #fff; color: #000; border-color: #fff; }
+
+/* ── Layout Principal ── */
+.workspace {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+/* ── Panel Lateral (Controles) ── */
+.sidebar-controls {
+  width: 400px;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border-color);
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar-controls::-webkit-scrollbar { width: 6px; }
+.sidebar-controls::-webkit-scrollbar-track { background: var(--bg-dark); }
+.sidebar-controls::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+.sidebar-controls::-webkit-scrollbar-thumb:hover { background: var(--lux-gold); }
+
+.control-group {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 15px;
+  border-radius: 8px;
+}
+.control-group h3 {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  color: var(--lux-gold);
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input-row { margin-bottom: 12px; }
+.input-row label { display: block; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; font-weight: 600;}
+.input-row input[type="text"], .input-row select, .input-row input[type="number"] {
+  width: 100%;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-family: var(--font-text);
+  outline: none;
+  transition: 0.2s;
+}
+.input-row input[type="text"]:focus, .input-row select:focus, .input-row input[type="number"]:focus { border-color: var(--lux-gold); }
+.input-row input[type="range"] { width: 100%; accent-color: var(--lux-gold); cursor: pointer; }
+
+.file-upload {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-dark);
+  border: 1px dashed var(--border-color);
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  transition: 0.2s;
+}
+.file-upload:hover { border-color: var(--lux-gold); color: var(--lux-gold); background: rgba(0, 255, 255, 0.05); }
+.file-upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+.player-control {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 10px;
+  margin-bottom: 15px;
+  background: var(--bg-dark);
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+.player-control .file-upload { height: 100%; padding: 5px; flex-direction: column; gap: 5px; font-size: 0.7rem;}
+.player-inputs { display: flex; flex-direction: column; gap: 8px; }
+
+.grid-2-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Modal Configuración Colores */
+.modal-colors { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+.modal-colors.active { display: flex; }
+.modal-content { background: var(--bg-panel); border: 1px solid var(--lux-gold); padding: 30px; width: 450px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);}
+.color-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: var(--bg-card); padding: 10px 15px; border-radius: 6px;}
+.color-row label { font-family: var(--font-title); font-size: 0.9rem; text-transform: uppercase;}
+.color-row input[type="color"] { width: 45px; height: 35px; border: 1px solid var(--border-color); border-radius: 4px; background: transparent; cursor: pointer; padding: 2px;}
+
+/* ── Área de Previsualización (Canvas) ── */
+.preview-area {
+  flex-grow: 1;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  position: relative;
+  background-image: linear-gradient(45deg, #111 25%, transparent 25%), linear-gradient(-45deg, #111 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #111 75%), linear-gradient(-45deg, transparent 75%, #111 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+/* El Contenedor Exacto de 1080x1080 */
+.roster-canvas {
+  width: 1080px;
+  height: 1080px;
+  background-color: #1a1a24;
+  position: relative;
+  overflow: hidden;
+  transform-origin: center;
+  box-shadow: 0 0 50px rgba(0,0,0,0.8);
+}
+
+.r-bg-image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  filter: brightness(100%) blur(0px);
+}
+
+.r-overlay { 
+  position: absolute; 
+  inset: 0; 
+  background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.8) 100%); 
+  z-index: 1; 
+  pointer-events: none; 
+}
+
+/* Elementos de Texto */
+.r-header { position: absolute; top: 70px; left: 0; width: 100%; text-align: center; z-index: 10; }
+.r-title { font-family: var(--font-title); font-size: 85px; font-weight: 800; color: var(--rost-txt-title); text-transform: uppercase; text-shadow: 0 5px 20px rgba(0,0,0,0.9); line-height: 1; margin-bottom: 5px;}
+.r-subtitle { font-family: var(--font-mono); font-size: 30px; color: var(--rost-txt-accent); text-transform: uppercase; letter-spacing: 6px; text-shadow: 0 2px 10px rgba(0,0,0,0.9); background: rgba(0,0,0,0.4); display: inline-block; padding: 5px 20px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);}
+
+.r-footer { position: absolute; bottom: 40px; left: 0; width: 100%; text-align: center; z-index: 10; display: flex; flex-direction: column; gap: 10px;}
+.r-footer-text { font-family: var(--font-title); font-size: 45px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 5px 15px rgba(0,0,0,0.9); }
+.r-footer-sub { font-family: var(--font-mono); font-size: 20px; color: var(--rost-txt-accent); text-transform: uppercase; letter-spacing: 2px;}
+
+/* Caja de Estadísticas Flotante */
+.r-stats-box {
+  position: absolute;
+  top: 250px;
+  right: 50px;
+  background: rgba(10, 10, 15, 0.7);
+  border: 1px solid var(--rost-txt-accent);
+  padding: 20px 30px;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  text-align: right;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  border-left: 4px solid var(--rost-txt-accent);
+}
+.r-stats-box.hidden { display: none; }
+.r-stat-item { margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;}
+.r-stat-item:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0;}
+.r-stat-label { font-family: var(--font-title); font-size: 18px; color: #ccc; text-transform: uppercase; display: block; margin-bottom: 5px;}
+.r-stat-val { font-family: var(--font-mono); font-size: 40px; color: #fff; font-weight: bold; line-height: 1; text-shadow: 0 0 10px var(--rost-txt-accent);}
+
+/* Jugadores */
+.r-players-container { position: absolute; bottom: 150px; left: 0; width: 100%; height: 750px; display: flex; justify-content: center; align-items: flex-end; z-index: 5; }
+
+.r-player { position: relative; display: flex; flex-direction: column; align-items: center; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+.r-player img { width: auto; height: 100%; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.8)); }
+
+.r-labels-wrapper { position: absolute; bottom: -30px; display: flex; flex-direction: column; align-items: center; z-index: 6; }
+
+.r-player-name {
+  background: var(--rost-name-bg);
+  border: 2px solid var(--rost-name-border);
+  color: #fff;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 26px;
+  padding: 8px 35px;
+  text-transform: uppercase;
+  transform: skewX(-15deg);
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+}
+.r-player-name span { display: block; transform: skewX(15deg); }
+
+.r-player-role {
+  background: var(--rost-role-bg);
+  color: var(--rost-role-txt);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: bold;
+  padding: 4px 20px;
+  text-transform: uppercase;
+  transform: skewX(-15deg);
+  margin-top: -2px; 
+  box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+}
+.r-player-role span { display: block; transform: skewX(15deg); letter-spacing: 1px;}
+
+/* ── Layouts ── */
+.layout-v .r-player-1 { height: 75%; z-index: 1; margin-right: -100px; filter: brightness(0.6); }
+.layout-v .r-player-2 { height: 88%; z-index: 2; margin-right: -90px; filter: brightness(0.8); }
+.layout-v .r-player-3 { height: 100%; z-index: 3; } 
+.layout-v .r-player-4 { height: 88%; z-index: 2; margin-left: -90px; filter: brightness(0.8); }
+.layout-v .r-player-5 { height: 75%; z-index: 1; margin-left: -100px; filter: brightness(0.6); }
+
+.layout-a .r-player-1 { height: 100%; z-index: 3; margin-right: -60px; }
+.layout-a .r-player-2 { height: 88%; z-index: 2; margin-right: -60px; filter: brightness(0.8); }
+.layout-a .r-player-3 { height: 75%; z-index: 1; filter: brightness(0.6); }
+.layout-a .r-player-4 { height: 88%; z-index: 2; margin-left: -60px; filter: brightness(0.8); }
+.layout-a .r-player-5 { height: 100%; z-index: 3; margin-left: -60px; }
+
+.layout-flat .r-players-container { gap: 15px; }
+.layout-flat .r-player { height: 85%; z-index: 2; margin: 0; filter: brightness(1) !important; }
+
+.layout-stairs .r-player-1 { height: 65%; z-index: 1; margin-right: -50px; filter: brightness(0.5); }
+.layout-stairs .r-player-2 { height: 75%; z-index: 2; margin-right: -50px; filter: brightness(0.65); }
+.layout-stairs .r-player-3 { height: 85%; z-index: 3; margin-right: -50px; filter: brightness(0.8); }
+.layout-stairs .r-player-4 { height: 95%; z-index: 4; margin-right: -50px; filter: brightness(0.95); }
+.layout-stairs .r-player-5 { height: 100%; z-index: 5; margin-left: 0; filter: brightness(1); }
+
+/* Logos Arrastrables */
+.draggable-logo {
+  position: absolute;
+  width: 180px;
+  cursor: grab;
+  z-index: 20;
+  filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
+}
+.draggable-logo:active { cursor: grabbing; }
+.draggable-logo img { width: 100%; height: auto; pointer-events: none; }
+.delete-logo {
+  position: absolute; top: -12px; right: -12px;
+  background: var(--lux-rojo); color: white; border-radius: 50%; width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-weight: bold; font-family: sans-serif;
+  opacity: 0; transition: 0.2s; border: 2px solid #fff;
+}
+.draggable-logo:hover .delete-logo { opacity: 1; }
+</style>
+</head>
+<body>
+
+  <!-- Barra Superior -->
+  <div class="top-bar">
+    <div class="brand">SLENDERGUN MG <span>ROSTER</span></div>
+    <div class="controls-top">
+      <a href="index.html" class="btn">⬅ Volver al Lobby</a>
+      <button class="btn btn-red" onclick="resetearTodo()">🗑 Limpiar Todo</button>
+      <button class="btn" onclick="abrirConfigColores()">🎨 Paleta de Colores</button>
+      <button class="btn btn-gold" onclick="descargarImagen()">⬇ Descargar Imagen</button>
+    </div>
+  </div>
+
+  <div class="workspace">
+    
+    <!-- Panel Lateral de Controles -->
+    <div class="sidebar-controls">
+      
+      <!-- Fondo y Diseño -->
+      <div class="control-group">
+        <h3>1. Diseño y Entorno</h3>
+        <div class="input-row">
+          <label>Fondo Principal (Resolución HD)</label>
+          <label class="file-upload">
+            Haz clic para subir imagen de fondo
+            <input type="file" accept="image/*" id="bgUpload">
+          </label>
+        </div>
+        <div class="grid-2-cols">
+          <div class="input-row">
+            <label>Brillo Fondo</label>
+            <input type="range" id="bgBrightness" min="10" max="200" value="100" oninput="actualizarFiltros()">
+          </div>
+          <div class="input-row">
+            <label>Desenfoque (Blur)</label>
+            <input type="range" id="bgBlur" min="0" max="20" value="0" oninput="actualizarFiltros()">
+          </div>
+        </div>
+        <div class="input-row">
+          <label>Estilo de Formación</label>
+          <select id="layoutSelect" onchange="cambiarLayout()">
+            <option value="layout-v">Formación en "V" (Clásica)</option>
+            <option value="layout-a">Formación en "A" (Invertida)</option>
+            <option value="layout-flat">Línea Recta (Equitativa)</option>
+            <option value="layout-stairs">Escalera Diagonal</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Textos Generales -->
+      <div class="control-group">
+        <h3>2. Textos de Presentación</h3>
+        <div class="input-row">
+          <label>Título Principal</label>
+          <input type="text" id="inpTitle" value="OFFICIAL ROSTER" oninput="actualizarTextos()">
+        </div>
+        <div class="input-row">
+          <label>Subtítulo (Torneo / Liga)</label>
+          <input type="text" id="inpSub" value="SLENDERGUN MG ESPORTS" oninput="actualizarTextos()">
+        </div>
+        <div class="input-row">
+          <label>Texto Inferior Principal</label>
+          <input type="text" id="inpFoot" value="TEMPORADA 2026" oninput="actualizarTextos()">
+        </div>
+        <div class="input-row">
+          <label>Texto Inferior Secundario (Coach / Redes)</label>
+          <input type="text" id="inpFootSub" value="COACH: OSCAR | @SLENDERGUN_MG" oninput="actualizarTextos()">
+        </div>
+      </div>
+
+      <!-- Estadísticas Flotantes -->
+      <div class="control-group">
+        <h3>3. Caja de Estadísticas / Logros</h3>
+        <div class="input-row" style="display:flex; align-items:center; gap:10px;">
+          <input type="checkbox" id="showStats" onchange="toggleStats()" checked style="width:20px; height:20px; accent-color:var(--lux-gold);"> 
+          <label style="margin:0; font-size:1rem; color:var(--text-main);">Mostrar Panel Flotante</label>
+        </div>
+        <div class="grid-2-cols">
+          <div class="input-row">
+            <label>Etiqueta 1</label>
+            <input type="text" id="statLabel1" value="KILLS TOTALES" oninput="actualizarStats()">
+          </div>
+          <div class="input-row">
+            <label>Valor 1</label>
+            <input type="text" id="statVal1" value="124" oninput="actualizarStats()">
+          </div>
+        </div>
+        <div class="grid-2-cols">
+          <div class="input-row">
+            <label>Etiqueta 2</label>
+            <input type="text" id="statLabel2" value="BOOYAHS" oninput="actualizarStats()">
+          </div>
+          <div class="input-row">
+            <label>Valor 2</label>
+            <input type="text" id="statVal2" value="15" oninput="actualizarStats()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Jugadores -->
+      <div class="control-group">
+        <h3>4. Plantilla (Fotos PNG Transparente)</h3>
+        <script>
+          const defaultRoles = ['RUSH', 'RUSH 2', 'IGL', 'SNIPER', 'SOPORTE'];
+          for(let i=1; i<=5; i++){
+            document.write(`
+              <div class="player-control">
+                <label class="file-upload" ${i===3 ? 'style="border-color:var(--lux-gold);"' : ''}>
+                  ${i===3 ? '👑' : '📷'} <input type="file" accept="image/*" onchange="cargarJugador(this, ${i})">
+                </label>
+                <div class="player-inputs">
+                  <input type="text" id="nameP${i}" value="JUGADOR ${i}" placeholder="Nombre del Jugador" oninput="actualizarNombres()">
+                  <input type="text" id="roleP${i}" value="${defaultRoles[i-1]}" placeholder="Rol (Ej. IGL)" oninput="actualizarNombres()">
+                </div>
+              </div>
+            `);
+          }
+        </script>
+      </div>
+
+      <!-- Logos Adicionales -->
+      <div class="control-group">
+        <h3>5. Logos y Patrocinadores</h3>
+        <label class="file-upload" style="margin-bottom: 5px; height:50px;">
+          <strong style="color:var(--lux-gold); font-size:1rem;">+ Subir Logo Arrastrable</strong>
+          <input type="file" accept="image/*" id="logoUpload">
+        </label>
+        <p style="font-size:0.75rem; color:var(--text-dim); text-align:center;">Agrega insignias o sponsors y arrástralos por el lienzo.</p>
+      </div>
+
+    </div>
+
+    <!-- Área de Canvas (Previsualización) -->
+    <div class="preview-area" id="previewArea">
+      <!-- Este es el contenedor exacto que se descarga (1080x1080) -->
+      <div class="roster-canvas layout-v" id="rosterCanvas">
+        
+        <!-- Capa de Fondo -->
+        <div class="r-bg-image" id="outBg"></div>
+        
+        <!-- Gradientes -->
+        <div class="r-overlay"></div>
+        
+        <!-- Textos Superiores -->
+        <div class="r-header">
+          <div class="r-title" id="outTitle">OFFICIAL ROSTER</div>
+          <div class="r-subtitle" id="outSub">SLENDERGUN MG ESPORTS</div>
+        </div>
+
+        <!-- Caja de Stats Flotante -->
+        <div class="r-stats-box" id="outStatsBox">
+          <div class="r-stat-item">
+            <span class="r-stat-label" id="outStatL1">KILLS TOTALES</span>
+            <div class="r-stat-val" id="outStatV1">124</div>
+          </div>
+          <div class="r-stat-item">
+            <span class="r-stat-label" id="outStatL2">BOOYAHS</span>
+            <div class="r-stat-val" id="outStatV2">15</div>
+          </div>
+        </div>
+
+        <!-- Contenedor de Jugadores -->
+        <div class="r-players-container">
+          <script>
+            // Usamos un Base64 de un pixel transparente para que html2canvas NO falle al inicio.
+            const placeholder = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+            
+            for(let i=1; i<=5; i++){
+              document.write(`
+                <div class="r-player r-player-${i}">
+                  <img src="${placeholder}" id="imgP${i}" alt="P${i}" style="background: rgba(255,255,255,0.05); width:300px;">
+                  <div class="r-labels-wrapper">
+                    <div class="r-player-name"><span id="outName${i}">JUGADOR ${i}</span></div>
+                    <div class="r-player-role"><span id="outRole${i}">${defaultRoles[i-1]}</span></div>
+                  </div>
+                </div>
+              `);
+            }
+          </script>
+        </div>
+
+        <!-- Textos Inferiores -->
+        <div class="r-footer">
+          <div class="r-footer-text" id="outFoot">TEMPORADA 2026</div>
+          <div class="r-footer-sub" id="outFootSub">COACH: OSCAR | @SLENDERGUN_MG</div>
+        </div>
+
+        <!-- Contenedor dinámico para logos flotantes -->
+        <div id="logosContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Configuración Colores -->
+  <div class="modal-colors" id="modalColors">
+    <div class="modal-content">
+      <h3 style="margin-bottom: 25px; font-family: var(--font-title); color: var(--lux-gold); font-size:1.3rem; border-bottom:1px solid var(--border-color); padding-bottom:10px;">Paleta de Colores</h3>
+      
+      <div class="color-row">
+        <label>Título Principal</label>
+        <input type="color" id="colTitle" value="#ffffff" oninput="aplicarColores()">
+      </div>
+      <div class="color-row">
+        <label>Acento (Subtítulos/Stats)</label>
+        <input type="color" id="colSub" value="#00ffff" oninput="aplicarColores()">
+      </div>
+      <div class="color-row">
+        <label>Borde Nombre Jugador</label>
+        <input type="color" id="colNameBorder" value="#00ffff" oninput="aplicarColores()">
+      </div>
+      <div class="color-row">
+        <label>Fondo Nombre Jugador</label>
+        <input type="color" id="colNameBg" value="#000000" oninput="aplicarColores()">
+      </div>
+      <div class="color-row">
+        <label>Fondo de Rol</label>
+        <input type="color" id="colRoleBg" value="#00ffff" oninput="aplicarColores()">
+      </div>
+      <div class="color-row">
+        <label>Texto de Rol</label>
+        <input type="color" id="colRoleTxt" value="#000000" oninput="aplicarColores()">
+      </div>
+      
+      <div style="text-align: right; margin-top: 25px;">
+        <button class="btn btn-gold" onclick="cerrarConfigColores()" style="width:100%; justify-content:center;">GUARDAR CAMBIOS</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+// ── Escalar el Canvas 1080x1080 para que quepa en pantalla ──
+function autoScale() {
+  const previewArea = document.getElementById('previewArea');
+  const canvas = document.getElementById('rosterCanvas');
+  const availableWidth = previewArea.clientWidth - 40;
+  const availableHeight = previewArea.clientHeight - 40;
+  
+  const scale = Math.min(availableWidth / 1080, availableHeight / 1080, 1);
+  canvas.style.transform = `scale(${scale})`;
+  
+  window.currentScale = scale;
+}
+window.addEventListener('resize', autoScale);
+autoScale();
+
+// ── Eventos de Texto ──
+function actualizarTextos() {
+  document.getElementById('outTitle').innerText = document.getElementById('inpTitle').value;
+  document.getElementById('outSub').innerText = document.getElementById('inpSub').value;
+  document.getElementById('outFoot').innerText = document.getElementById('inpFoot').value;
+  document.getElementById('outFootSub').innerText = document.getElementById('inpFootSub').value;
+}
+
+function actualizarNombres() {
+  for(let i=1; i<=5; i++){
+    document.getElementById(`outName${i}`).innerText = document.getElementById(`nameP${i}`).value;
+    document.getElementById(`outRole${i}`).innerText = document.getElementById(`roleP${i}`).value;
+  }
+}
+
+function actualizarStats() {
+  document.getElementById('outStatL1').innerText = document.getElementById('statLabel1').value;
+  document.getElementById('outStatV1').innerText = document.getElementById('statVal1').value;
+  document.getElementById('outStatL2').innerText = document.getElementById('statLabel2').value;
+  document.getElementById('outStatV2').innerText = document.getElementById('statVal2').value;
+}
+
+function toggleStats() {
+  const box = document.getElementById('outStatsBox');
+  if(document.getElementById('showStats').checked) {
+    box.classList.remove('hidden');
+  } else {
+    box.classList.add('hidden');
+  }
+}
+
+// ── Filtros y Diseño ──
+function cambiarLayout() {
+  const canvas = document.getElementById('rosterCanvas');
+  canvas.className = 'roster-canvas ' + document.getElementById('layoutSelect').value;
+}
+
+function actualizarFiltros() {
+  const bg = document.getElementById('outBg');
+  const br = document.getElementById('bgBrightness').value;
+  const bl = document.getElementById('bgBlur').value;
+  bg.style.filter = `brightness(${br}%) blur(${bl}px)`;
+}
+
+// ── Colores Modal ──
+function abrirConfigColores() { document.getElementById('modalColors').classList.add('active'); }
+function cerrarConfigColores() { document.getElementById('modalColors').classList.remove('active'); }
+
+function aplicarColores() {
+  const root = document.documentElement;
+  root.style.setProperty('--rost-txt-title', document.getElementById('colTitle').value);
+  root.style.setProperty('--rost-txt-accent', document.getElementById('colSub').value);
+  root.style.setProperty('--rost-name-border', document.getElementById('colNameBorder').value);
+  root.style.setProperty('--rost-role-bg', document.getElementById('colRoleBg').value);
+  root.style.setProperty('--rost-role-txt', document.getElementById('colRoleTxt').value);
+  
+  let hex = document.getElementById('colNameBg').value;
+  let r = parseInt(hex.slice(1, 3), 16);
+  let g = parseInt(hex.slice(3, 5), 16);
+  let b = parseInt(hex.slice(5, 7), 16);
+  root.style.setProperty('--rost-name-bg', `rgba(${r}, ${g}, ${b}, 0.85)`);
+}
+
+// ── Carga de Imágenes ──
+document.getElementById('bgUpload').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if(file) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      document.getElementById('outBg').style.backgroundImage = `url(${event.target.result})`;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+function cargarJugador(input, num) {
+  const file = input.files[0];
+  if(file) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const imgTag = document.getElementById(`imgP${num}`);
+      imgTag.src = event.target.result;
+      imgTag.style.background = 'transparent'; // quita el fondo gris de ayuda
+      imgTag.style.width = 'auto'; // Ajusta su proporción normal
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// ── Sistema de Logos Arrastrables (Drag & Drop) ──
+let logoCount = 0;
+document.getElementById('logoUpload').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if(file) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      logoCount++;
+      crearLogoArrastrable(event.target.result, logoCount);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = ''; 
+  }
+});
+
+function crearLogoArrastrable(src, id) {
+  const container = document.getElementById('logosContainer');
+  const div = document.createElement('div');
+  div.className = 'draggable-logo';
+  div.id = `logoDrag_${id}`;
+  div.style.top = '100px';
+  div.style.left = '100px';
+  
+  div.innerHTML = `
+    <div class="delete-logo" onclick="this.parentElement.remove()">X</div>
+    <img src="${src}">
+  `;
+  container.appendChild(div);
+  
+  let isDragging = false;
+  let offsetX, offsetY;
+
+  div.addEventListener('mousedown', function(e) {
+    if(e.target.className === 'delete-logo') return;
+    isDragging = true;
+    
+    const rect = div.getBoundingClientRect();
+    const scale = window.currentScale || 1;
+    offsetX = (e.clientX - rect.left) / scale;
+    offsetY = (e.clientY - rect.top) / scale;
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if(!isDragging) return;
+    
+    const canvasRect = document.getElementById('rosterCanvas').getBoundingClientRect();
+    const scale = window.currentScale || 1;
+    
+    let x = (e.clientX - canvasRect.left) / scale - offsetX;
+    let y = (e.clientY - canvasRect.top) / scale - offsetY;
+    
+    div.style.left = `${x}px`;
+    div.style.top = `${y}px`;
+  });
+
+  document.addEventListener('mouseup', function() { isDragging = false; });
+  document.addEventListener('mouseleave', function() { isDragging = false; });
+}
+
+// ── Botones de Acción Global ──
+function resetearTodo() {
+  if(confirm('¿Eliminar todas las configuraciones, logos y fotos cargadas?')) {
+    document.getElementById('outBg').style.backgroundImage = 'none';
+    document.getElementById('bgBrightness').value = 100;
+    document.getElementById('bgBlur').value = 0;
+    actualizarFiltros();
+
+    document.getElementById('logosContainer').innerHTML = '';
+    
+    const defaultRoles = ['RUSH', 'RUSH 2', 'IGL', 'SNIPER', 'SOPORTE'];
+    const placeholder = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+    
+    for(let i=1; i<=5; i++) {
+      const img = document.getElementById(`imgP${i}`);
+      img.src = placeholder;
+      img.style.background = 'rgba(255,255,255,0.05)';
+      img.style.width = '300px';
+
+      document.getElementById(`nameP${i}`).value = i===3 ? 'CAPITÁN' : `JUGADOR ${i}`;
+      document.getElementById(`roleP${i}`).value = defaultRoles[i-1];
+    }
+    
+    document.getElementById('inpTitle').value = 'OFFICIAL ROSTER';
+    document.getElementById('inpSub').value = 'SLENDERGUN MG ESPORTS';
+    document.getElementById('inpFoot').value = 'TEMPORADA 2026';
+    document.getElementById('inpFootSub').value = 'COACH: OSCAR | @SLENDERGUN_MG';
+    
+    document.getElementById('statLabel1').value = 'KILLS TOTALES';
+    document.getElementById('statVal1').value = '124';
+    document.getElementById('statLabel2').value = 'BOOYAHS';
+    document.getElementById('statVal2').value = '15';
+    document.getElementById('showStats').checked = true;
+    toggleStats();
+    
+    actualizarTextos();
+    actualizarNombres();
+    actualizarStats();
+  }
+}
+
+function descargarImagen() {
+  const canvasElement = document.getElementById('rosterCanvas');
+  const btn = document.querySelector('.btn-gold');
+  const originalText = btn.innerText;
+  
+  btn.innerText = "⏳ GENERANDO...";
+  
+  const currentTransform = canvasElement.style.transform;
+  canvasElement.style.transform = 'scale(1)';
+  
+  document.querySelectorAll('.delete-logo').forEach(el => el.style.display = 'none');
+
+  setTimeout(() => {
+    html2canvas(canvasElement, {
+      scale: 1, 
+      backgroundColor: '#1a1a24',
+      useCORS: true,
+      allowTaint: true
+    }).then(canvas => {
+      canvasElement.style.transform = currentTransform;
+      document.querySelectorAll('.delete-logo').forEach(el => el.style.display = 'flex');
+      btn.innerText = originalText;
+      
+      const enlace = document.createElement('a');
+      enlace.download = `SlenderGun_Roster_${Date.now()}.png`;
+      enlace.href = canvas.toDataURL('image/png', 1.0);
+      enlace.click();
+    }).catch(err => {
+      canvasElement.style.transform = currentTransform;
+      document.querySelectorAll('.delete-logo').forEach(el => el.style.display = 'flex');
+      btn.innerText = originalText;
+      alert("Error en captura: " + err);
+    });
+  }, 150);
+}
+</script>
+</body>
+</html>
