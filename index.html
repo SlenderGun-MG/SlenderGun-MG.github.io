@@ -1631,30 +1631,36 @@
 @media(max-width:600px){.module-area .module-grid{grid-template-columns:1fr}}
 
 
-/* KAELIX: identidad morada para la sección de alianza */
+/* Paleta dividida de alianza: TR amarillo / KAELIX morado */
 .brand-marquee {
-  --tr-glow: rgba(139, 92, 246, .24);
-  --kaelix-glow: rgba(168, 85, 247, .25);
+  --tr-glow: rgba(255, 212, 0, .22);
+  --kaelix-glow: rgba(176, 92, 255, .24);
 }
-.showdown-shell::before { background: #8b5cf6; box-shadow: 0 0 18px #8b5cf6; }
-.showdown-shell::after { background: #c084fc; box-shadow: 0 0 18px #c084fc; }
-.showdown-status i { background: #c084fc; box-shadow: 0 0 0 0 rgba(192,132,252,.55); }
-.showdown-team.tr,
-.showdown-team.kaelix { --team-color: #a855f7; }
-.showdown-team.tr .team-copy strong span,
-.showdown-team.kaelix .team-copy strong { color: #c084fc; }
-.versus-orbit::before,
-.versus-orbit::after { background: #c084fc; box-shadow: 0 0 12px #c084fc; }
+.showdown-shell::before { background:#ffd400; box-shadow:0 0 18px #ffd400; }
+.showdown-shell::after { background:#b45cff; box-shadow:0 0 18px #b45cff; }
+.showdown-team.tr { --team-color:#ffd400; }
+.showdown-team.kaelix { --team-color:#b45cff; }
+.showdown-team.tr .team-copy strong span { color:#ffd400; }
+.showdown-team.kaelix .team-copy strong { color:#c78aff; }
+.showdown-team.tr .team-emblem.tr-logo-frame {
+  border-color:#ffd400;
+  box-shadow:0 0 20px rgba(255,212,0,.18),inset 0 0 16px rgba(255,212,0,.08);
+}
+.showdown-team.kaelix .team-emblem.kx-logo-frame {
+  border-color:#b45cff;
+  box-shadow:0 0 20px rgba(180,92,255,.22),inset 0 0 16px rgba(180,92,255,.10);
+}
+.versus-orbit::before { background:#ffd400; box-shadow:0 0 12px #ffd400; }
+.versus-orbit::after { background:#b45cff; box-shadow:0 0 12px #b45cff; }
 .versus-mark {
-  border-color: rgba(192,132,252,.75);
-  background: linear-gradient(135deg, rgba(139,92,246,.34), rgba(192,132,252,.22));
-  box-shadow: 0 0 34px rgba(168,85,247,.22), inset 0 0 20px rgba(192,132,252,.12);
+  border-color:rgba(180,92,255,.72);
+  background:linear-gradient(135deg,rgba(255,212,0,.22),rgba(180,92,255,.22));
+  box-shadow:0 0 34px rgba(180,92,255,.15),inset 0 0 20px rgba(255,212,0,.08);
 }
 .energy-rail {
-  background: linear-gradient(90deg, rgba(139,92,246,.7), rgba(255,255,255,.1), rgba(192,132,252,.75));
+  background:linear-gradient(90deg,rgba(255,212,0,.65),rgba(255,255,255,.1),rgba(180,92,255,.7));
 }
-.energy-rail i { box-shadow: 0 0 14px 3px rgba(192,132,252,.75); }
-
+.showdown-status i { background:#b45cff; box-shadow:0 0 0 0 rgba(180,92,255,.55); }
 </style>
 </head>
 <body>
