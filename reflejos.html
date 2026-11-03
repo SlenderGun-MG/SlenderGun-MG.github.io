@@ -254,7 +254,7 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
       </div>
       <div class="arena-footer"><span>ACERTADOS <strong id="arenaHits">0</strong></span><span>ERRORES <strong id="arenaErrors">0</strong></span><span>PRECISIÓN <strong id="arenaAccuracy">—</strong></span></div>
       <div class="workout-controls">
-        <div class="control-group"><label class="field-label" for="difficulty">Dificultad</label><select class="level-select" id="difficulty"><option value="1">Nivel 1 · Inicial</option><option value="2">Nivel 2 · Básico</option><option value="3" selected>Nivel 3 · Competitivo</option><option value="4">Nivel 4 · Avanzado</option><option value="5">Nivel 5 · Élite</option></select></div>
+        <div class="control-group"><label class="field-label" for="difficulty">Dificultad</label><select class="level-select" id="difficulty"><option value="1">Nivel 1 · Inicial</option><option value="2" selected>Nivel 2 · Competitivo</option><option value="3">Nivel 3 · Élite</option></select></div>
         <div class="control-group control-actions"><button class="btn btn-primary" id="startButton">▶ INICIAR SESIÓN</button><button class="btn btn-secondary" id="resetButton" type="button">REINICIAR</button></div>
       </div>
     </div>
@@ -394,7 +394,7 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
   // Permite abrir una rutina concreta desde el portal ENTRENAMIENTO.
   const params = new URLSearchParams(window.location.search);
   const requestedLevel = Number(params.get('nivel'));
-  if (Number.isInteger(requestedLevel) && requestedLevel >= 1 && requestedLevel <= 5) {
+  if (Number.isInteger(requestedLevel) && requestedLevel >= 1 && requestedLevel <= 3) {
     $('difficulty').value = String(requestedLevel);
   }
   chooseMode(PAGE_MODE);

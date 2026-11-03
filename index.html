@@ -225,7 +225,7 @@
     .spot:nth-child(even) .spot-info { order: 1; }
     .spot-rojo { --accent: var(--red); }
     .spot-azul { --accent: var(--cyan); }
-    .spot-reaction { --accent: #f2c14e; }
+    .spot-reaction { --accent: #54e5ff; }
     .spot-img {
       position: relative;
       min-height: 275px;
@@ -307,7 +307,7 @@
 
     /* Gráfico de Centro de entrenamiento conservado del index original. */
     .reaction-art {
-      background: radial-gradient(circle at 50% 48%, #33250d 0%, #07141e 52%, #05080d 100%);
+      background: radial-gradient(circle at 50% 48%, #12303d 0%, #07141e 52%, #05080d 100%);
       border-color: rgba(84,229,255,.28);
     }
     .reaction-art-grid {
@@ -321,10 +321,10 @@
       border: 1px solid rgba(84,229,255,.8); border-radius: 50%;
       box-shadow: 0 0 28px rgba(0,217,255,.12), inset 0 0 20px rgba(0,217,255,.08);
     }
-    .reaction-art-target::before, .reaction-art-target::after { position: absolute; content: ''; background: #f2c14e; opacity: .65; }
+    .reaction-art-target::before, .reaction-art-target::after { position: absolute; content: ''; background: #54e5ff; opacity: .65; }
     .reaction-art-target::before { width: 78px; height: 1px; }
     .reaction-art-target::after { width: 1px; height: 78px; }
-    .reaction-art-target i { width: 15px; height: 15px; border: 3px solid #f2c14e; border-radius: 50%; background: rgba(84,229,255,.2); }
+    .reaction-art-target i { width: 15px; height: 15px; border: 3px solid #54e5ff; border-radius: 50%; background: rgba(84,229,255,.2); }
     .target-a { top: 22%; left: 18%; transform: scale(.75); }
     .target-b { top: 30%; right: 18%; transform: scale(1.08); }
     .target-c { bottom: 22%; left: 44%; transform: scale(.62); }
@@ -334,7 +334,7 @@
     .reaction-art-hud b { color: #effcff; font: 700 1.55rem var(--font-display); letter-spacing: 2px; }
     .reaction-art-stats { position: absolute; right: 18px; bottom: 16px; left: 18px; display: flex; gap: 8px; justify-content: space-between; }
     .reaction-art-stats span { flex: 1; display: flex; flex-direction: column; gap: 4px; padding: 8px 10px; border: 1px solid rgba(84,229,255,.18); background: rgba(3,12,18,.82); }
-    .reaction-art-stats b { color: #f2c14e; font: 700 1.05rem var(--font-display); }
+    .reaction-art-stats b { color: #54e5ff; font: 700 1.05rem var(--font-display); }
     .reaction-art-stats small { font-size: .52rem; }
 
     /* Escenario de marcas: animación de energía, no una marquesina de texto. */
@@ -1630,42 +1630,38 @@
 @media(max-width:1000px){.module-area .module-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.module-area .module-grid{grid-template-columns:1fr}}
 
-</style>
 
-<style id="tr-gold-premium">
-:root{--cyan:#f2c14e;--cyan2:#b87918;--gold:#ffd76b;--line:#453516}
-a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid #ffe6a0;outline-offset:3px}
-.mode-card,.module,.stat,.hud-card,.panel-stat,.workout,.side-panel,.hero-panel,.game-view,.arena,.info-card,.export-center,.mission-card{
- transition:border-color .25s ease,box-shadow .25s ease,transform .25s ease,filter .25s ease;
+/* Paleta dividida de alianza: TR amarillo / KAELIX morado */
+.brand-marquee {
+  --tr-glow: rgba(255, 212, 0, .22);
+  --kaelix-glow: rgba(176, 92, 255, .24);
 }
-.mode-card::after,.module::after,.card-shine::after{pointer-events:none}
-@media (hover:hover) and (pointer:fine){
- .mode-card:hover,.module:hover,.stat:hover,.hud-card:hover,.panel-stat:hover,.info-card:hover{
-   border-color:#f2c14e!important;box-shadow:0 0 0 1px #f2c14e33,0 0 26px #f2c14e28,inset 0 0 24px #f2c14e0c!important;transform:translateY(-3px);
- }
- .btn:hover,.tool-btn:hover,.small-link:hover,.back-link:hover,.icon-btn:hover,.large-btn:hover,.export-center-btn:hover{
-   border-color:#ffe6a0!important;box-shadow:0 0 8px #f2c14e99,0 0 24px #f2c14e55!important;filter:brightness(1.12);
- }
- .mode-card::before,.module::before,.btn::before,.tool-btn::before,.small-link::before,.back-link::before,.icon-btn::before,.large-btn::before,.export-center-btn::before{
-   content:"";position:absolute;inset:-2px;pointer-events:none;opacity:0;transform:translateX(-125%) skewX(-18deg);
-   background:linear-gradient(105deg,transparent 35%,#fff9d8aa 50%,transparent 65%);
- }
- .mode-card:hover::before,.module:hover::before,.btn:hover::before,.tool-btn:hover::before,.small-link:hover::before,.back-link:hover::before,.icon-btn:hover::before,.large-btn:hover::before,.export-center-btn:hover::before{opacity:1;animation:trGoldSweep .8s ease forwards}
+.showdown-shell::before { background:#ffd400; box-shadow:0 0 18px #ffd400; }
+.showdown-shell::after { background:#b45cff; box-shadow:0 0 18px #b45cff; }
+.showdown-team.tr { --team-color:#ffd400; }
+.showdown-team.kaelix { --team-color:#b45cff; }
+.showdown-team.tr .team-copy strong span { color:#ffd400; }
+.showdown-team.kaelix .team-copy strong { color:#c78aff; }
+.showdown-team.tr .team-emblem.tr-logo-frame {
+  border-color:#ffd400;
+  box-shadow:0 0 20px rgba(255,212,0,.18),inset 0 0 16px rgba(255,212,0,.08);
 }
-@keyframes trGoldSweep{to{transform:translateX(125%) skewX(-18deg)}}
-@media(hover:none){.mode-card:active,.module:active,.btn:active,.tool-btn:active,.large-btn:active,.icon-btn:active{border-color:#ffe6a0!important;box-shadow:0 0 18px #f2c14e88!important;transform:scale(.985)}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+.showdown-team.kaelix .team-emblem.kx-logo-frame {
+  border-color:#b45cff;
+  box-shadow:0 0 20px rgba(180,92,255,.22),inset 0 0 16px rgba(180,92,255,.10);
+}
+.versus-orbit::before { background:#ffd400; box-shadow:0 0 12px #ffd400; }
+.versus-orbit::after { background:#b45cff; box-shadow:0 0 12px #b45cff; }
+.versus-mark {
+  border-color:rgba(180,92,255,.72);
+  background:linear-gradient(135deg,rgba(255,212,0,.22),rgba(180,92,255,.22));
+  box-shadow:0 0 34px rgba(180,92,255,.15),inset 0 0 20px rgba(255,212,0,.08);
+}
+.energy-rail {
+  background:linear-gradient(90deg,rgba(255,212,0,.65),rgba(255,255,255,.1),rgba(180,92,255,.7));
+}
+.showdown-status i { background:#b45cff; box-shadow:0 0 0 0 rgba(180,92,255,.55); }
 </style>
-
-
-<style id="tr-gold-platform">
-:root{--gold:#f2c14e;--gold2:#b87918}
-.module{position:relative;overflow:hidden;isolation:isolate;transition:transform .25s,border-color .25s,box-shadow .25s}
-@media(hover:hover) and (pointer:fine){.module:hover{border-color:#ffe29a!important;box-shadow:0 0 0 1px #f2c14e44,0 0 30px #f2c14e44,inset 0 0 28px #f2c14e14!important;transform:translateY(-4px)}.module::after{content:"";position:absolute;inset:-2px;pointer-events:none;transform:translateX(-125%) skewX(-18deg);background:linear-gradient(105deg,transparent 35%,#fff7d0aa 50%,transparent 65%)}.module:hover::after{animation:platformGoldSweep .85s ease forwards}}
-@keyframes platformGoldSweep{to{transform:translateX(125%) skewX(-18deg)}}
-@media(hover:none){.module:active{box-shadow:0 0 24px #f2c14e88!important;transform:scale(.985)}}
-</style>
-
 </head>
 <body>
   <header class="site-header" id="top">
@@ -1709,7 +1705,7 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
     </section>
 
     <section class="module-area" aria-label="Módulos de gestión">
-<header class="area-head"><div><div class="area-label">CENTRO DE OPERACIONES / ACCESO DIRECTO</div><h2>Selecciona una herramienta</h2></div><p>08 SISTEMAS DISPONIBLES<br>TR-eSPORT PLATFORM</p></header>
+<header class="area-head"><div><div class="area-label">CENTRO DE OPERACIONES / ACCESO DIRECTO</div><h2>Selecciona una herramienta</h2></div><p>07 SISTEMAS DISPONIBLES<br>TR-eSPORT PLATFORM</p></header>
 <div class="module-grid">
 <a class="module" href="Táctil.html">
 <div class="top"><span class="num">01 / MAPA</span><span class="tag">ANÁLISIS DE MAPAS</span></div>
@@ -1721,11 +1717,7 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 <div class="open"><span>ABRIR CALCULADORA</span><b>↗</b></div></a>
 <a class="module" href="panel-reaction-lab.html">
 <div class="top"><span class="num">03 / TRAIN</span><span class="tag">ENTRENAMIENTO</span></div>
-<div class="glyph">REACTION</div><h3>Reaction Lab</h3><p>Entrena 15 ejercicios de motricidad, percepción visual y procesamiento auditivo, además de las rutinas individuales.</p>
-<div class="open"><span>ENTRAR A ENTRENAR</span><b>↗</b></div></a>
-<a class="module" href="reflejos.html">
-<div class="top"><span class="num">08 / REFLEX</span><span class="tag">ENTRENAMIENTO</span></div>
-<div class="glyph">REFLEX</div><h3>Entrenamiento de reflejos</h3><p>Mejora la respuesta a señales visuales con ejercicios de reacción, precisión temporal y control de anticipación.</p>
+<div class="glyph">REACTION</div><h3>Reaction Lab</h3><p>Entrena reflejos, puntería, seguimiento, velocidad, identificación visual y decisiones bajo presión.</p>
 <div class="open"><span>ENTRAR A ENTRENAR</span><b>↗</b></div></a>
 <a class="module" href="manager.html">
 <div class="top"><span class="num">04 / TEAM</span><span class="tag">ADMINISTRACIÓN</span></div>
