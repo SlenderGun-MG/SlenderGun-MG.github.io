@@ -1630,6 +1630,31 @@
 @media(max-width:1000px){.module-area .module-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.module-area .module-grid{grid-template-columns:1fr}}
 
+
+/* KAELIX: identidad morada para la sección de alianza */
+.brand-marquee {
+  --tr-glow: rgba(139, 92, 246, .24);
+  --kaelix-glow: rgba(168, 85, 247, .25);
+}
+.showdown-shell::before { background: #8b5cf6; box-shadow: 0 0 18px #8b5cf6; }
+.showdown-shell::after { background: #c084fc; box-shadow: 0 0 18px #c084fc; }
+.showdown-status i { background: #c084fc; box-shadow: 0 0 0 0 rgba(192,132,252,.55); }
+.showdown-team.tr,
+.showdown-team.kaelix { --team-color: #a855f7; }
+.showdown-team.tr .team-copy strong span,
+.showdown-team.kaelix .team-copy strong { color: #c084fc; }
+.versus-orbit::before,
+.versus-orbit::after { background: #c084fc; box-shadow: 0 0 12px #c084fc; }
+.versus-mark {
+  border-color: rgba(192,132,252,.75);
+  background: linear-gradient(135deg, rgba(139,92,246,.34), rgba(192,132,252,.22));
+  box-shadow: 0 0 34px rgba(168,85,247,.22), inset 0 0 20px rgba(192,132,252,.12);
+}
+.energy-rail {
+  background: linear-gradient(90deg, rgba(139,92,246,.7), rgba(255,255,255,.1), rgba(192,132,252,.75));
+}
+.energy-rail i { box-shadow: 0 0 14px 3px rgba(192,132,252,.75); }
+
 </style>
 </head>
 <body>
