@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b10">
+<meta name="description" content="Centro de entrenamiento individual de TR-eSport: reflejos, seguimiento, precisión AIM, velocidad, visión y toma de decisiones.">
+<title>Panel Reaction Lab | TR-eSport</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b10;--panel:#0e151d;--panel2:#111d27;--line:#21313c;--cyan:#54e5ff;--cyan2:#00b8d7;--gold:#ffcc00;--red:#ff5964;--green:#42edaa;--text:#f2faff;--muted:#93a5b2;--title:'Chakra Petch',sans-serif;--mono:'Share Tech Mono',monospace;--body:'Inter',sans-serif;--radius:16px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bg);scroll-padding-top:86px}body{margin:0;min-width:320px;background:radial-gradient(ellipse at 50% -15%,#12303d 0,transparent 42%),var(--bg);color:var(--text);font-family:var(--body);overflow-x:hidden}a{color:inherit}button,a{-webkit-tap-highlight-color:transparent}.shell{width:min(1160px,100% - 36px);margin-inline:auto}
+.topbar{height:68px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid #ffffff12;background:#070b10e8;backdrop-filter:blur(14px);position:sticky;top:0;z-index:50;padding:0 max(18px,calc((100vw - 1160px)/2))}.brand{display:flex;align-items:center;gap:11px;text-decoration:none;min-width:0}.brand-mark{width:36px;height:36px;background:var(--gold);color:#080b0f;clip-path:polygon(24% 0,100% 0,76% 100%,0 100%);display:grid;place-items:center;font:700 1rem var(--title);flex:none}.brand-name{font:700 1rem var(--title);letter-spacing:.07em;white-space:nowrap}.brand-name small{display:block;color:var(--muted);font:.62rem var(--mono);letter-spacing:.18em;margin-top:2px}.back-link{border:1px solid var(--line);padding:10px 14px;border-radius:9px;color:var(--muted);text-decoration:none;font:.75rem var(--mono);transition:.2s;white-space:nowrap}.back-link:hover,.back-link:focus-visible{border-color:var(--cyan);color:var(--cyan)}
+.hero{padding:65px 0 46px;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(230px,.7fr);align-items:center;gap:32px}.eyebrow{font:.72rem var(--mono);letter-spacing:.18em;color:var(--cyan);text-transform:uppercase;display:flex;align-items:center;gap:9px}.pulse{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 12px var(--green);display:inline-block}.hero h1{font:700 clamp(2.7rem,6.3vw,5.2rem)/.95 var(--title);letter-spacing:-.04em;margin:15px 0 18px;text-transform:uppercase}.hero h1 span{color:var(--cyan)}.hero p{max-width:690px;color:var(--muted);line-height:1.8;margin:0;font-size:1rem}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.btn{display:inline-flex;justify-content:center;align-items:center;gap:9px;text-decoration:none;border:1px solid transparent;border-radius:8px;padding:13px 17px;font:700 .83rem var(--title);letter-spacing:.05em;transition:transform .2s,border-color .2s,background .2s}.btn:hover{transform:translateY(-2px)}.btn-primary{background:linear-gradient(110deg,var(--cyan),#00b8d7);color:#031117;box-shadow:0 8px 24px #00c9ef17}.btn-outline{border-color:var(--line);color:var(--text);background:#ffffff04}.btn-outline:hover{border-color:var(--cyan);color:var(--cyan)}.hero-panel{position:relative;overflow:hidden;border:1px solid #54e5ff35;border-radius:18px;min-height:245px;padding:22px;background:radial-gradient(circle at 50% 40%,#13303d,#0b141c 68%)}.hero-panel:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#54e5ff10 1px,transparent 1px),linear-gradient(90deg,#54e5ff10 1px,transparent 1px);background-size:27px 27px;mask-image:linear-gradient(to bottom,#000,transparent 95%)}.panel-top,.panel-bottom,.target-art,.panel-info{position:relative;z-index:1}.panel-top{display:flex;justify-content:space-between;gap:10px;align-items:center;color:var(--muted);font:.64rem var(--mono);letter-spacing:.1em}.online{color:var(--green);white-space:nowrap}.target-art{width:116px;height:116px;border:1px solid #54e5ff9c;border-radius:50%;margin:20px auto;display:grid;place-items:center;box-shadow:0 0 38px #54e5ff18,inset 0 0 22px #54e5ff12}.target-art:before,.target-art:after{content:"";position:absolute;background:#54e5ff8c}.target-art:before{height:1px;width:154px}.target-art:after{height:154px;width:1px}.target-art span{width:28px;height:28px;border:3px solid var(--cyan);border-radius:50%;box-shadow:0 0 23px #54e5ff9c;background:#54e5ff2d}.panel-info{text-align:center;font: .7rem var(--mono);letter-spacing:.12em;color:#b3ced8}.panel-bottom{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:15px}.panel-stat{background:#071018c9;border:1px solid #54e5ff20;padding:9px 8px;text-align:center}.panel-stat b{display:block;color:var(--cyan);font:700 1.1rem var(--title)}.panel-stat small{display:block;color:var(--muted);font:.55rem var(--mono);margin-top:3px;letter-spacing:.08em}
+.section{padding:28px 0 48px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:18px}.section-head h2{font:700 clamp(1.55rem,3vw,2rem) var(--title);margin:0;text-transform:uppercase;letter-spacing:.02em}.section-head p{margin:7px 0 0;max-width:670px;color:var(--muted);font-size:.88rem;line-height:1.6}.micro{font:.65rem var(--mono);letter-spacing:.12em;color:var(--muted);white-space:nowrap}.mode-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.mode-card{display:flex;flex-direction:column;min-width:0;padding:19px 19px 17px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,#101922,#0b1118);transition:transform .2s,border-color .2s,background .2s}.mode-card:hover{transform:translateY(-3px);border-color:#54e5ff80;background:linear-gradient(145deg,#11232e,#0b151d)}.mode-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.mode-icon{display:grid;place-items:center;width:42px;height:42px;border:1px solid #54e5ff35;border-radius:11px;background:#54e5ff10;color:var(--cyan);font:700 1rem var(--title)}.mode-no{font:.62rem var(--mono);color:#5e7887;letter-spacing:.1em}.mode-card h3{font:700 1.08rem var(--title);text-transform:uppercase;letter-spacing:.035em;margin:0 0 8px}.mode-card p{font-size:.81rem;line-height:1.65;color:var(--muted);margin:0 0 14px;min-height:52px}.trains{border-top:1px solid #ffffff0d;padding-top:12px;margin-top:auto}.trains b{display:block;font:.6rem var(--mono);letter-spacing:.12em;color:var(--cyan);margin-bottom:5px}.trains span{color:#b1c1ca;font-size:.75rem;line-height:1.55}.card-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:17px}.chip{border:1px solid #ffffff16;border-radius:99px;padding:5px 8px;color:#a9bbc6;font:.58rem var(--mono);letter-spacing:.06em}.card-link{color:var(--cyan);text-decoration:none;font:700 .68rem var(--mono);letter-spacing:.04em;white-space:nowrap}.card-link:hover{text-decoration:underline}
+.info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.info-card{padding:21px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,#101922,#0b1118);min-width:0}.info-icon{font:700 1.2rem var(--title);color:var(--gold);margin-bottom:13px}.info-card h3{font:700 1.04rem var(--title);text-transform:uppercase;margin:0 0 9px}.info-card p{margin:0;color:var(--muted);font-size:.82rem;line-height:1.7}.steps{counter-reset:step;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.step{position:relative;padding:20px 20px 20px 62px;border:1px solid var(--line);border-radius:14px;background:#ffffff03;min-width:0}.step:before{counter-increment:step;content:"0" counter(step);position:absolute;left:19px;top:19px;color:var(--cyan);font:700 1.15rem var(--title)}.step h3{margin:0 0 8px;font:700 .98rem var(--title);text-transform:uppercase}.step p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.65}.level-list{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.level{border:1px solid var(--line);border-radius:11px;padding:14px 10px;text-align:center;background:#ffffff03}.level b{display:block;color:var(--cyan);font:700 1rem var(--title)}.level span{display:block;margin-top:5px;color:var(--muted);font-size:.71rem}.note{margin-top:18px;padding:14px 16px;border-left:2px solid var(--gold);background:#ffcc0008;color:var(--muted);font-size:.78rem;line-height:1.7}.note strong{color:var(--text)}.footer{border-top:1px solid #ffffff12;padding:22px 0 28px;color:#617987;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:.64rem var(--mono);letter-spacing:.1em}
+@media(max-width:850px){.hero{grid-template-columns:1fr;padding-top:43px}.hero-panel{min-height:220px}.mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.info-grid,.steps{grid-template-columns:1fr}.level-list{grid-template-columns:repeat(5,minmax(0,1fr))}.section-head{align-items:start;flex-direction:column;gap:8px}}
+@media(max-width:560px){.shell{width:calc(100% - 26px)}.topbar{height:62px;padding:0 13px}.brand-mark{width:31px;height:31px}.brand-name{font-size:.85rem}.brand-name small{font-size:.55rem}.back-link{font-size:.62rem;padding:9px 10px}.hero{padding:37px 0 27px;gap:22px}.hero h1{font-size:clamp(2.35rem,12vw,3.65rem)}.hero p{font-size:.9rem}.hero-actions{display:grid;grid-template-columns:1fr}.btn{width:100%}.hero-panel{min-height:210px;padding:15px}.target-art{width:93px;height:93px;margin:17px auto}.target-art:before{width:125px}.target-art:after{height:125px}.section{padding:24px 0 34px}.mode-grid{grid-template-columns:1fr}.mode-card{padding:17px}.mode-card p{min-height:0}.info-card{padding:17px}.level-list{grid-template-columns:repeat(2,minmax(0,1fr))}.level:last-child{grid-column:auto}.step{padding-left:57px}.footer{font-size:.56rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+
+/* ── Selector de formato: celular / computadora ── */
+.device-toolbar{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap;margin:10px auto 0;padding:10px 12px;border:1px solid #54e5ff2b;border-radius:12px;background:linear-gradient(120deg,#0d1821f5,#091118f5);box-shadow:0 8px 24px #0002}
+.device-toolbar-title{display:flex;align-items:center;gap:8px;font: .63rem var(--mono);letter-spacing:.12em;color:var(--muted);white-space:nowrap}
+.device-toolbar-pulse{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px #54e5ff8a}
+.device-switch,.orientation-switch{display:flex;align-items:center;gap:5px;padding:3px;border:1px solid var(--line);background:#03080d;border-radius:10px}
+.device-mode-btn,.orientation-btn{border:1px solid transparent;background:transparent;color:var(--muted);border-radius:7px;padding:8px 11px;font:700 .7rem var(--title);letter-spacing:.035em;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:background .18s,color .18s,border-color .18s}
+.device-mode-btn[aria-pressed="true"],.orientation-btn[aria-pressed="true"]{background:#54e5ff16;color:var(--cyan);border-color:#54e5ff45}
+.device-mode-btn:focus-visible,.orientation-btn:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.device-hint{font:.61rem var(--mono);color:#718b99;line-height:1.45}
+.device-toolbar [hidden]{display:none!important}
+@media(max-width:620px){.device-toolbar{margin-top:8px;padding:8px;gap:7px;justify-content:center}.device-toolbar-title{display:none}.device-switch{flex:1;justify-content:center}.device-mode-btn{flex:1;padding:9px 7px;font-size:.68rem}.device-hint{width:100%;text-align:center;font-size:.56rem}.orientation-switch{width:100%;justify-content:center}.orientation-btn{flex:1}}
+@media(orientation:landscape) and (max-height:560px){.topbar{height:54px}.device-toolbar{margin-top:6px;padding:6px 9px}.device-toolbar-title,.device-hint{display:none}.hero{padding-top:19px!important;padding-bottom:16px!important}.arena{height:min(48vh,250px)!important;min-height:180px!important}.stats-strip{margin-bottom:16px!important}}
+
+/* Vista móvil simulada desde una computadora; en un teléfono manda el ancho y orientación reales. */
+@media(min-width:700px){
+ body[data-device="mobile"][data-preview-orientation="portrait"]{width:min(390px,100%);margin-inline:auto;border-left:1px solid #54e5ff25;border-right:1px solid #54e5ff25;box-shadow:0 0 50px #0008}
+ body[data-device="mobile"][data-preview-orientation="landscape"]{width:min(844px,100%);margin-inline:auto;border-left:1px solid #54e5ff25;border-right:1px solid #54e5ff25;box-shadow:0 0 50px #0008}
+ body[data-device="mobile"] .topbar{padding:0 9px;height:60px;gap:7px}
+ body[data-device="mobile"] .brand{gap:7px}
+ body[data-device="mobile"] .brand-mark{width:29px;height:29px;font-size:.8rem}
+ body[data-device="mobile"] .brand-name{font-size:.78rem;letter-spacing:.02em}
+ body[data-device="mobile"] .brand-name small{font-size:.48rem;letter-spacing:.08em}
+ body[data-device="mobile"] .back-link{padding:8px 7px;font-size:.55rem}
+ body[data-device="mobile"] .device-toolbar{width:calc(100% - 18px);padding:8px;gap:6px}
+ body[data-device="mobile"] .device-toolbar-title{display:none}
+ body[data-device="mobile"] .device-hint{width:100%;text-align:center;font-size:.55rem}
+ body[data-device="mobile"] .device-mode-btn,body[data-device="mobile"] .orientation-btn{padding:8px 6px;font-size:.63rem}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .shell{width:calc(100% - 22px)}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .hero{grid-template-columns:1fr!important;padding:25px 0 20px;gap:15px}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .hero h1{font-size:clamp(2.2rem,10vw,3rem);margin:10px 0}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .hero p{font-size:.84rem;line-height:1.65}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .session-clock{display:flex;align-items:center;justify-content:space-between;text-align:left;padding:10px 12px;min-width:0}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .session-clock strong{font-size:1.5rem;margin:0}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .stats-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-bottom:20px}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .stat{padding:11px}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .stat label{font-size:.56rem}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .stat strong{font-size:1.45rem}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .training-layout{grid-template-columns:minmax(0,1fr);gap:11px}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .arena{height:330px;min-height:270px}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .workout-head{padding:12px}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .workout-head h2{font-size:.98rem}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .arena-footer{padding:10px 11px;font-size:.55rem}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .workout-controls{padding:11px;align-items:stretch}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .workout-controls .control-group{width:100%;justify-content:space-between}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .workout-controls .control-actions{display:grid;grid-template-columns:1fr auto}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .workout-controls .btn{padding:10px 8px;font-size:.72rem}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .side-panel{grid-template-columns:1fr}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .side-section,body[data-device="mobile"][data-preview-orientation="portrait"] .side-section:nth-child(2),body[data-device="mobile"][data-preview-orientation="portrait"] .side-section:nth-child(3){grid-column:auto;border-right:0}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .bottom-grid,body[data-device="mobile"][data-preview-orientation="portrait"] .info-grid,body[data-device="mobile"][data-preview-orientation="portrait"] .steps{grid-template-columns:1fr}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .mode-grid{grid-template-columns:1fr}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .level-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .hero-panel{min-height:205px}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .section{padding:20px 0 27px}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .footer{font-size:.54rem}
+
+ body[data-device="mobile"][data-preview-orientation="landscape"] .shell{width:calc(100% - 20px)}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .hero{grid-template-columns:minmax(0,1fr) auto!important;gap:15px;padding:20px 0 15px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .hero h1{font-size:clamp(2rem,4.5vw,3rem);margin:8px 0}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .hero p{font-size:.78rem;line-height:1.55}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .session-clock{min-width:125px;padding:10px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .session-clock strong{font-size:1.7rem}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .stats-strip{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-bottom:15px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .stat{padding:9px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .stat label{font-size:.52rem}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .stat strong{font-size:1.3rem}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .training-layout{grid-template-columns:minmax(0,1.45fr) minmax(215px,.75fr);gap:9px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .arena{height:230px;min-height:190px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .workout-head{padding:10px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .workout-head h2{font-size:.9rem}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .workout-head p{font-size:.65rem}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .side-panel{grid-template-columns:1fr}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .side-section,body[data-device="mobile"][data-preview-orientation="landscape"] .side-section:nth-child(2),body[data-device="mobile"][data-preview-orientation="landscape"] .side-section:nth-child(3){grid-column:auto;border-right:0}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .session-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .bottom-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .hero-panel{min-height:190px;padding:12px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .target-art{width:82px;height:82px;margin:12px auto}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .target-art:before{width:112px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .target-art:after{height:112px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .section{padding:18px 0 24px}
+}
+@media(orientation:landscape) and (max-height:560px){
+ .hero{grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:18px 0 14px}
+ .hero h1{font-size:clamp(1.8rem,5vw,3rem);margin:8px 0}
+ .hero p{font-size:.78rem;line-height:1.5}
+ .training-layout{grid-template-columns:minmax(0,1.4fr) minmax(220px,.7fr);gap:10px}
+ .arena{height:230px;min-height:185px}
+ .stats-strip{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-bottom:16px}
+ .stat{padding:9px}
+ .stat label{font-size:.53rem}
+ .stat strong{font-size:1.3rem}
+ .session-clock{min-width:125px;padding:10px}
+ .session-clock strong{font-size:1.7rem}
+ .side-panel{grid-template-columns:1fr}
+ .side-section,.side-section:nth-child(2),.side-section:nth-child(3){grid-column:auto;border-right:0}
+ .session-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .bottom-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* Ajustes del portal para vista de celular */
+@media(min-width:700px){
+ body[data-device="mobile"][data-preview-orientation="portrait"] .hero{grid-template-columns:1fr!important;padding:28px 0 22px;gap:20px}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .hero h1{font-size:clamp(2.2rem,10vw,3rem)}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .hero p{font-size:.86rem}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .hero-actions{display:grid;grid-template-columns:1fr}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .hero-actions .btn{width:100%}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .hero-panel{min-height:205px;padding:15px}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .target-art{width:93px;height:93px;margin:17px auto}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .target-art:before{width:125px}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .target-art:after{height:125px}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .mode-grid,body[data-device="mobile"][data-preview-orientation="portrait"] .info-grid,body[data-device="mobile"][data-preview-orientation="portrait"] .steps{grid-template-columns:1fr}
+ body[data-device="mobile"][data-preview-orientation="portrait"] .level-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .hero{grid-template-columns:minmax(0,1.2fr) minmax(230px,.8fr)!important;padding:22px 0 17px;gap:15px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .hero h1{font-size:clamp(2rem,4.5vw,3rem)}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .hero p{font-size:.78rem;line-height:1.55}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .hero-panel{min-height:205px;padding:13px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .target-art{width:84px;height:84px;margin:12px auto}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .target-art:before{width:116px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .target-art:after{height:116px}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .info-grid,body[data-device="mobile"][data-preview-orientation="landscape"] .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+ body[data-device="mobile"][data-preview-orientation="landscape"] .level-list{grid-template-columns:repeat(5,minmax(0,1fr))}
+ body[data-device="mobile"] .mode-card{padding:13px}
+ body[data-device="mobile"] .mode-card h3{font-size:.91rem}
+ body[data-device="mobile"] .mode-card p{font-size:.72rem;line-height:1.55;min-height:0}
+ body[data-device="mobile"] .info-card{padding:14px}
+ body[data-device="mobile"] .step{padding:15px 12px 15px 48px}
+ body[data-device="mobile"] .step:before{left:13px;top:14px}
+ body[data-device="mobile"] .section{padding:20px 0 26px}
+}
+@media(orientation:landscape) and (max-height:560px){.hero{grid-template-columns:minmax(0,1.2fr) minmax(230px,.8fr);padding:18px 0 15px}.hero-panel{min-height:180px;padding:12px}.target-art{width:80px;height:80px;margin:10px auto}.target-art:before{width:110px}.target-art:after{height:110px}.mode-grid,.info-grid,.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.section{padding:17px 0 23px}}
+
+
+/* Exportación central de puntajes y copias de entrenamiento */
+.export-center{border:1px solid #54e5ff35;border-radius:16px;padding:20px;background:linear-gradient(145deg,#101922,#0b1118)}
+.export-center p{margin:0;color:var(--muted);font-size:.84rem;line-height:1.7;max-width:800px}
+.export-center-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.export-center-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:12px 16px;border:1px solid #54e5ff45;border-radius:9px;background:linear-gradient(110deg,var(--cyan),#00b8d7);color:#031117;font:700 .78rem var(--title);cursor:pointer;touch-action:manipulation}
+.export-center-btn.secondary{background:#13232d;color:var(--cyan)}
+.export-center-btn:hover{background:#fff;color:#031117}
+.export-center-btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.export-center-status{display:block;min-height:1.3em;margin-top:11px;color:var(--green);font:.65rem var(--mono);line-height:1.5;overflow-wrap:anywhere}
+@media(max-width:560px){.export-center{padding:16px}.export-center-actions{display:grid;grid-template-columns:1fr}.export-center-btn{width:100%;font-size:.72rem}}
+
+
+/* Fullscreen / pantalla grande */
+.fullscreen-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid #54e5ff65;background:linear-gradient(110deg,#54e5ff,#00b8d7);color:#041016;border-radius:8px;padding:9px 12px;font:700 .69rem var(--title);letter-spacing:.045em;white-space:nowrap;cursor:pointer;touch-action:manipulation;transition:transform .18s,filter .18s,box-shadow .18s;box-shadow:0 5px 18px #00c9ef12}
+.fullscreen-btn:hover,.fullscreen-btn:focus-visible{filter:brightness(1.08);box-shadow:0 7px 22px #00c9ef28;outline:2px solid #54e5ff;outline-offset:2px}
+.fullscreen-btn:active{transform:scale(.98)}
+.device-toolbar .fullscreen-btn{flex:0 0 auto;min-height:36px}
+@media(max-width:620px){.device-toolbar .fullscreen-btn{flex:1 1 100%;width:100%;min-height:40px;font-size:.72rem}}
+:fullscreen{background-color:#070b10}
+:fullscreen body{min-height:100vh}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="Inicio del centro de entrenamiento">
+    <span class="brand-mark">TR</span>
+    <span class="brand-name">TR-eSPORT <small>PANEL REACTION LAB</small></span>
+  </a>
+  <a class="back-link" href="../index.html">← INDEX PRINCIPAL</a>
+</header>
+<section class="device-toolbar shell" aria-label="Configuración del formato de pantalla">
+  <div class="device-toolbar-title"><span class="device-toolbar-pulse"></span><span>FORMATO DE VISTA</span></div>
+  <div class="device-switch" role="group" aria-label="Elegir formato de dispositivo">
+    <button type="button" class="device-mode-btn" data-device-mode="mobile" aria-pressed="false">▯ Celular</button>
+    <button type="button" class="device-mode-btn" data-device-mode="desktop" aria-pressed="false">▰ Computadora</button>
+  </div>
+  <div class="orientation-switch" role="group" aria-label="Orientación de celular" hidden>
+    <button type="button" class="orientation-btn" data-orientation-mode="portrait" aria-pressed="true">↕ Vertical</button>
+    <button type="button" class="orientation-btn" data-orientation-mode="landscape" aria-pressed="false">↔ Horizontal</button>
+  </div>
+  <button class="fullscreen-btn" id="fullscreenToggle" type="button" aria-pressed="false" title="Ver en pantalla completa">⛶ PANTALLA GRANDE</button>
+  <small class="device-hint" id="deviceHint" aria-live="polite">Diseño adaptable al dispositivo.</small>
+</section>
+<main class="shell">
+  <section class="hero" aria-labelledby="mainTitle">
+    <div>
+      <div class="eyebrow"><span class="pulse"></span> PANEL REACTION LAB · SISTEMA DE MEJORA INDIVIDUAL</div>
+      <h1 id="mainTitle">Entrena.<br><span>Mide. Mejora.</span></h1>
+      <p>Este espacio reúne las herramientas de entrenamiento individual de TR-eSport. Cada rutina trabaja una habilidad concreta para que puedas practicar con intención, registrar tus resultados y comparar tu progreso sesión tras sesión.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="reflejos.html">▶ COMENZAR ENTRENAMIENTO</a>
+        <a class="btn btn-outline" href="#aspectos">EXPLORAR LOS ASPECTOS ↓</a>
+      </div>
+    </div>
+    <div class="hero-panel" aria-label="Panel visual del sistema de entrenamiento">
+      <div class="panel-top"><span>TR / PERFORMANCE SYSTEM</span><span class="online">● LISTO</span></div>
+      <div class="target-art"><span></span></div>
+      <div class="panel-info">ENTRENAMIENTO INDIVIDUAL · SESIONES DE 30 S</div>
+      <div class="panel-bottom"><div class="panel-stat"><b>07</b><small>RUTINAS</small></div><div class="panel-stat"><b>05</b><small>NIVELES</small></div><div class="panel-stat"><b>LOCAL</b><small>REGISTRO</small></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="aspectos" aria-labelledby="aspectsTitle">
+    <div class="section-head"><div><h2 id="aspectsTitle">¿Qué puedes entrenar?</h2><p>Cada aspecto tiene un objetivo distinto. Cada habilidad tiene su propio HTML independiente. Selecciona una tarjeta para abrir ese entrenamiento.</p></div><span class="micro">01 / HABILIDADES</span></div>
+    <div class="mode-grid">
+      <article class="mode-card"><div class="mode-top"><span class="mode-icon">RX</span><span class="mode-no">MODE 01</span></div><h3>Reflejos</h3><p>Espera la señal y toca el objetivo apenas aparezca. Evita reaccionar antes de tiempo.</p><div class="trains"><b>TRABAJA</b><span>Tiempo de reacción · Atención al estímulo</span></div><div class="card-foot"><span class="chip">REACCIÓN</span><a class="card-link" href="reflejos.html">ENTRENAR ↗</a></div></article>
+      <article class="mode-card"><div class="mode-top"><span class="mode-icon">TR</span><span class="mode-no">MODE 02</span></div><h3>Seguimiento</h3><p>Mantén el cursor o el dedo cerca de una esfera que se desplaza por la zona de práctica.</p><div class="trains"><b>TRABAJA</b><span>Coordinación ojo-mano · Control del movimiento</span></div><div class="card-foot"><span class="chip">TRACKING</span><a class="card-link" href="seguimiento.html">ENTRENAR ↗</a></div></article>
+      <article class="mode-card"><div class="mode-top"><span class="mode-icon">◎</span><span class="mode-no">MODE 03</span></div><h3>Precisión AIM</h3><p>Apunta a objetivos pequeños y busca un movimiento controlado en lugar de tocar al azar.</p><div class="trains"><b>TRABAJA</b><span>Precisión · Control de puntería</span></div><div class="card-foot"><span class="chip">PUNTERÍA</span><a class="card-link" href="precision-aim.html">ENTRENAR ↗</a></div></article>
+      <article class="mode-card"><div class="mode-top"><span class="mode-icon">SP</span><span class="mode-no">MODE 04</span></div><h3>Velocidad</h3><p>Acumula aciertos dentro del tiempo disponible manteniendo el control de cada movimiento.</p><div class="trains"><b>TRABAJA</b><span>Ritmo · Rapidez de ejecución</span></div><div class="card-foot"><span class="chip">RITMO</span><a class="card-link" href="velocidad.html">ENTRENAR ↗</a></div></article>
+      <article class="mode-card"><div class="mode-top"><span class="mode-icon">VX</span><span class="mode-no">MODE 05</span></div><h3>Identificación visual</h3><p>Lee la instrucción y elige el color solicitado entre varios objetivos de apariencia diferente.</p><div class="trains"><b>TRABAJA</b><span>Atención selectiva · Procesamiento visual</span></div><div class="card-foot"><span class="chip">VISIÓN</span><a class="card-link" href="identificacion-visual.html">ENTRENAR ↗</a></div></article>
+      <article class="mode-card"><div class="mode-top"><span class="mode-icon">DC</span><span class="mode-no">MODE 06</span></div><h3>Decisión bajo presión</h3><p>Identifica los objetivos válidos y evita los señuelos. La respuesta correcta depende de la señal.</p><div class="trains"><b>TRABAJA</b><span>Discriminación de objetivos · Inhibición de respuesta</span></div><div class="card-foot"><span class="chip">DECISIÓN</span><a class="card-link" href="decision-bajo-presion.html">ENTRENAR ↗</a></div></article>
+      <article class="mode-card"><div class="mode-top"><span class="mode-icon">FPS</span><span class="mode-no">MODE 07</span></div><h3>Campo de tiro</h3><p>Controla un personaje en tercera persona, mueve la cámara y dispara a objetivos de práctica. En PC usa mouse y teclado; en celular usa joystick y botones táctiles.</p><div class="trains"><b>TRABAJA</b><span>Movimiento · Control de cámara · Disparo y precisión</span></div><div class="card-foot"><span class="chip">COMBATE / AIM</span><a class="card-link" href="campo-de-tiro.html">JUGAR ↗</a></div></article>
+
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="readTitle">
+    <div class="section-head"><div><h2 id="readTitle">Cómo leer tu rendimiento</h2><p>Los indicadores te ayudan a identificar qué mejorar en la siguiente sesión.</p></div><span class="micro">02 / MÉTRICAS</span></div>
+    <div class="info-grid">
+      <article class="info-card"><div class="info-icon">01 / MS</div><h3>Reacción media</h3><p>Promedio de los tiempos medidos en los aciertos registrados. En los modos donde no se mide el tiempo de cada toque, este valor puede no representar una reacción real en milisegundos.</p></article>
+      <article class="info-card"><div class="info-icon">02 / %</div><h3>Precisión</h3><p>Porcentaje de intentos correctos frente al total de intentos contabilizados en la sesión. Sirve para observar si mantienes el control cuando aumenta la dificultad.</p></article>
+      <article class="info-card"><div class="info-icon">03 / +</div><h3>Aciertos y errores</h3><p>Consulta los objetivos acertados y los errores de cada sesión. Compara la misma rutina y el mismo nivel para observar cambios con mayor claridad.</p></article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="flowTitle">
+    <div class="section-head"><div><h2 id="flowTitle">Método de entrenamiento</h2><p>Utiliza una secuencia sencilla para convertir cada sesión en una oportunidad de mejora.</p></div><span class="micro">03 / PROCESO</span></div>
+    <div class="steps">
+      <article class="step"><h3>Selecciona</h3><p>Elige la habilidad que buscas mejorar y empieza con un nivel que puedas controlar.</p></article>
+      <article class="step"><h3>Practica</h3><p>Completa la sesión de 30 segundos. Mantén la atención en el objetivo de la rutina.</p></article>
+      <article class="step"><h3>Compara</h3><p>Revisa aciertos, precisión, errores y reacción media cuando esté disponible. Repite y compara.</p></article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="levelsTitle">
+    <div class="section-head"><div><h2 id="levelsTitle">Niveles de dificultad</h2><p>La dificultad cambia las exigencias del ejercicio, como el tamaño de los objetivos, la velocidad o el tiempo de respuesta.</p></div><span class="micro">04 / PROGRESIÓN</span></div>
+    <div class="level-list"><div class="level"><b>NIVEL 1</b><span>Inicial</span></div><div class="level"><b>NIVEL 2</b><span>Básico</span></div><div class="level"><b>NIVEL 3</b><span>Competitivo</span></div><div class="level"><b>NIVEL 4</b><span>Avanzado</span></div><div class="level"><b>NIVEL 5</b><span>Élite</span></div></div>
+    <div class="note"><strong>Recomendación:</strong> comienza con nivel 1 o 2, prioriza la precisión y aumenta la dificultad cuando puedas completar el ejercicio con control. En <strong>Calibración AIM</strong> puedes guardar referencias separadas para primera y tercera persona; estos valores son notas del entrenador y no cambian la sensibilidad dentro de Free Fire.</div>
+  </section>
+
+  <section class="section" aria-labelledby="saveTitle">
+    <div class="section-head"><div><h2 id="saveTitle">Tu progreso y tus datos</h2><p>Un registro práctico para mantener el enfoque en la mejora personal.</p></div><span class="micro">05 / HISTORIAL</span></div>
+    <div class="info-grid">
+      <article class="info-card"><div class="info-icon">LOCAL</div><h3>Guardado en el navegador</h3><p>Las sesiones y preferencias se guardan en el almacenamiento local del navegador en ese dispositivo. No hay cuentas ni sincronización online.</p></article>
+      <article class="info-card"><div class="info-icon">500×</div><h3>Sesiones recientes</h3><p>Cada módulo mantiene su propio historial local para comparar sesiones y niveles de esa habilidad.</p></article>
+      <article class="info-card"><div class="info-icon">AIM</div><h3>Calibración personal</h3><p>Guarda tus propias referencias de primera y tercera persona y utilízalas como recordatorio durante tu práctica.</p></article>
+    </div>
+    <div class="note"><strong>Importante:</strong> los resultados miden tu desempeño dentro de estos ejercicios en pantalla; no equivalen directamente al rendimiento dentro de una partida de Free Fire. Si borras los datos del navegador, el historial local puede eliminarse.</div>
+  </section>
+  <section class="section" style="padding-top:0;text-align:center"><a class="btn btn-primary" href="reflejos.html">▶ INICIAR ENTRENAMIENTO</a></section>
+  <section class="section" id="exportar" aria-labelledby="exportTitle">
+    <div class="section-head"><div><h2 id="exportTitle">Descargar tus resultados</h2><p>Descarga los puntajes generales o una imagen-resumen de los entrenamientos de los siete módulos en formato PNG.</p></div><span class="micro">06 / EXPORTACIÓN</span></div>
+    <div class="export-center">
+      <p><strong style="color:var(--text)">Imagen de puntajes:</strong> tablero acumulado de los siete módulos. <strong style="color:var(--text)">Imagen de entrenamiento:</strong> resumen de estadísticas y sesiones recientes guardadas localmente.</p>
+      <div class="export-center-actions">
+        <button class="export-center-btn" id="downloadAllScoresBtn" type="button">▧ DESCARGAR PUNTAJES · IMAGEN PNG</button>
+        <button class="export-center-btn secondary" id="downloadAllTrainingBtn" type="button">▧ DESCARGAR ENTRENAMIENTOS · IMAGEN PNG</button>
+      </div>
+      <small class="export-center-status" id="exportAllStatus" aria-live="polite"></small>
+    </div>
+  </section>
+
+</main>
+<footer class="shell footer"><span>TR-eSPORT · PANEL REACTION LAB</span><span>REFLEJOS · TRACKING · AIM · VISIÓN · DECISIÓN</span></footer>
+<script>
+(() => {
+  const body = document.body;
+  const modeButtons = [...document.querySelectorAll('[data-device-mode]')];
+  const orientationButtons = [...document.querySelectorAll('[data-orientation-mode]')];
+  const orientationGroup = document.querySelector('.orientation-switch');
+  const hint = document.getElementById('deviceHint');
+  const STORE = 'trTraining.displayPreference.v1';
+  const touchDevice = window.matchMedia('(pointer: coarse) and (hover: none)').matches;
+  const smallViewport = window.matchMedia('(max-width: 620px)').matches;
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (_) { saved = {}; }
+  let device = saved.device || ((touchDevice || smallViewport) ? 'mobile' : 'desktop');
+  let orientation = saved.orientation === 'landscape' ? 'landscape' : 'portrait';
+  function applyView() {
+    body.dataset.device = device;
+    body.dataset.previewOrientation = orientation;
+    modeButtons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.deviceMode === device)));
+    orientationButtons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.orientationMode === orientation)));
+    const showOrientationPreview = device === 'mobile' && !touchDevice && !smallViewport;
+    if (orientationGroup) orientationGroup.hidden = !showOrientationPreview;
+    if (hint) {
+      if (device === 'mobile' && showOrientationPreview) {
+        hint.textContent = orientation === 'portrait' ? 'Vista celular vertical · ancho de 390 px' : 'Vista celular horizontal · ancho de 844 px';
+      } else if (device === 'mobile') {
+        hint.textContent = 'Modo celular activo · al girar el dispositivo, el diseño se adapta automáticamente.';
+      } else if (touchDevice || smallViewport) {
+        hint.textContent = 'Vista adaptable · en un celular, el ancho físico de pantalla sigue mandando.';
+      } else {
+        hint.textContent = 'Vista computadora · diseño amplio.';
+      }
+    }
+    try { localStorage.setItem(STORE, JSON.stringify({device, orientation})); } catch (_) {}
+  }
+  modeButtons.forEach(btn => btn.addEventListener('click', () => {
+    device = btn.dataset.deviceMode;
+    if (device === 'mobile') orientation = 'portrait';
+    applyView();
+  }));
+  orientationButtons.forEach(btn => btn.addEventListener('click', () => {
+    orientation = btn.dataset.orientationMode;
+    applyView();
+  }));
+  window.addEventListener('resize', applyView, {passive:true});
+  window.addEventListener('orientationchange', applyView, {passive:true});
+  applyView();
+})();
+</script>
+<script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const modules = [
+    {title:'Reflejos', slug:'reflejos', key:'trTraining.reflex.v1'},
+    {title:'Seguimiento', slug:'seguimiento', key:'trTraining.tracking.v1'},
+    {title:'Precisión AIM', slug:'precision-aim', key:'trTraining.precision.v1'},
+    {title:'Velocidad', slug:'velocidad', key:'trTraining.speed.v1'},
+    {title:'Identificación visual', slug:'identificacion-visual', key:'trTraining.visual.v1'},
+    {title:'Decisión bajo presión', slug:'decision-bajo-presion', key:'trTraining.decision.v1'},
+    {title:'Campo de tiro', slug:'campo-de-tiro', key:'trTraining.shooting.v1'}
+  ];
+  const today=()=>new Date().toISOString().slice(0,10);
+  const empty=()=>({sessions:0,totalHits:0,totalAttempts:0,totalErrors:0,bestReaction:null,fp:1,tp:1,recent:[]});
+  const read=key=>{try{const x=JSON.parse(localStorage.getItem(key)||'null');return x&&typeof x==='object'?{...empty(),...x,recent:Array.isArray(x.recent)?x.recent:[]}:empty();}catch(_){return empty();}};
+  const val=(v,e='—')=>v===null||v===undefined||v===''?e:String(v);
+  const pct=(v)=>v===null||v===undefined||v===''?'—':String(v).includes('%')?String(v):`${v}%`;
+  const ms=(v)=>v===null||v===undefined||v===''?'—':/ms/i.test(String(v))?String(v):`${v} ms`;
+  function rr(ctx,x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1.5;ctx.stroke();}}
+  function text(ctx,t,x,y,font,color,align='left'){ctx.font=font;ctx.fillStyle=color;ctx.textAlign=align;ctx.fillText(String(t),x,y);ctx.textAlign='left';}
+  function wrap(ctx,t,x,y,max,lineHeight,maxLines=3){let line='',count=0;for(const word of String(t??'').split(/\s+/)){const attempt=line?`${line} ${word}`:word;if(ctx.measureText(attempt).width>max&&line){ctx.fillText(line,x,y);y+=lineHeight;count++;line=word;if(count>=maxLines-1){ctx.fillText(line+'…',x,y);return y+lineHeight;}}else line=attempt;}if(line){ctx.fillText(line,x,y);y+=lineHeight;}return y;}
+  function savePng(canvas,name){const status=$('exportAllStatus');const save=blob=>{if(!blob){if(status)status.textContent='No se pudo generar la imagen. Intenta de nuevo.';return;}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1800);if(status)status.textContent=`Imagen PNG descargada: ${name}`;};if(canvas.toBlob)canvas.toBlob(save,'image/png');else{const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download=name;a.click();if(status)status.textContent=`Imagen PNG preparada: ${name}`;}}
+  function createReport(kind){
+    const training=kind==='training';
+    const records=modules.map(m=>({module:m,data:read(m.key)}));
+    const allRows=[]; records.forEach(({module,data})=>(data.recent||[]).slice(0,training?3:4).forEach(item=>allRows.push({title:module.title,...item})));
+    const w=1500,margin=66,visibleHistoryRows=training?Math.max(1,Math.min(18,allRows.length)):records.length,h=training?1000+visibleHistoryRows*52:700+visibleHistoryRows*58;
+    const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');
+    ctx.fillStyle='#070b10';ctx.fillRect(0,0,w,h);ctx.strokeStyle='#12303d';ctx.lineWidth=1;for(let x=0;x<w;x+=50){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}for(let y=0;y<h;y+=50){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+    const grad=ctx.createLinearGradient(0,0,w,240);grad.addColorStop(0,'#102b38');grad.addColorStop(1,'#070b10');ctx.fillStyle=grad;ctx.fillRect(0,0,w,250);
+    rr(ctx,margin,42,w-margin*2,160,18,'#08121bea','#54e5ff55');text(ctx,'TR-eSPORT  /  PERFORMANCE SYSTEM',margin+30,80,'700 22px "Share Tech Mono", monospace','#54e5ff');text(ctx,training?'RESUMEN DE ENTRENAMIENTOS':'TABLERO GENERAL DE PUNTAJES',margin+30,130,'700 39px "Chakra Petch", Arial, sans-serif','#f2faff');text(ctx,'Panel Reaction Lab · seis habilidades y campo de tiro',margin+30,169,'600 22px Inter, Arial, sans-serif','#a9d9e6');text(ctx,`Generado: ${new Date().toLocaleString('es-MX')} · PNG`,w-margin-25,81,'17px "Share Tech Mono", monospace','#93a5b2','right');
+    const sum=records.reduce((a,r)=>{const d=r.data;a.sessions+=Number(d.sessions)||0;a.hits+=Number(d.totalHits)||0;a.attempts+=Number(d.totalAttempts)||0;a.errors+=Number(d.totalErrors)||0;return a;},{sessions:0,hits:0,attempts:0,errors:0});
+    const statData=[['MÓDULOS','07'],['SESIONES',sum.sessions],['ACIERTOS',sum.hits],['INTENTOS',sum.attempts],['ERRORES',sum.errors],['PRECISIÓN',sum.attempts?`${Math.round(sum.hits/sum.attempts*100)}%`:'—']];
+    const gap=12,cw=(w-margin*2-gap*5)/6;statData.forEach((s,i)=>{const x=margin+i*(cw+gap);rr(ctx,x,224,cw,100,12,'#0d1922','#244653');text(ctx,s[0],x+13,253,'14px "Share Tech Mono", monospace','#93a5b2');text(ctx,String(s[1]),x+13,293,'700 28px "Chakra Petch", Arial, sans-serif',i===5?'#ffcc00':'#54e5ff');});
+    const sectionY=training?360:365;
+    text(ctx,training?'RESUMEN POR HABILIDAD':'PUNTAJES ACUMULADOS POR HABILIDAD',margin,sectionY,'700 24px "Chakra Petch", Arial, sans-serif','#54e5ff');
+    const headY=sectionY+25;rr(ctx,margin,headY,w-margin*2,42,8,'#102b38','#244653');
+    const xs=[margin+16,margin+440,margin+620,margin+790,margin+950,margin+1100,margin+1270];
+    const heads=['MÓDULO','SESIONES','ACIERTOS','ERRORES','INTENTOS','PRECISIÓN','MEJOR REACCIÓN'];heads.forEach((s,i)=>text(ctx,s,xs[i],headY+27,'700 13px "Share Tech Mono", monospace','#b5dce7'));
+    records.forEach(({module,data},i)=>{const y=headY+49+i*58;rr(ctx,margin,y,w-margin*2,52,7,i%2?'#0a131b':'#0e1922','#1a303b');const totalAcc=data.totalAttempts?`${Math.round(data.totalHits/data.totalAttempts*100)}%`:'—';const vals=[module.title,val(data.sessions,'0'),val(data.totalHits,'0'),val(data.totalErrors,'0'),val(data.totalAttempts,'0'),totalAcc,ms(data.bestReaction)];vals.forEach((v,j)=>{ctx.font=j===0?'600 17px Inter, Arial, sans-serif':'16px "Share Tech Mono", monospace';ctx.fillStyle=j===2?'#ffcc00':j===3?'#ff7580':'#e3f5fb';ctx.textAlign=j===0?'left':'left';ctx.fillText(String(v),xs[j],y+31);});});
+    let footerStart=headY+49+records.length*58+22;
+    if(training){
+      text(ctx,'SESIONES RECIENTES INCLUIDAS',margin,footerStart,'700 24px "Chakra Petch", Arial, sans-serif','#54e5ff');const th=footerStart+25;rr(ctx,margin,th,w-margin*2,42,8,'#102b38','#244653');const cx=[margin+15,margin+355,margin+570,margin+730,margin+890,margin+1040,margin+1200];['MÓDULO','FECHA','NIVEL','ACIERTOS','ERRORES','PRECISIÓN','REACCIÓN'].forEach((s,i)=>text(ctx,s,cx[i],th+27,'700 13px "Share Tech Mono", monospace','#b5dce7'));
+      const shown=allRows.slice(0,18);if(!shown.length){rr(ctx,margin,th+49,w-margin*2,52,7,'#0e1922','#1a303b');text(ctx,'Todavía no hay sesiones guardadas.',margin+16,th+81,'18px Inter, Arial, sans-serif','#93a5b2');footerStart=th+120;}else{shown.forEach((item,i)=>{const y=th+49+i*52;rr(ctx,margin,y,w-margin*2,47,7,i%2?'#0a131b':'#0e1922','#1a303b');const vals=[item.title,val(item.date),val(item.level),val(item.hits,'0'),val(item.errors,'0'),pct(item.accuracy),ms(item.avgReaction)];vals.forEach((v,j)=>text(ctx,v,cx[j],y+29,j===0?'14px Inter, Arial, sans-serif':'14px "Share Tech Mono", monospace',j===3?'#ffcc00':j===4?'#ff7580':'#e3f5fb'));});footerStart=th+49+shown.length*52+15;}
+      const display=(()=>{try{return JSON.parse(localStorage.getItem('trTraining.displayPreference.v1')||'null')}catch(_){return null}})();
+      rr(ctx,margin,footerStart,w-margin*2,64,10,'#0b151e','#213b49');text(ctx,`Formato guardado: ${display?.device==='mobile'?'Celular':'Computadora'} · Orientación de vista: ${display?.orientation==='landscape'?'Horizontal':'Vertical'}`,margin+18,footerStart+38,'17px Inter, Arial, sans-serif','#a9c6d1');footerStart+=78;
+    }
+    text(ctx,'Los puntajes y registros incluidos proceden del almacenamiento local de este navegador/dispositivo.',margin,h-35,'15px Inter, Arial, sans-serif','#8099a5');text(ctx,`TR-eSPORT · ${training?'TRAINING SNAPSHOT':'SCOREBOARD'}`,w-margin,h-35,'15px "Share Tech Mono", monospace','#54e5ff','right');
+    savePng(c,`TR-eSport-${training?'entrenamientos':'puntajes-generales'}-${today()}.png`);
+  }
+  $('downloadAllScoresBtn')?.addEventListener('click',()=>createReport('scores'));
+  $('downloadAllTrainingBtn')?.addEventListener('click',()=>createReport('training'));
+})();
+</script>
+
+
+<script>
+(() => {
+  const button = document.getElementById('fullscreenToggle');
+  if (!button) return;
+  const root = document.documentElement;
+  const isFullscreen = () => Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+  const paint = () => {
+    const active = isFullscreen();
+    button.textContent = active ? '⛶ SALIR DE PANTALLA GRANDE' : '⛶ PANTALLA GRANDE';
+    button.setAttribute('aria-pressed', String(active));
+    button.setAttribute('aria-label', active ? 'Salir de pantalla completa' : 'Activar pantalla completa');
+    button.title = active ? 'Salir de pantalla completa (Esc)' : 'Ver en pantalla completa';
+  };
+  button.addEventListener('click', async () => {
+    try {
+      if (isFullscreen()) {
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        else throw new Error('exit-fullscreen-unsupported');
+      } else {
+        if (root.requestFullscreen) {
+          try { await root.requestFullscreen({ navigationUI: 'hide' }); }
+          catch (_) { await root.requestFullscreen(); }
+        } else if (root.webkitRequestFullscreen) {
+          root.webkitRequestFullscreen();
+        } else {
+          throw new Error('fullscreen-unsupported');
+        }
+      }
+    } catch (_) {
+      window.alert('Este navegador o modo de apertura no permite pantalla completa para esta página. Prueba abrirla en Chrome, Edge o Firefox; en algunos navegadores móviles puedes usar “Añadir a pantalla de inicio”.');
+    }
+    paint();
+  });
+  document.addEventListener('fullscreenchange', paint);
+  document.addEventListener('webkitfullscreenchange', paint);
+  paint();
+})();
+</script>
+
+</body>
+</html>

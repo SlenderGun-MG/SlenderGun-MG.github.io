@@ -427,6 +427,35 @@ body {
   
   .btn-entrar { width: 100%; padding: 16px; font-size: 1.05rem; }
 }
+/* ── REACTION LAB · Módulo de entrenamiento ── */
+.spot-reaction .spot-tag{color:#54e5ff;border-color:#54e5ff}
+.spot-reaction .spot-info h2 span{color:#54e5ff}
+.spot-reaction .reaction-enter{background:linear-gradient(100deg,#54e5ff,#00b8d7);color:#041016;clip-path:none;border-radius:5px;box-shadow:0 8px 24px rgba(0,217,255,.12)}
+.spot-reaction .reaction-enter:hover{background:#fff;color:#041016;box-shadow:0 12px 28px rgba(0,217,255,.22)}
+.spot-reaction .spot-img::after{background:linear-gradient(145deg,rgba(0,217,255,.05),transparent 45%,rgba(0,217,255,.10))}
+.reaction-art{isolation:isolate;background:radial-gradient(circle at 50% 48%,#12303d 0%,#07141e 50%,#05080d 100%);border-color:rgba(84,229,255,.25)}
+.reaction-art-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(84,229,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(84,229,255,.09) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(to bottom,transparent,#000 15%,#000 85%,transparent)}
+.reaction-art-target{position:absolute;width:64px;height:64px;border:1px solid rgba(84,229,255,.8);border-radius:50%;display:grid;place-items:center;box-shadow:0 0 28px rgba(0,217,255,.12),inset 0 0 20px rgba(0,217,255,.08)}
+.reaction-art-target::before,.reaction-art-target::after{content:"";position:absolute;background:#54e5ff;opacity:.6}
+.reaction-art-target::before{height:1px;width:84px}.reaction-art-target::after{height:84px;width:1px}
+.reaction-art-target i{width:17px;height:17px;border:3px solid #54e5ff;border-radius:50%;background:rgba(84,229,255,.2);box-shadow:0 0 15px rgba(84,229,255,.8)}
+.target-a{top:22%;left:18%;transform:scale(.75)}.target-b{top:35%;right:18%;transform:scale(1.1)}.target-c{bottom:23%;left:43%;transform:scale(.62)}
+.reaction-art-path{position:absolute;inset:18% 15% 22%;border:1px dashed rgba(84,229,255,.28);border-radius:48% 52% 38% 62%;transform:rotate(-18deg)}
+.reaction-art-hud{position:absolute;left:22px;top:20px;display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left}
+.reaction-art-hud span,.reaction-art-hud small,.reaction-art-stats small{font-family:var(--font-mono);font-size:.67rem;letter-spacing:1.4px;color:#8eafbe}
+.reaction-art-hud b{font-family:var(--font-title);font-size:1.8rem;letter-spacing:2px;color:#effcff;text-shadow:0 0 20px rgba(84,229,255,.24)}
+.reaction-art-stats{position:absolute;left:22px;right:22px;bottom:18px;display:flex;gap:10px;justify-content:space-between}
+.reaction-art-stats span{min-width:0;flex:1;display:flex;flex-direction:column;gap:4px;padding:10px 12px;background:rgba(3,12,18,.82);border:1px solid rgba(84,229,255,.18);backdrop-filter:blur(6px)}
+.reaction-art-stats b{font-family:var(--font-title);font-size:1.15rem;color:#54e5ff}.reaction-art-stats small{font-size:.56rem}
+@media(max-width:600px){.reaction-art-hud{left:14px;top:14px}.reaction-art-hud b{font-size:1.35rem}.reaction-art-stats{left:12px;right:12px;bottom:12px;gap:5px}.reaction-art-stats span{padding:7px 8px}.reaction-art-stats b{font-size:1rem}.reaction-art-stats small{font-size:.48rem}.reaction-art-target{width:48px;height:48px}}
+
+
+/* Fullscreen / pantalla grande */
+.fullscreen-toggle{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(84,229,255,.55);background:linear-gradient(110deg,#54e5ff,#00b8d7);color:#041016;border-radius:7px;padding:9px 12px;font-family:var(--font-title);font-weight:700;font-size:.82rem;letter-spacing:.035em;white-space:nowrap;cursor:pointer;touch-action:manipulation;transition:filter .2s,transform .2s}
+.fullscreen-toggle:hover,.fullscreen-toggle:focus-visible{filter:brightness(1.1);transform:translateY(-1px);outline:2px solid #54e5ff;outline-offset:2px}
+@media(max-width:900px){.nav-tabs .fullscreen-toggle{padding:11px 16px;width:min(90%,320px);font-size:.95rem}}
+:fullscreen{background-color:#070709}
+
 </style>
 </head>
 <body>
@@ -448,6 +477,7 @@ body {
     <div class="nav-tabs" id="nav-menu">
       <a href="#inicio" class="nav-link">Inicio</a>
       <a href="#modulos" class="nav-link">Módulos de Gestión</a>
+      <a href="#" class="fullscreen-toggle" id="fullscreenToggle" role="button" aria-pressed="false" title="Ver en pantalla completa">⛶ PANTALLA GRANDE</a>
     </div>
   </nav>
 
@@ -501,6 +531,25 @@ body {
         <h2>Calculadora Stats</h2>
         <p>Registra y analiza el rendimiento individual de cada jugador. Captura kills, daño, posición y puntos por partida para generar un resumen estadístico de la competencia.</p>
         <a href="estadisticas.html" class="btn-entrar">ENTRAR</a>
+      </div>
+    </div>
+
+    <!-- Spot: Reaction Lab · nuevo centro de entrenamiento -->
+    <div class="spot spot-reaction spot-anim">
+      <div class="spot-img con-imagen reaction-art" role="img" aria-label="Panel gráfico de entrenamiento de reflejos, puntería y percepción visual">
+        <div class="reaction-art-grid"></div>
+        <div class="reaction-art-target target-a"><i></i></div>
+        <div class="reaction-art-target target-b"><i></i></div>
+        <div class="reaction-art-target target-c"><i></i></div>
+        <div class="reaction-art-path"></div>
+        <div class="reaction-art-hud"><span>TR / TRAINING SYSTEM</span><b>REACTION LAB</b><small>REFLEJOS · AIM · VISIÓN</small></div>
+        <div class="reaction-art-stats"><span><b>05</b><small>NIVELES</small></span><span><b>06</b><small>MODOS</small></span><span><b>∞</b><small>VARIANTES</small></span></div>
+      </div>
+      <div class="spot-info">
+        <span class="spot-tag">Entrenamiento competitivo</span>
+        <h2>Reaction <span>Lab</span></h2>
+        <p>Centro de entrenamiento para mejorar los <strong>reflejos</strong>, la <strong>puntería (AIM)</strong> y la <strong>percepción visual</strong>. Incluye movimientos rápidos hacia objetivos, seguimiento de una bolita con trayectoria aleatoria, precisión, velocidad, identificación visual y decisiones bajo presión. Cada modo dispone de <strong>cinco niveles de dificultad</strong> y patrones aleatorios para evitar recorridos fijos repetitivos. En los ejercicios de AIM podrás ajustar por separado la sensibilidad de <strong>primera persona</strong> y <strong>tercera persona</strong>. Los resultados resumen reacción, aciertos, precisión y errores.</p>
+        <a href="panel-reaction-lab.html" class="btn-entrar reaction-enter">ENTRAR A REACTION LAB</a>
       </div>
     </div>
 
@@ -588,5 +637,47 @@ body {
     });
   });
 </script>
+
+<script>
+(() => {
+  const button = document.getElementById('fullscreenToggle');
+  if (!button) return;
+  const root = document.documentElement;
+  const isFullscreen = () => Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+  const paint = () => {
+    const active = isFullscreen();
+    button.textContent = active ? '⛶ SALIR DE PANTALLA GRANDE' : '⛶ PANTALLA GRANDE';
+    button.setAttribute('aria-pressed', String(active));
+    button.setAttribute('aria-label', active ? 'Salir de pantalla completa' : 'Activar pantalla completa');
+    button.title = active ? 'Salir de pantalla completa (Esc)' : 'Ver en pantalla completa';
+  };
+  button.addEventListener('click', async (event) => {
+    event.preventDefault();
+    try {
+      if (isFullscreen()) {
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        else throw new Error('exit-fullscreen-unsupported');
+      } else {
+        if (root.requestFullscreen) {
+          try { await root.requestFullscreen({ navigationUI: 'hide' }); }
+          catch (_) { await root.requestFullscreen(); }
+        } else if (root.webkitRequestFullscreen) {
+          root.webkitRequestFullscreen();
+        } else {
+          throw new Error('fullscreen-unsupported');
+        }
+      }
+    } catch (_) {
+      window.alert('Este navegador o modo de apertura no permite pantalla completa para esta página. Prueba abrirla en Chrome, Edge o Firefox; en algunos navegadores móviles puedes usar “Añadir a pantalla de inicio”.');
+    }
+    paint();
+  });
+  document.addEventListener('fullscreenchange', paint);
+  document.addEventListener('webkitfullscreenchange', paint);
+  paint();
+})();
+</script>
+
 </body>
 </html>
